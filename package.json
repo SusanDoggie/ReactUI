@@ -1,0 +1,14 @@
+{
+  "name": "doggie-react-ui",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/SusanDoggie/doggie-react-ui.git",
+  "author": "Susan Cheng <susan.doggie@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "react": "^17.0.2",
+    "react-codemirror": "^1.0.0",
+    "react-native-vector-icons": "^9.0.0"
+  }
+}
