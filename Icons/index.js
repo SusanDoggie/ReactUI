@@ -25,18 +25,18 @@
 
 import './font-inject';
 
-export const AntDesign = require('react-native-vector-icons/dist/AntDesign');
-export const Entypo = require('react-native-vector-icons/dist/Entypo');
-export const EvilIcons = require('react-native-vector-icons/dist/EvilIcons');
-export const Feather = require('react-native-vector-icons/dist/Feather');
-export const FontAwesome = require('react-native-vector-icons/dist/FontAwesome');
-export const FontAwesome5 = require('react-native-vector-icons/dist/FontAwesome5');
-export const FontAwesome5Pro = require('react-native-vector-icons/dist/FontAwesome5Pro');
-export const Fontisto = require('react-native-vector-icons/dist/Fontisto');
-export const Foundation = require('react-native-vector-icons/dist/Foundation');
-export const Ionicons = require('react-native-vector-icons/dist/Ionicons');
-export const MaterialCommunityIcons = require('react-native-vector-icons/dist/MaterialCommunityIcons');
-export const MaterialIcons = require('react-native-vector-icons/dist/MaterialIcons');
-export const Octicons = require('react-native-vector-icons/dist/Octicons');
-export const SimpleLineIcons = require('react-native-vector-icons/dist/SimpleLineIcons');
-export const Zocial = require('react-native-vector-icons/dist/Zocial');
+export { default as AntDesign } from 'react-native-vector-icons/dist/AntDesign';
+export { default as Entypo } from 'react-native-vector-icons/dist/Entypo';
+export { default as EvilIcons } from 'react-native-vector-icons/dist/EvilIcons';
+export { default as Feather } from 'react-native-vector-icons/dist/Feather';
+export { default as FontAwesome } from 'react-native-vector-icons/dist/FontAwesome';
+export { default as FontAwesome5 } from 'react-native-vector-icons/dist/FontAwesome5';
+export { default as FontAwesome5Pro } from 'react-native-vector-icons/dist/FontAwesome5Pro';
+export { default as Fontisto } from 'react-native-vector-icons/dist/Fontisto';
+export { default as Foundation } from 'react-native-vector-icons/dist/Foundation';
+export { default as Ionicons } from 'react-native-vector-icons/dist/Ionicons';
+export { default as MaterialCommunityIcons } from 'react-native-vector-icons/dist/MaterialCommunityIcons';
+export { default as MaterialIcons } from 'react-native-vector-icons/dist/MaterialIcons';
+export { default as Octicons } from 'react-native-vector-icons/dist/Octicons';
+export { default as SimpleLineIcons } from 'react-native-vector-icons/dist/SimpleLineIcons';
+export { default as Zocial } from 'react-native-vector-icons/dist/Zocial';

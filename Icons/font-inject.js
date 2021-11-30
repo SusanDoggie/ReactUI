@@ -104,13 +104,13 @@ if (global.document) {
     }
   `;
   
-  const style = document.createElement('style');
+  const style = global.document.createElement('style');
   style.type = 'text/css';
   if (style.styleSheet) {
     style.styleSheet.cssText = iconFontStyles;
   } else {
-    style.appendChild(document.createTextNode(iconFontStyles));
+    style.appendChild(global.document.createTextNode(iconFontStyles));
   }
   
-  document.head.appendChild(style);
+  global.document.head.appendChild(style);
 }
