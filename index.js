@@ -23,4 +23,4 @@
 //  THE SOFTWARE.
 //
 
-export { default as Icons } from './src/components/Icons';
+export { default as Icons } from './Icons';

@@ -23,5 +23,5 @@
 //  THE SOFTWARE.
 //
 
-export { default as Icons } from './src/components/Icons';
-export { default as CodeMirror } from './src/components/CodeMirror';
+export { default as Icons } from './Icons';
+export { default as CodeMirror } from './CodeMirror';
