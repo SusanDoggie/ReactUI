@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.web.js
 //
 //  The MIT License
 //  Copyright (c) 2015 - 2021 Susan Cheng. All rights reserved.
@@ -23,4 +23,5 @@
 //  THE SOFTWARE.
 //
 
-export { default as Icons } from './src/components/Icons';
+import './font-inject';
+export * from './index.js';

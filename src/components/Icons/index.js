@@ -23,8 +23,6 @@
 //  THE SOFTWARE.
 //
 
-import './font-inject';
-
 export { default as AntDesign } from 'react-native-vector-icons/dist/AntDesign';
 export { default as Entypo } from 'react-native-vector-icons/dist/Entypo';
 export { default as EvilIcons } from 'react-native-vector-icons/dist/EvilIcons';

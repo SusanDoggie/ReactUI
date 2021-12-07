@@ -24,3 +24,4 @@
 //
 
 export { default as Icons } from './src/components/Icons';
+export { default as CodeMirror } from './src/components/CodeMirror';
