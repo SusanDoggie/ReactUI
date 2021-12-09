@@ -23,10 +23,7 @@
 //  THE SOFTWARE.
 //
 
-const Icons = required('./Icons');
-const CodeMirror = required('./CodeMirror');
-
 module.exports = {
-    Icons,
-    CodeMirror,
+    Icons: require('./Icons'),
+    CodeMirror: require('./CodeMirror'),
 };

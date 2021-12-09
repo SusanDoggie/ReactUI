@@ -23,9 +23,9 @@
 //  THE SOFTWARE.
 //
 
-required('codemirror/lib/codemirror.css');
-const { useEffect, useRef } = required('react');
-const CodeMirror = required('react-codemirror');
+require('codemirror/lib/codemirror.css');
+const { useEffect, useRef } = require('react');
+const CodeMirror = require('react-codemirror');
 
 module.exports = {
 	

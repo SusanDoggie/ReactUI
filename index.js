@@ -23,8 +23,6 @@
 //  THE SOFTWARE.
 //
 
-const Icons = required('./Icons');
-
 module.exports = {
-    Icons,
+    Icons: require('./Icons'),
 };

@@ -23,21 +23,21 @@
 //  THE SOFTWARE.
 //
 
-const AntDesign = required('react-native-vector-icons/Fonts/AntDesign.ttf');
-const Entypo = required('react-native-vector-icons/Fonts/Entypo.ttf');
-const EvilIcons = required('react-native-vector-icons/Fonts/EvilIcons.ttf');
-const Feather = required('react-native-vector-icons/Fonts/Feather.ttf');
-const FontAwesome = required('react-native-vector-icons/Fonts/FontAwesome.ttf');
-const FontAwesome5 = required('react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf');
-const FontAwesome5Brands = required('react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf');
-const Fontisto = required('react-native-vector-icons/Fonts/Fontisto.ttf');
-const Foundation = required('react-native-vector-icons/Fonts/Foundation.ttf');
-const Ionicons = required('react-native-vector-icons/Fonts/Ionicons.ttf');
-const MaterialCommunityIcons = required('react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf');
-const MaterialIcons = required('react-native-vector-icons/Fonts/MaterialIcons.ttf');
-const Octicons = required('react-native-vector-icons/Fonts/Octicons.ttf');
-const SimpleLineIcons = required('react-native-vector-icons/Fonts/SimpleLineIcons.ttf');
-const Zocial = required('react-native-vector-icons/Fonts/Zocial.ttf');
+const AntDesign = require('react-native-vector-icons/Fonts/AntDesign.ttf');
+const Entypo = require('react-native-vector-icons/Fonts/Entypo.ttf');
+const EvilIcons = require('react-native-vector-icons/Fonts/EvilIcons.ttf');
+const Feather = require('react-native-vector-icons/Fonts/Feather.ttf');
+const FontAwesome = require('react-native-vector-icons/Fonts/FontAwesome.ttf');
+const FontAwesome5 = require('react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf');
+const FontAwesome5Brands = require('react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf');
+const Fontisto = require('react-native-vector-icons/Fonts/Fontisto.ttf');
+const Foundation = require('react-native-vector-icons/Fonts/Foundation.ttf');
+const Ionicons = require('react-native-vector-icons/Fonts/Ionicons.ttf');
+const MaterialCommunityIcons = require('react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf');
+const MaterialIcons = require('react-native-vector-icons/Fonts/MaterialIcons.ttf');
+const Octicons = require('react-native-vector-icons/Fonts/Octicons.ttf');
+const SimpleLineIcons = require('react-native-vector-icons/Fonts/SimpleLineIcons.ttf');
+const Zocial = require('react-native-vector-icons/Fonts/Zocial.ttf');
 
 if (global.document) {
   
