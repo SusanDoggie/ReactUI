@@ -23,5 +23,10 @@
 //  THE SOFTWARE.
 //
 
-export { default as Icons } from './Icons';
-export { default as CodeMirror } from './CodeMirror';
+const Icons = required('./Icons');
+const CodeMirror = required('./CodeMirror');
+
+module.exports = {
+    Icons,
+    CodeMirror,
+};

@@ -23,4 +23,8 @@
 //  THE SOFTWARE.
 //
 
-export { default as Icons } from './Icons';
+const Icons = required('./Icons');
+
+module.exports = {
+    Icons,
+};

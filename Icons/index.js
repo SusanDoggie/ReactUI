@@ -23,18 +23,36 @@
 //  THE SOFTWARE.
 //
 
-export { default as AntDesign } from 'react-native-vector-icons/dist/AntDesign';
-export { default as Entypo } from 'react-native-vector-icons/dist/Entypo';
-export { default as EvilIcons } from 'react-native-vector-icons/dist/EvilIcons';
-export { default as Feather } from 'react-native-vector-icons/dist/Feather';
-export { default as FontAwesome } from 'react-native-vector-icons/dist/FontAwesome';
-export { default as FontAwesome5 } from 'react-native-vector-icons/dist/FontAwesome5';
-export { default as FontAwesome5Pro } from 'react-native-vector-icons/dist/FontAwesome5Pro';
-export { default as Fontisto } from 'react-native-vector-icons/dist/Fontisto';
-export { default as Foundation } from 'react-native-vector-icons/dist/Foundation';
-export { default as Ionicons } from 'react-native-vector-icons/dist/Ionicons';
-export { default as MaterialCommunityIcons } from 'react-native-vector-icons/dist/MaterialCommunityIcons';
-export { default as MaterialIcons } from 'react-native-vector-icons/dist/MaterialIcons';
-export { default as Octicons } from 'react-native-vector-icons/dist/Octicons';
-export { default as SimpleLineIcons } from 'react-native-vector-icons/dist/SimpleLineIcons';
-export { default as Zocial } from 'react-native-vector-icons/dist/Zocial';
+const AntDesign = required('react-native-vector-icons/dist/AntDesign');
+const Entypo = required('react-native-vector-icons/dist/Entypo');
+const EvilIcons = required('react-native-vector-icons/dist/EvilIcons');
+const Feather = required('react-native-vector-icons/dist/Feather');
+const FontAwesome = required('react-native-vector-icons/dist/FontAwesome');
+const FontAwesome5 = required('react-native-vector-icons/dist/FontAwesome5');
+const FontAwesome5Pro = required('react-native-vector-icons/dist/FontAwesome5Pro');
+const Fontisto = required('react-native-vector-icons/dist/Fontisto');
+const Foundation = required('react-native-vector-icons/dist/Foundation');
+const Ionicons = required('react-native-vector-icons/dist/Ionicons');
+const MaterialCommunityIcons = required('react-native-vector-icons/dist/MaterialCommunityIcons');
+const MaterialIcons = required('react-native-vector-icons/dist/MaterialIcons');
+const Octicons = required('react-native-vector-icons/dist/Octicons');
+const SimpleLineIcons = required('react-native-vector-icons/dist/SimpleLineIcons');
+const Zocial = required('react-native-vector-icons/dist/Zocial');
+
+module.exports = {
+    AntDesign,
+    Entypo,
+    EvilIcons,
+    Feather,
+    FontAwesome,
+    FontAwesome5,
+    FontAwesome5Pro,
+    Fontisto,
+    Foundation,
+    Ionicons,
+    MaterialCommunityIcons,
+    MaterialIcons,
+    Octicons,
+    SimpleLineIcons,
+    Zocial,
+};
