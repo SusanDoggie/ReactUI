@@ -23,20 +23,36 @@
 //  THE SOFTWARE.
 //
 
+const { default: AntDesign } = require('react-native-vector-icons/dist/AntDesign');
+const { default: Entypo } = require('react-native-vector-icons/dist/Entypo');
+const { default: EvilIcons } = require('react-native-vector-icons/dist/EvilIcons');
+const { default: Feather } = require('react-native-vector-icons/dist/Feather');
+const { default: FontAwesome } = require('react-native-vector-icons/dist/FontAwesome');
+const { default: FontAwesome5 } = require('react-native-vector-icons/dist/FontAwesome5');
+const { default: FontAwesome5Pro } = require('react-native-vector-icons/dist/FontAwesome5Pro');
+const { default: Fontisto } = require('react-native-vector-icons/dist/Fontisto');
+const { default: Foundation } = require('react-native-vector-icons/dist/Foundation');
+const { default: Ionicons } = require('react-native-vector-icons/dist/Ionicons');
+const { default: MaterialCommunityIcons } = require('react-native-vector-icons/dist/MaterialCommunityIcons');
+const { default: MaterialIcons } = require('react-native-vector-icons/dist/MaterialIcons');
+const { default: Octicons } = require('react-native-vector-icons/dist/Octicons');
+const { default: SimpleLineIcons } = require('react-native-vector-icons/dist/SimpleLineIcons');
+const { default: Zocial } = require('react-native-vector-icons/dist/Zocial');
+
 module.exports = {
-    AntDesign: require('react-native-vector-icons/dist/AntDesign'),
-    Entypo: require('react-native-vector-icons/dist/Entypo'),
-    EvilIcons: require('react-native-vector-icons/dist/EvilIcons'),
-    Feather: require('react-native-vector-icons/dist/Feather'),
-    FontAwesome: require('react-native-vector-icons/dist/FontAwesome'),
-    FontAwesome5: require('react-native-vector-icons/dist/FontAwesome5'),
-    FontAwesome5Pro: require('react-native-vector-icons/dist/FontAwesome5Pro'),
-    Fontisto: require('react-native-vector-icons/dist/Fontisto'),
-    Foundation: require('react-native-vector-icons/dist/Foundation'),
-    Ionicons: require('react-native-vector-icons/dist/Ionicons'),
-    MaterialCommunityIcons: require('react-native-vector-icons/dist/MaterialCommunityIcons'),
-    MaterialIcons: require('react-native-vector-icons/dist/MaterialIcons'),
-    Octicons: require('react-native-vector-icons/dist/Octicons'),
-    SimpleLineIcons: require('react-native-vector-icons/dist/SimpleLineIcons'),
-    Zocial: require('react-native-vector-icons/dist/Zocial'),
+    AntDesign,
+    Entypo,
+    EvilIcons,
+    Feather,
+    FontAwesome,
+    FontAwesome5,
+    FontAwesome5Pro,
+    Fontisto,
+    Foundation,
+    Ionicons,
+    MaterialCommunityIcons,
+    MaterialIcons,
+    Octicons,
+    SimpleLineIcons,
+    Zocial,
 };

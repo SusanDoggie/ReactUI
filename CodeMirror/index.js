@@ -24,29 +24,26 @@
 //
 
 require('codemirror/lib/codemirror.css');
-const { useEffect, useRef } = require('react');
+const React = require('react');
 const CodeMirror = require('react-codemirror');
 
-module.exports = {
-	
-	default: function({ value, onChange, ...props }) {
+export default function({ value, onChange, ...props }) {
 
-		const ref = useRef();
-	
-		useEffect(() => {
-	
-			const codeMirror = ref.current.getCodeMirror();
-	
-			if (codeMirror.getValue() !== value) {
-				codeMirror.setValue(value);
-			}
-	
-		}, [value]);
-	
-		return <CodeMirror
-			ref={ref}
-			value={value}
-			onChange={(newValue, change) => onChange && onChange(newValue, change)}
-			{...props} />;
-	}
-};
+	const ref = React.useRef();
+
+	React.useEffect(() => {
+
+		const codeMirror = ref.current.getCodeMirror();
+
+		if (codeMirror.getValue() !== value) {
+			codeMirror.setValue(value);
+		}
+
+	}, [value]);
+
+	return <CodeMirror
+		ref={ref}
+		value={value}
+		onChange={(newValue, change) => onChange && onChange(newValue, change)}
+		{...props} />;
+}
