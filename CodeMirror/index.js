@@ -23,9 +23,9 @@
 //  THE SOFTWARE.
 //
 
-require('codemirror/lib/codemirror.css');
-const React = require('react');
-const CodeMirror = require('react-codemirror');
+import 'codemirror/lib/codemirror.css';
+import React from 'react';
+import CodeMirror from 'react-codemirror';
 
 export default function({ value, onChange, ...props }) {
 

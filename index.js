@@ -23,6 +23,4 @@
 //  THE SOFTWARE.
 //
 
-module.exports = {
-    Icons: require('./Icons'),
-};
+export { default as Icons } from './Icons';

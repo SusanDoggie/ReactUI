@@ -23,7 +23,5 @@
 //  THE SOFTWARE.
 //
 
-module.exports = {
-    Icons: require('./Icons'),
-    CodeMirror: require('./CodeMirror'),
-};
+export { default as Icons } from './Icons';
+export { default as CodeMirror } from './CodeMirror';

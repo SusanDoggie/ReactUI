@@ -23,36 +23,18 @@
 //  THE SOFTWARE.
 //
 
-const { default: AntDesign } = require('react-native-vector-icons/dist/AntDesign');
-const { default: Entypo } = require('react-native-vector-icons/dist/Entypo');
-const { default: EvilIcons } = require('react-native-vector-icons/dist/EvilIcons');
-const { default: Feather } = require('react-native-vector-icons/dist/Feather');
-const { default: FontAwesome } = require('react-native-vector-icons/dist/FontAwesome');
-const { default: FontAwesome5 } = require('react-native-vector-icons/dist/FontAwesome5');
-const { default: FontAwesome5Pro } = require('react-native-vector-icons/dist/FontAwesome5Pro');
-const { default: Fontisto } = require('react-native-vector-icons/dist/Fontisto');
-const { default: Foundation } = require('react-native-vector-icons/dist/Foundation');
-const { default: Ionicons } = require('react-native-vector-icons/dist/Ionicons');
-const { default: MaterialCommunityIcons } = require('react-native-vector-icons/dist/MaterialCommunityIcons');
-const { default: MaterialIcons } = require('react-native-vector-icons/dist/MaterialIcons');
-const { default: Octicons } = require('react-native-vector-icons/dist/Octicons');
-const { default: SimpleLineIcons } = require('react-native-vector-icons/dist/SimpleLineIcons');
-const { default: Zocial } = require('react-native-vector-icons/dist/Zocial');
-
-module.exports = {
-    AntDesign,
-    Entypo,
-    EvilIcons,
-    Feather,
-    FontAwesome,
-    FontAwesome5,
-    FontAwesome5Pro,
-    Fontisto,
-    Foundation,
-    Ionicons,
-    MaterialCommunityIcons,
-    MaterialIcons,
-    Octicons,
-    SimpleLineIcons,
-    Zocial,
-};
+export { default as AntDesign } from 'react-native-vector-icons/dist/AntDesign';
+export { default as Entypo } from 'react-native-vector-icons/dist/Entypo';
+export { default as EvilIcons } from 'react-native-vector-icons/dist/EvilIcons';
+export { default as Feather } from 'react-native-vector-icons/dist/Feather';
+export { default as FontAwesome } from 'react-native-vector-icons/dist/FontAwesome';
+export { default as FontAwesome5 } from 'react-native-vector-icons/dist/FontAwesome5';
+export { default as FontAwesome5Pro } from 'react-native-vector-icons/dist/FontAwesome5Pro';
+export { default as Fontisto } from 'react-native-vector-icons/dist/Fontisto';
+export { default as Foundation } from 'react-native-vector-icons/dist/Foundation';
+export { default as Ionicons } from 'react-native-vector-icons/dist/Ionicons';
+export { default as MaterialCommunityIcons } from 'react-native-vector-icons/dist/MaterialCommunityIcons';
+export { default as MaterialIcons } from 'react-native-vector-icons/dist/MaterialIcons';
+export { default as Octicons } from 'react-native-vector-icons/dist/Octicons';
+export { default as SimpleLineIcons } from 'react-native-vector-icons/dist/SimpleLineIcons';
+export { default as Zocial } from 'react-native-vector-icons/dist/Zocial';

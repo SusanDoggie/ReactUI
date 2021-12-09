@@ -23,5 +23,5 @@
 //  THE SOFTWARE.
 //
 
-require('./font-inject');
-module.exports = require('./index.js');
+import './font-inject';
+export * from './index.js';
