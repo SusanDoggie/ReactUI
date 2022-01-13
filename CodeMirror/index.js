@@ -24,26 +24,64 @@
 //
 
 import 'codemirror/lib/codemirror.css';
+import './index.css';
 import React from 'react';
-import CodeMirror from 'react-codemirror';
+import { View } from 'react-native';
 
-export default function({ value, onChange, ...props }) {
+export const CodeMirror = React.forwardRef(function({
+	value,
+	defaultValue,
+	style,
+	autoFocus,
+	options,
+	onChange,
+	onCursorActivity,
+	onFocus,
+	onBlur,
+	onScroll,
+	...props
+}, forwardRef) {
 
-	const ref = React.useRef();
+	const codeMirror = React.useRef({ editor: null });
+	const textareaRef = React.useRef();
 
 	React.useEffect(() => {
 
-		const codeMirror = ref.current.getCodeMirror();
+		const editor = require('codemirror').fromTextArea(textareaRef.current, options);
+		codeMirror.current.editor = editor;
+		
+		editor.on('change', (editor, change) => onChange && change.origin !== 'setValue' && onChange(editor.getValue(), change));
+		editor.on('cursorActivity', (editor) => onCursorActivity && onCursorActivity(editor));
+		editor.on('focus', () => onFocus && onFocus());
+		editor.on('blur', () => onBlur && onBlur());
+		editor.on('scroll', (editor) => onScroll && onScroll(editor.getScrollInfo()));
+		editor.setValue(value ?? defaultValue);
 
-		if (codeMirror.getValue() !== value) {
-			codeMirror.setValue(value);
+		return () => editor.toTextArea();
+
+	}, []);
+
+	React.useEffect(() => {
+
+		const editor = codeMirror.current.editor;
+
+		if (!_.isNil(editor) && !_.isNil(value) && editor.getValue() !== value) {
+			editor.setValue(value);
 		}
 
 	}, [value]);
 
-	return <CodeMirror
-		ref={ref}
-		value={value}
-		onChange={(newValue, change) => onChange && onChange(newValue, change)}
-		{...props} />;
-}
+	React.useImperativeHandle(forwardRef, () => ({
+		focus: () => { codeMirror.current.editor?.focus(); },
+	}), []);
+
+	return <View style={{ width: '100%', height: '100%', ...style }} {...props}>
+		<textarea
+			ref={textareaRef}
+			defaultValue={value ?? defaultValue}
+			autoComplete='off'
+			autoFocus={autoFocus} />
+	</View>;
+});
+
+export default CodeMirror;
