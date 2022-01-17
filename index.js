@@ -23,4 +23,4 @@
 //  THE SOFTWARE.
 //
 
-export { default as Icons } from './Icons';
+export * as Icons from './Icons';

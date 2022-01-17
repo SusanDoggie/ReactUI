@@ -64,11 +64,11 @@ if (global.document) {
     }
     @font-face {
       src: url(${FontAwesome5});
-      font-family: FontAwesome5;
+      font-family: FontAwesome5_Regular;
     }
     @font-face {
       src: url(${FontAwesome5Brands});
-      font-family: FontAwesome5Brands;
+      font-family: FontAwesome5_Brands;
     }
     @font-face {
       src: url(${Fontisto});

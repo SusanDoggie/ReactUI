@@ -1,7 +1,7 @@
 {
   "name": "doggie-react-ui",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index",
   "repository": "https://github.com/SusanDoggie/doggie-react-ui.git",
   "author": "Susan Cheng <susan.doggie@gmail.com>",
   "license": "MIT",
