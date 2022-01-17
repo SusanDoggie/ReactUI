@@ -23,4 +23,5 @@
 //  THE SOFTWARE.
 //
 
+export * from './Icons';
 export * as Icons from './Icons';

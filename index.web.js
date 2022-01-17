@@ -23,5 +23,6 @@
 //  THE SOFTWARE.
 //
 
+export * from './Icons';
 export * as Icons from './Icons';
 export { default as CodeMirror } from './CodeMirror';
