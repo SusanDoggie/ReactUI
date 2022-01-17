@@ -28,7 +28,8 @@ import Entypo from 'react-native-vector-icons/Fonts/Entypo.ttf';
 import EvilIcons from 'react-native-vector-icons/Fonts/EvilIcons.ttf';
 import Feather from 'react-native-vector-icons/Fonts/Feather.ttf';
 import FontAwesome from 'react-native-vector-icons/Fonts/FontAwesome.ttf';
-import FontAwesome5 from 'react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf';
+import FontAwesome5Solid from 'react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf';
+import FontAwesome5Regular from 'react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf';
 import FontAwesome5Brands from 'react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf';
 import Fontisto from 'react-native-vector-icons/Fonts/Fontisto.ttf';
 import Foundation from 'react-native-vector-icons/Fonts/Foundation.ttf';
@@ -63,12 +64,16 @@ if (global.document) {
       font-family: FontAwesome;
     }
     @font-face {
-      src: url(${FontAwesome5});
+      src: url(${FontAwesome5Solid});
+      font-family: FontAwesome5;
+    }
+    @font-face {
+      src: url(${FontAwesome5Regular});
       font-family: FontAwesome5_Regular;
     }
     @font-face {
       src: url(${FontAwesome5Brands});
-      font-family: FontAwesome5_Brands;
+      font-family: FontAwesome5Brands;
     }
     @font-face {
       src: url(${Fontisto});
