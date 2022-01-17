@@ -55,7 +55,7 @@ export const CodeMirror = React.forwardRef(function({
 		editor.on('focus', () => onFocus && onFocus());
 		editor.on('blur', () => onBlur && onBlur());
 		editor.on('scroll', (editor) => onScroll && onScroll(editor.getScrollInfo()));
-		editor.setValue(value ?? defaultValue);
+		editor.setValue(value ?? defaultValue ?? '');
 
 		return () => editor.toTextArea();
 
@@ -78,7 +78,7 @@ export const CodeMirror = React.forwardRef(function({
 	return <View style={{ width: '100%', height: '100%', ...style }} {...props}>
 		<textarea
 			ref={textareaRef}
-			defaultValue={value ?? defaultValue}
+			defaultValue={value ?? defaultValue ?? ''}
 			autoComplete='off'
 			autoFocus={autoFocus} />
 	</View>;
