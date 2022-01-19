@@ -7,8 +7,27 @@ import babel from '@rollup/plugin-babel';
 
 const packageJson = require("./package.json");
 
+const rollupConfig = {
+    external: [
+        /node_modules/
+    ],
+    plugins: [
+        resolve(),
+        babel({
+            babelrc: false,
+            exclude: 'node_modules/**',
+            babelHelpers: 'bundled',
+        }),
+        commonjs(),
+        postcss(),
+        css(),
+        terser(),
+    ],
+}
+
 export default [
     {
+        ...rollupConfig,
         input: "index.js",
         output: [
             {
@@ -17,23 +36,9 @@ export default [
                 sourcemap: true,
             },
         ],
-        external: [
-            /node_modules/
-        ],
-        plugins: [
-            resolve(),
-            babel({
-                babelrc: false,
-                exclude: 'node_modules/**',
-                babelHelpers: 'bundled',
-            }),
-            commonjs(),
-            postcss(),
-            css(),
-            terser(),
-        ],
     },
     {
+        ...rollupConfig,
         input: "index.web.js",
         output: [
             {
@@ -41,21 +46,6 @@ export default [
                 format: "cjs",
                 sourcemap: true,
             },
-        ],
-        external: [
-            /node_modules/
-        ],
-        plugins: [
-            resolve(),
-            babel({ 
-                babelrc: false,
-                exclude: 'node_modules/**',
-                babelHelpers: 'bundled',
-            }),
-            commonjs(),
-            postcss(),
-            css(),
-            terser(),
         ],
     },
 ];
