@@ -13,7 +13,8 @@
     "react-native-markdown-display": "^7.0.0-alpha.2",
     "react-native-render-html": "^6.3.3",
     "react-native-svg": "^12.1.1",
-    "react-native-vector-icons": "^9.0.0"
+    "react-native-vector-icons": "^9.0.0",
+    "style-inject": "^0.3.0"
   },
   "peerDependencies": {
     "lodash": ">=4.17.21",
