@@ -1,5 +1,5 @@
 //
-//  index.js
+//  styleInject.js
 //
 //  The MIT License
 //  Copyright (c) 2015 - 2022 Susan Cheng. All rights reserved.
@@ -23,14 +23,19 @@
 //  THE SOFTWARE.
 //
 
-export { default as styleInject } from './styleInject';
-export { default as BBCode } from './BBCode';
-export { default as Button } from './Button';
-export { default as HTML } from './HTML';
-export { default as Icon } from './Icon';
-export { default as Image } from './Image';
-export { default as Markdown } from './Markdown';
-export { default as ScrollView } from './ScrollView';
-export { default as SVG } from './SVG';
-export { default as Touchable } from './Touchable';
-export * from './Icons';
+export function styleInject(css) {
+    
+    if (!css || typeof document === 'undefined') return;
+  
+    const head = document.head || document.getElementsByTagName('head')[0];
+    const style = document.createElement('style');
+    head.appendChild(style);
+  
+    if (style.styleSheet) {
+      style.styleSheet.cssText = css;
+    } else {
+      style.appendChild(document.createTextNode(css));
+    }
+  }
+
+export default styleInject;
