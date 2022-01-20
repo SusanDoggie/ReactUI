@@ -1,5 +1,5 @@
 //
-//  font-inject.js
+//  font-inject.web.js
 //
 //  The MIT License
 //  Copyright (c) 2015 - 2022 Susan Cheng. All rights reserved.
@@ -40,82 +40,71 @@ import Octicons from 'react-native-vector-icons/Fonts/Octicons.ttf';
 import SimpleLineIcons from 'react-native-vector-icons/Fonts/SimpleLineIcons.ttf';
 import Zocial from 'react-native-vector-icons/Fonts/Zocial.ttf';
 
-if (global.document) {
-  
-  const iconFontStyles = `
-    @font-face {
-      src: url(${AntDesign});
-      font-family: AntDesign;
-    }
-    @font-face {
-      src: url(${Entypo});
-      font-family: Entypo;
-    }
-    @font-face {
-      src: url(${EvilIcons});
-      font-family: EvilIcons;
-    }
-    @font-face {
-      src: url(${Feather});
-      font-family: Feather;
-    }
-    @font-face {
-      src: url(${FontAwesome});
-      font-family: FontAwesome;
-    }
-    @font-face {
-      src: url(${FontAwesome5Solid});
-      font-family: FontAwesome5;
-    }
-    @font-face {
-      src: url(${FontAwesome5Regular});
-      font-family: FontAwesome5_Regular;
-    }
-    @font-face {
-      src: url(${FontAwesome5Brands});
-      font-family: FontAwesome5Brands;
-    }
-    @font-face {
-      src: url(${Fontisto});
-      font-family: Fontisto;
-    }
-    @font-face {
-      src: url(${Foundation});
-      font-family: Foundation;
-    }
-    @font-face {
-      src: url(${Ionicons});
-      font-family: Ionicons;
-    }
-    @font-face {
-      src: url(${MaterialCommunityIcons});
-      font-family: MaterialCommunityIcons;
-    }
-    @font-face {
-      src: url(${MaterialIcons});
-      font-family: MaterialIcons;
-    }
-    @font-face {
-      src: url(${Octicons});
-      font-family: Octicons;
-    }
-    @font-face {
-      src: url(${SimpleLineIcons});
-      font-family: SimpleLineIcons;
-    }
-    @font-face {
-      src: url(${Zocial});
-      font-family: Zocial;
-    }
-  `;
-  
-  const style = global.document.createElement('style');
-  style.type = 'text/css';
-  if (style.styleSheet) {
-    style.styleSheet.cssText = iconFontStyles;
-  } else {
-    style.appendChild(global.document.createTextNode(iconFontStyles));
-  }
-  
-  global.document.head.appendChild(style);
+import styleInject from '../styleInject';
+
+styleInject(`
+@font-face {
+  src: url(${AntDesign});
+  font-family: AntDesign;
 }
+@font-face {
+  src: url(${Entypo});
+  font-family: Entypo;
+}
+@font-face {
+  src: url(${EvilIcons});
+  font-family: EvilIcons;
+}
+@font-face {
+  src: url(${Feather});
+  font-family: Feather;
+}
+@font-face {
+  src: url(${FontAwesome});
+  font-family: FontAwesome;
+}
+@font-face {
+  src: url(${FontAwesome5Solid});
+  font-family: FontAwesome5;
+}
+@font-face {
+  src: url(${FontAwesome5Regular});
+  font-family: FontAwesome5_Regular;
+}
+@font-face {
+  src: url(${FontAwesome5Brands});
+  font-family: FontAwesome5Brands;
+}
+@font-face {
+  src: url(${Fontisto});
+  font-family: Fontisto;
+}
+@font-face {
+  src: url(${Foundation});
+  font-family: Foundation;
+}
+@font-face {
+  src: url(${Ionicons});
+  font-family: Ionicons;
+}
+@font-face {
+  src: url(${MaterialCommunityIcons});
+  font-family: MaterialCommunityIcons;
+}
+@font-face {
+  src: url(${MaterialIcons});
+  font-family: MaterialIcons;
+}
+@font-face {
+  src: url(${Octicons});
+  font-family: Octicons;
+}
+@font-face {
+  src: url(${SimpleLineIcons});
+  font-family: SimpleLineIcons;
+}
+@font-face {
+  src: url(${Zocial});
+  font-family: Zocial;
+}
+`);

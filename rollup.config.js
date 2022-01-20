@@ -1,10 +1,9 @@
-import resolve from "@rollup/plugin-node-resolve";
-import commonjs from "@rollup/plugin-commonjs";
-import css from "rollup-plugin-import-css";
-import postcss from "rollup-plugin-postcss";
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import postcss from 'rollup-plugin-postcss';
 import babel from '@rollup/plugin-babel';
 
-const packageJson = require("./package.json");
+const packageJson = require('./package.json');
 
 const rollupPlugins = [
     babel({
@@ -14,11 +13,10 @@ const rollupPlugins = [
     }),
     commonjs(),
     postcss(),
-    css(),
 ];
 
 const rollupConfig = {
-    input: "index",
+    input: 'index',
     external: [
         /node_modules/
     ],
@@ -30,12 +28,12 @@ export default [
         output: [
             {
               file: packageJson.main + '.js',
-              format: "cjs",
+              format: 'cjs',
               sourcemap: true,
             },
             {
               file: packageJson.module + '.js',
-              format: "esm",
+              format: 'esm',
               sourcemap: true,
             },
         ],
@@ -51,12 +49,12 @@ export default [
         output: [
             {
                 file: packageJson.main + '.web.js',
-                format: "cjs",
+                format: 'cjs',
                 sourcemap: true,
             },
             {
               file: packageJson.module + '.web.js',
-              format: "esm",
+              format: 'esm',
               sourcemap: true,
             },
         ],
