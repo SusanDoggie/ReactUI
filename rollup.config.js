@@ -8,7 +8,7 @@ const packageJson = require('./package.json');
 const rollupPlugins = [
     postcss({
         inject: (cssVariableName) => `
-        import styleInject from 'styleInject';
+        import styleInject from 'style-inject';
         styleInject(${cssVariableName});`
     }),
     babel({

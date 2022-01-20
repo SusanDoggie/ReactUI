@@ -40,7 +40,7 @@ import Octicons from 'react-native-vector-icons/Fonts/Octicons.ttf';
 import SimpleLineIcons from 'react-native-vector-icons/Fonts/SimpleLineIcons.ttf';
 import Zocial from 'react-native-vector-icons/Fonts/Zocial.ttf';
 
-import styleInject from '../styleInject';
+import styleInject from 'style-inject';
 
 styleInject(`
 @font-face {

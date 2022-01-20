@@ -23,7 +23,7 @@
 //  THE SOFTWARE.
 //
 
-export { default as styleInject } from './styleInject';
+export { default as styleInject } from 'style-inject';
 export { default as BBCode } from './BBCode';
 export { default as Button } from './Button';
 export { default as HTML } from './HTML';
