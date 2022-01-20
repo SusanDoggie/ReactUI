@@ -23,6 +23,5 @@
 //  THE SOFTWARE.
 //
 
-export * from './Icons';
-export * as Icons from './Icons';
+export * from './index.js';
 export { default as CodeMirror } from './CodeMirror';

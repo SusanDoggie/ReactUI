@@ -23,5 +23,13 @@
 //  THE SOFTWARE.
 //
 
+export { default as BBCode } from './BBCode';
+export { default as Button } from './Button';
+export { default as HTML } from './HTML';
+export { default as Icon } from './Icon';
+export { default as Image } from './Image';
+export { default as Markdown } from './Markdown';
+export { default as ScrollView } from './ScrollView';
+export { default as SVG } from './SVG';
+export { default as Touchable } from './Touchable';
 export * from './Icons';
-export * as Icons from './Icons';
