@@ -13,6 +13,7 @@ export const Icon = React.forwardRef(({
 	icon,
 	name,
 	style,
+	children,
 	...props
 }, forwardRef) => {
 
@@ -26,6 +27,7 @@ export const Icon = React.forwardRef(({
 	
 	return <Text ref={forwardRef} style={style} {...props}>
 		{!_.isNil(_Icon) && <_Icon name={name} size={fontSize} color={color} style={_style} />}
+		{children}
 	</Text>;
 });
 
