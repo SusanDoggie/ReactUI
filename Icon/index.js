@@ -6,7 +6,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 import * as Icons from '../Icons';
 
 export const Icon = React.forwardRef(({
@@ -17,9 +17,15 @@ export const Icon = React.forwardRef(({
 }, forwardRef) => {
 
 	const _Icon = Icons[icon];
+
+	const {
+		fontSize,
+		color,
+		..._style
+	} = StyleSheet.flatten(style);
 	
 	return <Text ref={forwardRef} style={style} {...props}>
-		{!_.isNil(_Icon) && <_Icon name={name} />}
+		{!_.isNil(_Icon) && <_Icon name={name} size={fontSize} color={color} style={_style} />}
 	</Text>;
 });
 

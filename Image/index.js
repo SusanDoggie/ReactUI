@@ -6,7 +6,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Image as RNImage } from 'react-native';
+import { Image as RNImage, StyleSheet } from 'react-native';
 import ImageBase from './ImageBase';
 
 export const Image = React.forwardRef(({
@@ -19,7 +19,7 @@ export const Image = React.forwardRef(({
         width,
         height,
         ..._style
-    } = style ?? {};
+    } = StyleSheet.flatten(style);
 
     const _source = RNImage.resolveAssetSource ? RNImage.resolveAssetSource(source) : undefined;
     const [imageSize, setImageSize] = React.useState({ width: _source?.width ?? 0, height: _source?.height ?? 0 });

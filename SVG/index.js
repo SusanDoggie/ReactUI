@@ -6,7 +6,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { SvgCss, SvgCssUri } from 'react-native-svg';
 
 export const SVG = React.forwardRef(({
@@ -19,7 +19,7 @@ export const SVG = React.forwardRef(({
         width,
         height,
         ..._style
-    } = style ?? {};
+    } = StyleSheet.flatten(style);
 
     if (_.isString(source?.content)) {
         return <SvgCss ref={forwardRef} width={width} height={height} xml={source.content} style={_style} {...props} />;
