@@ -10,16 +10,16 @@
     "rollup": "rollup -c"
   },
   "dependencies": {
-    "react-native-markdown-display": "^7.0.0-alpha.2",
-    "react-native-render-html": "^6.3.3",
-    "react-native-svg": "^12.1.1",
-    "react-native-vector-icons": "^9.0.0"
+    "react-native-markdown-display": "*",
+    "react-native-render-html": "*",
+    "react-native-svg": "*",
+    "react-native-vector-icons": "*"
   },
   "peerDependencies": {
-    "lodash": ">=4.17.21",
+    "lodash": "*",
     "react": ">=16.8.0",
     "react-native": ">=0.67.0",
-    "sugax": ">=1.0.2"
+    "sugax": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.16.12",
