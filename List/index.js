@@ -23,15 +23,9 @@
 //  THE SOFTWARE.
 //
 
-export { default as styleInject } from 'style-inject';
-export { default as BBCode } from './BBCode';
-export { default as Button } from './Button';
-export { default as HTML } from './HTML';
-export { default as Icon } from './Icon';
-export { default as Image } from './Image';
-export { default as List } from './List';
-export { default as Markdown } from './Markdown';
-export { default as ScrollView } from './ScrollView';
-export { default as SVG } from './SVG';
-export { default as Touchable } from './Touchable';
-export * from './Icons';
+import _ from 'lodash';
+import React from 'react';
+
+export const List = ({ data, renderItem }) => React.createElement(React.Fragment, {}, ..._.map(data, (item, index) => renderItem({ item, index })));
+
+export default List;
