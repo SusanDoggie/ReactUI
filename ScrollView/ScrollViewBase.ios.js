@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { ScrollView, UIManager, Keyboard, TextInput, findNodeHandle } from 'react-native';
 
-export const KeyboardAwareScrollView = React.forwardRef(({ children, onScroll, scrollEventThrottle, ...props }, forwardRef) => {
+export const KeyboardAwareScrollView = React.forwardRef(({ children, onScroll, ...props }, forwardRef) => {
 
   const scrollViewRef = React.useRef();
   const scrollEvent = React.useRef({});
@@ -74,7 +74,8 @@ export const KeyboardAwareScrollView = React.forwardRef(({ children, onScroll, s
       _.assignIn(scrollEvent.current, event.nativeEvent);
       onScroll?.(event);
     }}
-    scrollEventThrottle={scrollEventThrottle ?? 16}
+    scrollEventThrottle={16}
+    scrollToOverflowEnabled={true}
     {...props}>{children}</ScrollView>;
 });
 
