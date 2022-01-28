@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "dist/cjs/index",
   "module": "dist/esm/index",
+  "types": "dist/index.d.ts",
   "repository": "https://github.com/SusanDoggie/doggie-react-ui.git",
   "author": "Susan Cheng <susan.doggie@gmail.com>",
   "license": "MIT",
