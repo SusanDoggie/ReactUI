@@ -23,9 +23,11 @@
 //  THE SOFTWARE.
 //
 
+import _ from "lodash";
+
 export function styleInject(css) {
     
-    if (!css || typeof document === 'undefined') return;
+    if (!_.isString(css) || typeof document === 'undefined') return;
   
     const head = document.head || document.getElementsByTagName('head')[0];
     const style = document.createElement('style');

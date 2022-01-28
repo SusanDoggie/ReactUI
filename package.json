@@ -31,9 +31,17 @@
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-node-resolve": "^13.1.3",
+    "@types/lodash": "^4.14.178",
+    "@types/react": "^17.0.38",
+    "@types/react-native": "^0.66.15",
+    "@types/react-redux": "^7.1.22",
+    "@types/redux": "^3.6.0",
     "postcss": "^8.4.5",
     "rollup": "^2.66.0",
+    "rollup-plugin-dts": "^4.1.0",
     "rollup-plugin-postcss": "^4.0.2",
-    "style-inject": "link:./styleInject"
+    "style-inject": "link:./styleInject",
+    "sugax": "^1.0.8",
+    "typescript": "^4.5.5"
   }
 }
