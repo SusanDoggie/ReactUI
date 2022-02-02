@@ -166,16 +166,16 @@ export function parse(docs) {
   
         } else if (match.startsWith('[/')) {
   
-          if (_.last(stacks)?.tag == tag) {
+          if (_.last(stacks)?.tag === tag) {
   
             const last = stacks.pop().elements;
             _.last(last).elements = elements;
     
             elements = last;
   
-            if (tags[tag]?.breakAfter != true) {
+            if (tags[tag]?.breakAfter !== true) {
               let newline_match;
-              if ((newline_match = newline_regex.exec(suffix)) && newline_match.index == 0) {
+              if ((newline_match = newline_regex.exec(suffix)) && newline_match.index === 0) {
                 suffix = suffix.slice(newline_match[0].length);
               }
             }
@@ -191,22 +191,22 @@ export function parse(docs) {
   
           elements.push(new TagElement(tag, attrs));
   
-          if (tags[tag]?.isSelfClosing != true) {
+          if (tags[tag]?.isSelfClosing !== true) {
   
             stacks.push({ tag, elements });
             elements = [];
   
-            if (tags[tag]?.breakAfter != true) {
+            if (tags[tag]?.breakAfter !== true) {
               let newline_match;
-              if ((newline_match = newline_regex.exec(suffix)) && newline_match.index == 0) {
+              if ((newline_match = newline_regex.exec(suffix)) && newline_match.index === 0) {
                 suffix = suffix.slice(newline_match[0].length);
               }
             }
   
-          } else if (tags[tag]?.breakStart != true) {
+          } else if (tags[tag]?.breakStart !== true) {
   
             let newline_match;
-            if ((newline_match = newline_regex.exec(suffix)) && newline_match.index == 0) {
+            if ((newline_match = newline_regex.exec(suffix)) && newline_match.index === 0) {
               suffix = suffix.slice(newline_match[0].length);
             }
           }
@@ -249,13 +249,13 @@ export function bbcode2html(content, params = {}) {
   
   for (const element of content) {
 
-    if (element.type == 'text') {
+    if (element.type === 'text') {
 
-      const text = html_escaper.escape(element.text).replace(/[^\S\r\n]/g, (c) => c == ' ' ? '&nbsp' : `&#${c.charCodeAt(0)};`);
+      const text = html_escaper.escape(element.text).replace(/[^\S\r\n]/g, (c) => c === ' ' ? '&nbsp' : `&#${c.charCodeAt(0)};`);
 
       html += text.replace(/\r\n|\r|\n/g, '<br />');
 
-    } else if (element.type == 'tag') {
+    } else if (element.type === 'tag') {
 
       switch (element.tag) {
 
@@ -490,7 +490,7 @@ export function bbcode2html(content, params = {}) {
           }
 
           let image_src;
-          if (element.elements.length == 1 && element.elements[0].type == 'text') {
+          if (element.elements.length === 1 && element.elements[0].type === 'text') {
             image_src = element.elements[0].text;
           }
 
