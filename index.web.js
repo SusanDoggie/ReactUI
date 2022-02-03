@@ -24,4 +24,5 @@
 //
 
 export * from './index.js';
-export { default as CodeMirror } from './CodeMirror';
+export { CodeMirror } from './CodeMirror';
+export { DataSheet } from './DataSheet';

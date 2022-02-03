@@ -11,6 +11,7 @@
     "rollup": "rollup -c"
   },
   "dependencies": {
+    "bson": "*",
     "codemirror": "*",
     "react-native-markdown-display": "*",
     "react-native-render-html": "*",

@@ -23,15 +23,15 @@
 //  THE SOFTWARE.
 //
 
-export { default as styleInject } from 'style-inject';
-export { default as BBCode } from './BBCode';
-export { default as Button } from './Button';
-export { default as HTML } from './HTML';
-export { default as Icon } from './Icon';
-export { default as Image } from './Image';
-export { default as List } from './List';
-export { default as Markdown } from './Markdown';
-export { default as ScrollView } from './ScrollView';
-export { default as SVG } from './SVG';
-export { default as Touchable } from './Touchable';
+export { styleInject } from 'style-inject';
+export { BBCode } from './BBCode';
+export { Button } from './Button';
+export { HTML } from './HTML';
+export { Icon } from './Icon';
+export { Image } from './Image';
+export { List } from './List';
+export { Markdown } from './Markdown';
+export { ScrollView } from './ScrollView';
+export { SVG } from './SVG';
+export { Touchable } from './Touchable';
 export * from './Icons';
