@@ -26,6 +26,6 @@
 import _ from 'lodash';
 import React from 'react';
 
-export const List = ({ data, renderItem }) => React.createElement(React.Fragment, {}, ..._.map(data, (item, index) => renderItem({ item, index })));
+export const List = ({ data, renderItem = ({item}) => item }) => React.createElement(React.Fragment, {}, ..._.map(data, (item, index) => renderItem({ item, index })));
 
 export default List;
