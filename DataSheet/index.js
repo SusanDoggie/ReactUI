@@ -94,7 +94,7 @@ export const DataSheet = React.forwardRef(({
         metaKey: false,
     });
 
-    const setState = (next) => _setState({ ...state, ...next });
+    const setState = (next) => _setState(state => ({ ...state, ...next }));
 
     React.useImperativeHandle(forwardRef, () => ({
         clearSelection: () => setState({ selecting_rows: null, selected_rows: [], selecting_cells: null, selected_cells: null }),
