@@ -69,8 +69,7 @@ export const Icon = React.forwardRef(({
 	const _Icon = Icons[icon];
 
 	const _style = StyleSheet.flatten(style);
-	
-	const { fontSize, color } = StyleSheet.flatten(style);
+	const { fontSize, color } = _style ?? {};
 	
 	return <Text ref={forwardRef} style={_style} {...props}>
 		{!_.isNil(_Icon) && <_Icon name={name} size={fontSize} color={color} style={_.pick(_style, text_style)} />}
