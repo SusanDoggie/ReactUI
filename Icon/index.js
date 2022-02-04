@@ -28,6 +28,36 @@ import React from 'react';
 import { Text, StyleSheet } from 'react-native';
 import * as Icons from '../Icons';
 
+const text_style = [
+	'color',
+	'fontFamily',
+	'fontFeatureSettings',
+	'fontSize',
+	'fontStyle',
+	'fontVariant',
+	'fontWeight',
+	'includeFontPadding',
+	'letterSpacing',
+	'lineHeight',
+	'textAlign',
+	'textAlignVertical',
+	'textDecorationColor',
+	'textDecorationLine',
+	'textDecorationStyle',
+	'textIndent',
+	'textOverflow',
+	'textRendering',
+	'textShadowColor',
+	'textShadowOffset',
+	'textShadowRadius',
+	'textTransform',
+	'unicodeBidi',
+	'whiteSpace',
+	'wordBreak',
+	'wordWrap',
+	'writingDirection',
+]
+
 export const Icon = React.forwardRef(({
 	icon,
 	name,
@@ -38,14 +68,12 @@ export const Icon = React.forwardRef(({
 
 	const _Icon = Icons[icon];
 
-	const {
-		fontSize,
-		color,
-		..._style
-	} = StyleSheet.flatten(style);
+	const _style = StyleSheet.flatten(style);
 	
-	return <Text ref={forwardRef} style={style} {...props}>
-		{!_.isNil(_Icon) && <_Icon name={name} size={fontSize} color={color} style={_style} />}
+	const { fontSize, color } = StyleSheet.flatten(style);
+	
+	return <Text ref={forwardRef} style={_style} {...props}>
+		{!_.isNil(_Icon) && <_Icon name={name} size={fontSize} color={color} style={_.pick(_style, text_style)} />}
 		{children}
 	</Text>;
 });
