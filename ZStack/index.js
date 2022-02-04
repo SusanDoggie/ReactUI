@@ -23,16 +23,18 @@
 //  THE SOFTWARE.
 //
 
-export { styleInject } from 'style-inject';
-export { BBCode } from './BBCode';
-export { Button } from './Button';
-export { HTML } from './HTML';
-export { Icon } from './Icon';
-export { Image } from './Image';
-export { List } from './List';
-export { Markdown } from './Markdown';
-export { ScrollView } from './ScrollView';
-export { SVG } from './SVG';
-export { Touchable } from './Touchable';
-export { ZStack } from './ZStack';
-export * from './Icons';
+import _ from 'lodash';
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+
+const toArray = React.Children.toArray;
+
+export const ZStack = React.forwardRef(({ children, ...props }, forwardRef) => <View ref={forwardRef} {...props}>
+    {toArray(children).map(child => React.cloneElement(
+        child,
+        { style: StyleSheet.compose(child.props.style, { position: 'absolute' }) },
+        ...toArray(child.props.children)
+    ))}
+</View>);
+
+export default ZStack;
