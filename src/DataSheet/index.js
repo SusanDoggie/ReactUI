@@ -69,6 +69,7 @@ export const DataSheet = React.forwardRef(({
     selectedItemContainerStyle,
     contentContainerStyle,
     encodeValue,
+	showEmptyLastRow,
     onDeleteRows,
     onDeleteCells,
     onCopyRows,
@@ -364,8 +365,10 @@ export const DataSheet = React.forwardRef(({
 
         {_.isArray(data) && <tbody
         style={StyleSheet.flatten([{ backgroundColor: 'white' }, contentContainerStyle])}>
+
             <List data={data} renderItem={({ item: items, index: row }) => <tr
             style={StyleSheet.flatten([{ backgroundColor: row % 2 == 0 ? 'white' : '#F6F8FF' }, rowContainerStyle])}>
+
                 {rowNumbers === true && <TableCell
                 selected={is_row_selected(row)}
                 onMouseDown={(e) => handleRowMouseDown(e, row)}
@@ -402,7 +405,30 @@ export const DataSheet = React.forwardRef(({
 					{renderItem({ item, rowIdx: row, columnIdx: col })}
                     </View>
                 </TableCell>} />
+
             </tr>} />
+
+			{showEmptyLastRow === true && <tr
+            style={StyleSheet.flatten([{ backgroundColor: data.length % 2 == 0 ? 'white' : '#F6F8FF' }, rowContainerStyle])}>
+
+                {rowNumbers === true && <TableCell
+                style={StyleSheet.flatten([{
+                    padding: 4,
+                    overflow: 'hidden',
+                }, itemContainerStyle])} />}
+
+                <List data={columns} renderItem={({ index: col }) => <TableCell
+                onDoubleClick={(e) => handleCellDoubleClick(e, data.length, col)}
+                style={StyleSheet.flatten([{
+                    padding: 0,
+                    position: 'relative',
+                    cursor: 'cell',
+                }, itemContainerStyle])}>
+					<Text style={{ fontFamily: 'monospace' }}>{' '}</Text>
+                </TableCell>} />
+
+            </tr>}
+
         </tbody>}
     </table>;
 });
