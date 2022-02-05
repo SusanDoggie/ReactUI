@@ -353,7 +353,7 @@ export const DataSheet = React.forwardRef(({
             {rowNumbers === true && <th />}
             <List data={columns} renderItem={({ item }) => <th
             style={StyleSheet.flatten([{
-                padding: 0,
+                padding: 4,
                 position: 'relative', 
                 border: 1, 
                 borderStyle: 'solid',
@@ -398,8 +398,8 @@ export const DataSheet = React.forwardRef(({
                     position: 'relative',
                     cursor: 'cell',
                 }, selectedItemContainerStyle])}>
-                    <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}>
-                        <View style={{ padding: 4 }}>{renderItem({ item, rowIdx: row, columnIdx: col })}</View>
+                    <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, padding: 4 }}>
+					{renderItem({ item, rowIdx: row, columnIdx: col })}
                     </View>
                 </TableCell>} />
             </tr>} />
