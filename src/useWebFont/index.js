@@ -28,7 +28,7 @@ import React from 'react';
 
 let loaded_fonts = []
 
-export const useWebFont = (families) => React.useEffect(() => {
+export const useWebFont = (...families) => React.useEffect(() => {
     const _families = _.filter(families, x => !loaded_fonts.includes(x));
     loaded_fonts = loaded_fonts.concat(_families);
     if (!_.isEmpty(_families)) require('webfontloader').load({ google: { families: families } });
