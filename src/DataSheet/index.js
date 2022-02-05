@@ -29,7 +29,6 @@ import { EJSON } from 'bson';
 import { View, Text, StyleSheet } from 'react-native';
 import { List } from '../List';
 import { useElementLayout, useDocumentEvent, useMergeRefs } from 'sugax';
-import { ValueViewer } from './ValueViewer';
 import { _encode_value } from './_encode_value';
 
 function TableCell({
@@ -60,7 +59,7 @@ export const DataSheet = React.forwardRef(({
     data,
     columns,
     rowNumbers = true,
-    renderItem = ({item}) => <ValueViewer value={item} />,
+    renderItem,
     style,
     headerContainerStyle,
     headerItemContainerStyle,
