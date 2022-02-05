@@ -24,8 +24,8 @@
 //
 
 import _ from 'lodash';
-import React, { useState } from 'react';
-import { Text, Pressable } from 'react-native';
+import React from 'react';
+import { Text, Pressable, StyleSheet } from 'react-native';
 import * as Icons from '../Icons';
 
 export const Button = React.forwardRef(({
@@ -46,11 +46,11 @@ export const Button = React.forwardRef(({
 	...props
 }, forwardRef) => {
 
-	const [isHover, setIsHover] = useState(false);
+	const [isHover, setIsHover] = React.useState(false);
 
-	const _style = isHover ? { ...style, ...hoverStyle } : { ...style };
-	const _iconStyle = isHover ? { ...iconStyle, ...iconHoverStyle } : { ...iconStyle };
-	const _titleStyle = isHover ? { ...titleStyle, ...titleHoverStyle } : { ...titleStyle };
+	const _style = isHover ? StyleSheet.compose(style, hoverStyle) : style;
+	const _iconStyle = isHover ? StyleSheet.compose(iconStyle, iconHoverStyle) : iconStyle;
+	const _titleStyle = isHover ? StyleSheet.compose(titleStyle, titleHoverStyle) : titleStyle;
 
 	const Icon = Icons[icon];
 
@@ -58,11 +58,11 @@ export const Button = React.forwardRef(({
 
 	if (_.isEmpty(children)) {
 		if (!_.isEmpty(Icon) && !_.isEmpty(title)) {
-			content = <Text style={{ color: 'white', fontWeight: '500', ..._titleStyle }}><Icon name={iconName} {..._iconStyle} /> {title}</Text>;
+			content = <Text style={[{ color: 'white', fontWeight: '500' }, _titleStyle]}><Icon name={iconName} {...StyleSheet.flatten(_iconStyle)} /> {title}</Text>;
 		} else if (!_.isEmpty(Icon)) {
-			content = <Icon name={iconName} color='white' fontWeight='500' {..._iconStyle} />;
+			content = <Icon name={iconName} color='white' fontWeight='500' {...StyleSheet.flatten(_iconStyle)} />;
 		} else if (!_.isEmpty(title)) {
-			content = <Text style={{ color: 'white', fontWeight: '500', ..._titleStyle }}>{title}</Text>;
+			content = <Text style={[{ color: 'white', fontWeight: '500' }, _titleStyle]}>{title}</Text>;
 		}
 	}
 
@@ -78,15 +78,14 @@ export const Button = React.forwardRef(({
 	}}
 	disabled={disabled}
 	focusable={!disabled && focusable !== false}
-	style={{
+	style={[{
 		padding: 8,
 		borderRadius: 2,
 		alignItems: 'center',
 		justifyContent: 'center',
 		backgroundColor: disabled ? '#dfdfdf' : isHover ? '#1691E8' : '#2196F3',
 		userSelect: 'none',
-		..._style
-	}} {...props}>
+	}, _style]} {...props}>
 		{content}
 	</Pressable>;
 });

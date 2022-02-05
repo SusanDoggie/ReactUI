@@ -1,5 +1,5 @@
 //
-//  index.web.js
+//  index.js
 //
 //  The MIT License
 //  Copyright (c) 2015 - 2022 Susan Cheng. All rights reserved.
@@ -26,6 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
+import { SvgCss, SvgCssUri } from 'react-native-svg';
 
 export const SVG = React.forwardRef(({
     source,
@@ -36,31 +37,18 @@ export const SVG = React.forwardRef(({
     const { 
         width,
         height,
-        aspectRatio,
         ..._style
     } = StyleSheet.flatten(style);
 
     if (_.isString(source?.content)) {
-        return <View ref={forwardRef} style={{ width, height, aspectRatio, ..._style }} {...props}>
-            <img
-            draggable={false}
-            width={_.isNil(width) && (_.isNil(height) || _.isNil(aspectRatio)) ? undefined : '100%'}
-            height={_.isNil(height) && (_.isNil(width) || _.isNil(aspectRatio)) ? undefined : '100%'}
-            src={`data:image/svg+xml,${encodeURIComponent(source.content)}`} />
-        </View>;
+        return <SvgCss ref={forwardRef} width={width} height={height} xml={source.content} style={_style} {...props} />;
     }
 
     if (_.isString(source?.uri)) {
-        return <View ref={forwardRef} style={{ width, height, aspectRatio, ..._style }} {...props}>
-            <img
-            draggable={false}
-            width={_.isNil(width) && (_.isNil(height) || _.isNil(aspectRatio)) ? undefined : '100%'}
-            height={_.isNil(height) && (_.isNil(width) || _.isNil(aspectRatio)) ? undefined : '100%'}
-            src={source.uri} />
-        </View>;
+        return <SvgCssUri ref={forwardRef} width={width} height={height} uri={source.uri} style={_style} {...props} />;
     }
 
-    return <View ref={forwardRef} style={{ width, height, aspectRatio, ..._style }} {...props} />;
+    return <View ref={forwardRef} style={[{ width, height }, _style]} {...props} />
 });
 
 export default SVG;

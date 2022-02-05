@@ -67,7 +67,7 @@ export const Image = React.forwardRef(({
         }    
     }
     
-    return <ImageBase ref={forwardRef} source={source} style={{ width: _width, height: _height, aspectRatio, ..._style }} {...props} />;
+    return <ImageBase ref={forwardRef} source={source} style={[{ width: _width, height: _height, aspectRatio }, _style]} {...props} />;
 });
 
 export default Image;

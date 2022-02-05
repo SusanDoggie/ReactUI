@@ -21,7 +21,7 @@ const rollupPlugins = [
 ];
 
 const rollupConfig = {
-    input: 'index',
+    input: 'src/index',
     external: [
         /node_modules/
     ],
@@ -71,7 +71,7 @@ export default [
         ],
     },
     {
-        input: 'index',
+        input: 'src/index',
         output: [
             {
                 file: 'dist/index.d.ts',

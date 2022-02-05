@@ -75,7 +75,7 @@ export const CodeMirror = React.forwardRef(function({
 		focus: () => { codeMirror.current.editor?.focus(); },
 	}), []);
 
-	return <View style={{ width: '100%', height: '100%', ...style }} {...props}>
+	return <View style={[{ width: '100%', height: '100%' }, style]} {...props}>
 		<textarea
 			ref={textareaRef}
 			defaultValue={value ?? defaultValue ?? ''}

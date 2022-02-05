@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { EJSON } from 'bson';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { List } from '../List';
 import { useElementLayout, useDocumentEvent, useMergeRefs } from 'sugax';
 import { ValueViewer } from './ValueViewer';
@@ -46,15 +46,14 @@ function TableCell({
 
     useElementLayout(ref, (e) => setCellHeight(e.nativeEvent?.layout?.height ?? 0));
 
-    const _style = selected ? selectedStyle : style;
-
-    return <td ref={ref} style={{
+    const _style = StyleSheet.flatten([{
         border: 1,
         borderStyle: selected ? 'double' : 'solid',
         borderColor: selected ? '#2185D0' : '#DDD',
         boxShadow: selected ? `inset 0 -${cellHeight}px 0 ${highlightColor}` : null,
-        ..._style
-    }} {...props}>{children}</td>;
+    }, selected ? selectedStyle : style]);
+
+    return <td ref={ref} style={_style} {...props}>{children}</td>;
 }
 
 export const DataSheet = React.forwardRef(({
@@ -337,61 +336,50 @@ export const DataSheet = React.forwardRef(({
 
     return <table
     ref={ref}
-    style={{ 
+    style={StyleSheet.flatten([{ 
         borderCollapse: 'collapse',
         userSelect: 'none',
         MozUserSelect: 'none',
         WebkitUserSelect: 'none',
         msUserSelect: 'none',
-        ...style,
-    }} {...props}>
+    }, style])} {...props}>
         <thead
-        style={{
+        style={StyleSheet.flatten([{
             position: 'sticky',
             tableLayout: 'fixed',
             top: 0,
             zIndex: 100,
-            ...headerContainerStyle,
-        }}>
+        }, headerContainerStyle])}>
             <tr style={{ backgroundColor: '#F6F8FF' }}>
             {rowNumbers === true && <th />}
             <List data={columns} renderItem={({ item }) => <th
-            style={{
+            style={StyleSheet.flatten([{
                 padding: 0,
                 position: 'relative', 
                 border: 1, 
                 borderStyle: 'solid',
                 borderColor: '#DDD',
-                ...headerItemContainerStyle
-            }}><Text style={{ ...headerTextStyle }}>{item}</Text></th>} />
+            }, headerItemContainerStyle])}><Text style={headerTextStyle}>{item}</Text></th>} />
             </tr>
         </thead>
 
         {_.isArray(data) && <tbody
-        style={{
-            backgroundColor: 'white',
-            ...contentContainerStyle,
-        }}>
+        style={StyleSheet.flatten([{ backgroundColor: 'white' }, contentContainerStyle])}>
             <List data={data} renderItem={({ item: items, index: row }) => <tr
-            style={{ 
-                backgroundColor: row % 2 == 0 ? 'white' : '#F6F8FF',
-                ...rowContainerStyle,
-            }}>
+            style={StyleSheet.flatten([{ backgroundColor: row % 2 == 0 ? 'white' : '#F6F8FF' }, rowContainerStyle])}>
                 {rowNumbers === true && <TableCell
                 selected={is_row_selected(row)}
                 onMouseDown={(e) => handleRowMouseDown(e, row)}
                 onMouseOver={(e) => handleRowMouseOver(e, row)}
                 highlightColor={highlightColor}
-                style={{
+                style={StyleSheet.flatten([{
                     padding: 4,
                     overflow: 'hidden',
-                    ...itemContainerStyle
-                }}
-                selectedStyle={{
+                }, itemContainerStyle])}
+                selectedStyle={StyleSheet.flatten([{
                     padding: 4,
                     overflow: 'hidden',
-                    ...selectedItemContainerStyle
-                }}>
+                }, selectedItemContainerStyle])}>
                     <Text style={{ fontFamily: 'monospace' }}>{row + 1}</Text>
                 </TableCell>}
 
@@ -401,18 +389,16 @@ export const DataSheet = React.forwardRef(({
                 onMouseOver={(e) => handleCellMouseOver(e, row, col)}
                 onDoubleClick={(e) => handleCellDoubleClick(e, row, col)}
                 highlightColor={highlightColor}
-                style={{
+                style={StyleSheet.flatten([{
                     padding: 0,
                     position: 'relative',
                     cursor: 'cell',
-                    ...itemContainerStyle
-                }}
-                selectedStyle={{
+                }, itemContainerStyle])}
+                selectedStyle={StyleSheet.flatten([{
                     padding: 0,
                     position: 'relative',
                     cursor: 'cell',
-                    ...selectedItemContainerStyle
-                }}>
+                }, selectedItemContainerStyle])}>
                     <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}>
                         <View style={{ padding: 4 }}>{renderItem({ item, rowIdx: row, columnIdx: col })}</View>
                     </View>
