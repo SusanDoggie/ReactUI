@@ -1,5 +1,5 @@
 //
-//  _encode_value.js
+//  encode_value.js
 //
 //  The MIT License
 //  Copyright (c) 2015 - 2022 Susan Cheng. All rights reserved.
@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import { Binary, UUID, EJSON } from 'bson';
 
-export function _encode_value(value) {
+export function encode_value(value) {
     
   if (_.isNull(value)) {
     return 'null';

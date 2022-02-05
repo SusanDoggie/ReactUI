@@ -29,7 +29,7 @@ import { EJSON } from 'bson';
 import { View, Text, StyleSheet } from 'react-native';
 import { List } from '../List';
 import { useElementLayout, useDocumentEvent, useMergeRefs } from 'sugax';
-import { _encode_value } from './_encode_value';
+import { encode_value } from './encode_value';
 
 function TableCell({
     style,
@@ -144,7 +144,7 @@ export const DataSheet = React.forwardRef(({
 	}
 	
 	function _encodeData(value) {
-        const string = _.isFunction(encodeValue) ? encodeValue(value) : `${_encode_value(value)}`;
+        const string = _.isFunction(encodeValue) ? encodeValue(value) : `${encode_value(value)}`;
 		return string.replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/\t/g, '\\t').replace(/\r/g, '\\r');
 	}
 
