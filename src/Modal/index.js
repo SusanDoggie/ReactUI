@@ -23,18 +23,35 @@
 //  THE SOFTWARE.
 //
 
-export { styleInject } from 'style-inject';
-export { BBCode } from './BBCode';
-export { Button } from './Button';
-export { HTML } from './HTML';
-export { Icon } from './Icon';
-export { Image } from './Image';
-export { List } from './List';
-export { Markdown } from './Markdown';
-export * from './Modal';
-export { ScrollView } from './ScrollView';
-export { SVG } from './SVG';
-export * from './Toast';
-export { Touchable } from './Touchable';
-export { ZStack } from './ZStack';
-export * from './Icons';
+import _ from 'lodash';
+import React from 'react';
+import { View, Modal as RNModal, TouchableWithoutFeedback, StyleSheet } from 'react-native';
+
+const ModalContext = React.createContext((element) => {});
+
+export const useModal = () => React.useContext(ModalContext);
+
+export const ModalProvider = React.forwardRef(({ 
+    children,
+    backdrop = true,
+    backdropColor = 'rgba(0, 0, 0, 0.75)',
+}, forwardRef) => {
+    
+    const [modal, setModal] = React.useState();
+
+    return <ModalContext.Provider ref={forwardRef} value={setModal}>
+        {children}
+        <RNModal visible={React.isValidElement(modal)} transparent>
+            <View style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}>
+                {backdrop === true && <TouchableWithoutFeedback onPress={() => setModal()}>
+                    <View style={[{ backgroundColor: backdropColor }, StyleSheet.absoluteFill]} />
+                </TouchableWithoutFeedback>}
+                {modal}
+            </View>
+        </RNModal>
+    </ModalContext.Provider>;
+});
