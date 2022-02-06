@@ -29,7 +29,7 @@ import { EJSON } from 'bson';
 import { View, Text, StyleSheet } from 'react-native';
 import { List } from '../List';
 import { useElementLayout, useDocumentEvent, useMergeRefs } from 'sugax';
-import { encode_value } from './encode_value';
+import { default_state, _encodeData, useMethods } from './methods';
 
 function TableCell({
     style,
@@ -69,76 +69,52 @@ export const DataSheet = React.forwardRef(({
     selectedItemContainerStyle,
     contentContainerStyle,
     encodeValue,
-	showEmptyLastRow,
+    showEmptyLastRow,
+    allowedSelection = true,
     onDeleteRows,
     onDeleteCells,
     onCopyRows,
     onCopyCells,
     onPasteRows,
     onPasteCells,
+    onSelectionChanged,
     highlightColor = 'rgba(33, 133, 208, 0.15)',
     ...props
 }, forwardRef) => {
 
     const tableRef = React.useRef();
-
     const ref = useMergeRefs(tableRef, forwardRef);
+    const [state, _setState] = React.useState(default_state);
+    const setState = (next) => _setState(state => allowedSelection === true ? { ...state, ...next } : default_state);
 
-    const [state, _setState] = React.useState({
-        selecting_rows: null,
-        selected_rows: [],
-        selecting_cells: null,
-        selected_cells: null,
-        shiftKey: false,
-        metaKey: false,
+    const {
+        _current_selected_rows,
+        onMouseDown,
+        onMouseUp,
+        handleRowMouseDown,
+        handleRowMouseOver,
+        handleCellMouseDown,
+        handleCellMouseOver,
+        handleCellDoubleClick,
+        handleKey,
+        handleCopy,
+        handlePaste,
+    } = useMethods({
+        state, 
+        setState,
+        tableRef,
+        data,
+        columns,
+        encodeValue,
+        allowedSelection,
+        onDeleteRows,
+        onDeleteCells,
+        onCopyRows,
+        onCopyCells,
+        onPasteRows,
+        onPasteCells,
     });
 
-    const setState = (next) => _setState(state => ({ ...state, ...next }));
-
-	function _current_selected_rows(e) {
-
-		if (_.isEmpty(state.selecting_rows)) {
-			return state.selected_rows;
-		}
-
-		const min_row = Math.min(state.selecting_rows.start_row, state.selecting_rows.end_row);
-		const max_row = Math.max(state.selecting_rows.start_row, state.selecting_rows.end_row);
-
-		if (e.shiftKey) {
-
-			const selecting_rows = new Set(state.selected_rows);
-
-			for (let row = min_row; row <= max_row; row++) {
-				selecting_rows.add(row);
-			}
-	
-			return [...selecting_rows].sort();
-		} 
-		
-		if (e.metaKey) {
-
-			const selecting_rows = new Set(state.selected_rows);
-
-			for (let row = min_row; row <= max_row; row++) {
-				if (selecting_rows.has(row)) {
-					selecting_rows.delete(row);
-				} else {
-					selecting_rows.add(row);
-				}
-			}
-	
-			return [...selecting_rows].sort();
-		} 
-
-		const selecting_rows = new Set();
-
-		for (let row = min_row; row <= max_row; row++) {
-			selecting_rows.add(row);
-		}
-	
-		return [...selecting_rows].sort();
-	}
-	
     React.useImperativeHandle(forwardRef, () => ({
         get selectedRows() { return _.isEmpty(state.selected_cells) ? state.selected_rows ?? [] : [] },
         get selectedCells() {
@@ -151,189 +127,18 @@ export const DataSheet = React.forwardRef(({
         },
         clearSelection: () => setState({ selecting_rows: null, selected_rows: [], selecting_cells: null, selected_cells: null }),
     }));
-    
-	function _encodeData(value) {
-        const string = _.isFunction(encodeValue) ? encodeValue(value) : `${encode_value(value)}`;
-		return string.replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/\t/g, '\\t').replace(/\r/g, '\\r');
-	}
 
-	function onMouseDown(e) {
+    React.useEffect(() => { if (_.isFunction(onSelectionChanged)) onSelectionChanged(); }, [state.selected_rows, state.selected_cells]);
 
-		if (!_.isEmpty(state.selected_rows) || !_.isEmpty(state.selected_cells)) {
-
-			let node = e.target;
-
-			while (node !== document) {
-				if (node === tableRef.current) {
-					return;
-				}
-				node = node.parentNode;
-			}
-
-			setState({ selecting_rows: null, selected_rows: [], selecting_cells: null, selected_cells: null });
-		}
-	}
-
-	function onMouseUp(e) {
-
-		if (!_.isEmpty(state.selecting_rows)) {
-
-			const selected_rows = _current_selected_rows(e);
-		
-			setState({ selecting_rows: null, selected_rows, selected_cells: null });
-		}
-
-		if (!_.isEmpty(state.selecting_cells)) {
-
-			setState({ selecting_cells: null, selected_cells: state.selecting_cells, selected_rows: [] });
-		}
-	}
-  
-	function handleRowMouseDown(e, row) {
-
-		setState({ selecting_rows: { start_row: row, end_row: row }, shiftKey: e.shiftKey, metaKey: e.metaKey });
-	}
-  
-	function handleRowMouseOver(e, row) {
-
-		if (_.isEmpty(state.selecting_rows)) return;
-
-		setState({ selecting_rows: { ...state.selecting_rows, end_row: row }, shiftKey: e.shiftKey, metaKey: e.metaKey });
-	}
-  
-	function handleCellMouseDown(e, row, col) {
-
-		setState({ selecting_cells: { start_row: row, start_col: col, end_row: row, end_col: col } });
-	}
-    
-	function handleCellMouseOver(e, row, col) {
-
-		if (_.isEmpty(state.selecting_cells)) return;
-
-		setState({ selecting_cells: { ...state.selecting_cells, end_row: row, end_col: col } });
-	}
-  
-	function handleCellDoubleClick(e, row, col) {
-		console.log(e);
-	}
-
-	function handleKey(e) {
-
-		if (e.ctrlKey) {
-			if (e.keyCode === 67) {
-			  handleCopy(e);
-			} else if (e.keyCode === 86 || e.which === 86) {
-			  handlePaste(e);
-			}
-		}
-
-		if (e.keyCode === 8 || e.keyCode === 46) {
-			handleDelete(e);
-		}
-	}
-
-	function handleDelete(e) {
-
-		if (!_.isEmpty(state.selected_rows)) {
-
-			e.preventDefault();
-			
-			if (_.isFunction(onDeleteRows)) {
-				onDeleteRows(state.selected_rows.sort());
-			}
-		}
-
-		if (!_.isEmpty(state.selected_cells)) {
-
-			e.preventDefault();
-			
-			if (_.isFunction(onDeleteCells)) {
-				onDeleteCells(state.selected_cells);
-			}
-		}
-	}
-
-	function handleCopy(e) {
-
-		if (!_.isEmpty(state.selected_rows)) {
-
-			e.preventDefault();
-			
-			const selected_rows = state.selected_rows.sort();
-			const _data = _.map(selected_rows, row => _.pick(data[row], columns));
-			
-			if (_.isFunction(onCopyRows)) {
-
-				onCopyRows(selected_rows, _data);
-
-			} else {
-
-				e.clipboardData.setData('application/json', EJSON.stringify(_data));
-				
-				const text = _data.map(x => _.values(x).map(x => _encodeData(x)).join('\t')).join('\n');
-				e.clipboardData.setData('text/plain', text);
-			}
-		}
-
-		if (!_.isEmpty(state.selected_cells)) {
-
-			e.preventDefault();
-			
-			const { start_row, start_col, end_row, end_col } = state.selected_cells;
-
-			const min_row = Math.min(start_row, end_row);
-			const max_row = Math.max(start_row, end_row);
-			const min_col = Math.min(start_col, end_col);
-			const max_col = Math.max(start_col, end_col);
-	
-			const _rows = _.range(min_row, max_row + 1);
-			const _cols = _.range(min_col, max_col + 1);
-			const _data = _.map(_rows, row => _.pick(data[row], _.map(_cols, col => columns[col])));
-
-			if (_.isFunction(onCopyCells)) {
-
-				onCopyCells({ start_row, start_col, end_row, end_col }, _data);
-
-			} else {
-				
-				e.clipboardData.setData('application/json', EJSON.stringify(_data));
-				
-				const text = _data.map(x => _.values(x).map(x => _encodeData(x)).join('\t')).join('\n');
-				e.clipboardData.setData('text/plain', text);
-			}
-		}
-	}
-
-	function handlePaste(e) {
-
-		if (!_.isEmpty(state.selected_rows)) {
-
-			e.preventDefault();
-			
-			if (_.isFunction(onPasteRows)) {
-				onPasteRows(state.selected_rows.sort());
-			}
-		}
-
-		if (!_.isEmpty(state.selected_cells)) {
-
-			e.preventDefault();
-			
-			if (_.isFunction(onPasteCells)) {
-				onPasteCells(state.selected_cells);
-			}
-		}
-	}
-    
     useDocumentEvent('mousedown', onMouseDown);
     useDocumentEvent('mouseup', onMouseUp);
     useDocumentEvent('keydown', handleKey);
     useDocumentEvent('copy', handleCopy);
     useDocumentEvent('paste', handlePaste);
 
-    const _selected_rows = _.isEmpty(state.selecting_cells) ? _current_selected_rows(state) : [];
-    const _selected_cells = _.isEmpty(state.selecting_rows) ? state.selecting_cells ?? state.selected_cells : null;
-    
+    const _selected_rows = allowedSelection === true && _.isEmpty(state.selecting_cells) ? _current_selected_rows(state) : [];
+    const _selected_cells = allowedSelection === true && _.isEmpty(state.selecting_rows) ? state.selecting_cells ?? state.selected_cells : null;
+
     const { start_row, start_col, end_row, end_col } = _selected_cells ?? {};
     const min_row = _.isEmpty(_selected_cells) ? null : Math.min(start_row, end_row);
     const max_row = _.isEmpty(_selected_cells) ? null : Math.max(start_row, end_row);
