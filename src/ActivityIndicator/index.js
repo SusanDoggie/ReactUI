@@ -21,10 +21,12 @@ export function useActivityIndicator() {
             let completed = false;
             setTimeout(() => { if (!completed) setVisible(true); }, delay);
 
-            await callback();
+            const result = await callback();
 
             completed = true;
             setVisible(false);
+
+            return result;
 
         } catch (e) {
 
