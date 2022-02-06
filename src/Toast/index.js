@@ -136,6 +136,7 @@ function ToastBody({
 
 export const ToastProvider = React.forwardRef(({ 
     children,
+    defaultTimeout = 5000,
 }, forwardRef) => {
 
     const [elements, setElements] = React.useState({});
@@ -150,7 +151,7 @@ export const ToastProvider = React.forwardRef(({
         setElements(elements => ({
             ...elements,
             [id]: <ToastBody key={id} message={message} type={type}
-            onShow={({ dismiss }) => setTimeout(dismiss, timeout ?? 5000)}
+            onShow={({ dismiss }) => setTimeout(dismiss, timeout ?? defaultTimeout)}
             onDismiss={() => setElements(elements => _.pickBy(elements, (_val, key) => key != id))} />
         }));
     }
