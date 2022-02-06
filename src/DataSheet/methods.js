@@ -54,9 +54,9 @@ export const useMethods = ({
     onCopyCells,
     onPasteRows,
     onPasteCells,
-}) => ({
+}) => {
 
-    _current_selected_rows(e) {
+    function _current_selected_rows(e) {
 
         if (allowedSelection !== true) return [];
 
@@ -102,9 +102,9 @@ export const useMethods = ({
         }
     
         return [...selecting_rows].sort();
-    },
+    }
     
-    onMouseDown(e) {
+    function onMouseDown(e) {
 
         if (allowedSelection !== true) return;
 
@@ -121,9 +121,9 @@ export const useMethods = ({
             
             setState({ selecting_rows: null, selected_rows: [], selecting_cells: null, selected_cells: null });
         }
-    },
+    }
     
-    onMouseUp(e) {
+    function onMouseUp(e) {
     
         if (allowedSelection !== true) return;
 
@@ -138,44 +138,44 @@ export const useMethods = ({
     
             setState({ selecting_cells: null, selected_cells: state.selecting_cells, selected_rows: [] });
         }
-    },
+    }
     
-    handleRowMouseDown(e, row) {
+    function handleRowMouseDown(e, row) {
     
         if (allowedSelection !== true) return;
 
         setState({ selecting_rows: { start_row: row, end_row: row }, shiftKey: e.shiftKey, metaKey: e.metaKey });
-    },
+    }
     
-    handleRowMouseOver(e, row) {
+    function handleRowMouseOver(e, row) {
     
         if (allowedSelection !== true) return;
         if (_.isEmpty(state.selecting_rows)) return;
     
         setState({ selecting_rows: { ...state.selecting_rows, end_row: row }, shiftKey: e.shiftKey, metaKey: e.metaKey });
-    },
+    }
     
-    handleCellMouseDown(e, row, col) {
+    function handleCellMouseDown(e, row, col) {
     
         if (allowedSelection !== true) return;
 
         setState({ selecting_cells: { start_row: row, start_col: col, end_row: row, end_col: col } });
-    },
+    }
     
-    handleCellMouseOver(e, row, col) {
+    function handleCellMouseOver(e, row, col) {
 
         if (allowedSelection !== true) return;
         if (_.isEmpty(state.selecting_cells)) return;
     
         setState({ selecting_cells: { ...state.selecting_cells, end_row: row, end_col: col } });
-    },
+    }
     
-    handleCellDoubleClick(e, row, col) {
+    function handleCellDoubleClick(e, row, col) {
         
         console.log(e);
-    },
+    }
     
-    handleKey(e) {
+    function handleKey(e) {
     
         if (allowedSelection !== true) return;
 
@@ -190,9 +190,9 @@ export const useMethods = ({
         if (e.keyCode === 8 || e.keyCode === 46) {
             handleDelete(e);
         }
-    },
+    }
     
-    handleDelete(e) {
+    function handleDelete(e) {
     
         if (allowedSelection !== true) return;
 
@@ -213,9 +213,9 @@ export const useMethods = ({
                 onDeleteCells(state.selected_cells);
             }
         }
-    },
+    }
     
-    handleCopy(e) {
+    function handleCopy(e) {
     
         if (allowedSelection !== true) return;
 
@@ -266,9 +266,9 @@ export const useMethods = ({
                 e.clipboardData.setData('text/plain', text);
             }
         }
-    },
+    }
     
-    handlePaste(e) {
+    function handlePaste(e) {
     
         if (allowedSelection !== true) return;
 
@@ -289,6 +289,19 @@ export const useMethods = ({
                 onPasteCells(state.selected_cells);
             }
         }
-    },
+    }
     
-});
+    return {
+        _current_selected_rows,
+        onMouseDown,
+        onMouseUp,
+        handleRowMouseDown,
+        handleRowMouseOver,
+        handleCellMouseDown,
+        handleCellMouseOver,
+        handleCellDoubleClick,
+        handleKey,
+        handleCopy,
+        handlePaste,
+    };
+};
