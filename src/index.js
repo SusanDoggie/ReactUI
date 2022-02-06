@@ -24,6 +24,7 @@
 //
 
 export { styleInject } from 'style-inject';
+export * from './ActivityIndicator';
 export { BBCode } from './BBCode';
 export { Button } from './Button';
 export { HTML } from './HTML';
