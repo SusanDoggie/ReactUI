@@ -43,7 +43,7 @@ export const ActivityIndicatorProvider = React.forwardRef(({
     backdrop = true,
     backdropColor = 'rgba(0, 0, 0, 0.75)',
     passThroughEvents = false,
-    ActivityIndicator = () => <RNActivityIndicator color={color} />,
+    ActivityIndicator = () => <RNActivityIndicator color='white' />,
 }, forwardRef) => {
 
     const [visible, setVisible] = React.useState(false);
