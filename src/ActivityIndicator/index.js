@@ -6,7 +6,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, ActivityIndicator as RNActivityIndicator, StyleSheet } from 'react-native';
 
 const ActivityIndicatorContext = React.createContext(() => {});
 
@@ -40,10 +40,10 @@ export function useActivityIndicator() {
 
 export const ActivityIndicatorProvider = React.forwardRef(({ 
     children,
-    color = 'white',
     backdrop = true,
     backdropColor = 'rgba(0, 0, 0, 0.75)',
     passThroughEvents = false,
+    ActivityIndicator = () => <RNActivityIndicator color={color} />,
 }, forwardRef) => {
 
     const [visible, setVisible] = React.useState(false);
@@ -61,7 +61,7 @@ export const ActivityIndicatorProvider = React.forwardRef(({
                 padding: 32,
                 borderRadius: 8,
                 backgroundColor: backdropColor,
-            }}><ActivityIndicator color={color} /></View> : <ActivityIndicator color={color} />}
+            }}><ActivityIndicator /></View> : <ActivityIndicator />}
         </View>}
     </ActivityIndicatorContext.Provider>;
 });

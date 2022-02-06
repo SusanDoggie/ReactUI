@@ -35,13 +35,17 @@ export const ModalProvider = React.forwardRef(({
     children,
     backdrop = true,
     backdropColor = 'rgba(0, 0, 0, 0.75)',
+    passThroughEvents = false,
 }, forwardRef) => {
     
     const [modal, setModal] = React.useState();
 
     return <ModalContext.Provider ref={forwardRef} value={setModal}>
         {children}
-        <RNModal visible={React.isValidElement(modal)} transparent>
+        <RNModal 
+        transparent
+        visible={React.isValidElement(modal)} 
+        pointerEvents={passThroughEvents ? 'none' : 'auto'}>
             <View style={{
                 flex: 1,
                 alignItems: 'center',
