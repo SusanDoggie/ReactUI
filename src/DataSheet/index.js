@@ -95,10 +95,6 @@ export const DataSheet = React.forwardRef(({
 
     const setState = (next) => _setState(state => ({ ...state, ...next }));
 
-    React.useImperativeHandle(forwardRef, () => ({
-        clearSelection: () => setState({ selecting_rows: null, selected_rows: [], selecting_cells: null, selected_cells: null }),
-    }));
-
 	function _current_selected_rows(e) {
 
 		if (_.isEmpty(state.selecting_rows)) {
@@ -143,6 +139,19 @@ export const DataSheet = React.forwardRef(({
 		return [...selecting_rows].sort();
 	}
 	
+    React.useImperativeHandle(forwardRef, () => ({
+        get selectedRows() { return _.isEmpty(state.selected_cells) ? state.selected_rows ?? [] : [] },
+        get selectedCells() {
+            const { start_row, start_col, end_row, end_col } = state.selected_cells ?? {};
+            const startRow = _.isEmpty(state.selected_cells) ? null : Math.min(start_row, end_row);
+            const endRow = _.isEmpty(state.selected_cells) ? null : Math.max(start_row, end_row);
+            const startCol = _.isEmpty(state.selected_cells) ? null : Math.min(start_col, end_col);
+            const endCol = _.isEmpty(state.selected_cells) ? null : Math.max(start_col, end_col);
+            return { startRow, startCol, endRow, endCol };
+        },
+        clearSelection: () => setState({ selecting_rows: null, selected_rows: [], selecting_cells: null, selected_cells: null }),
+    }));
+    
 	function _encodeData(value) {
         const string = _.isFunction(encodeValue) ? encodeValue(value) : `${encode_value(value)}`;
 		return string.replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/\t/g, '\\t').replace(/\r/g, '\\r');
