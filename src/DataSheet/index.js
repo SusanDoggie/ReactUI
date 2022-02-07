@@ -54,6 +54,18 @@ function TableCell({
     return <td ref={ref} style={_style} {...props}>{children}</td>;
 }
 
+const TableCellItem = ({ item, rowIdx, columnIdx, isEditing, renderItem }) => <View 
+style={{
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: isEditing === true ? 0 : 4,
+}}>
+    {renderItem({ item, rowIdx, columnIdx, isEditing: isEditing })}
+</View>;
+
 export const DataSheet = React.forwardRef(({
     data,
     columns,
@@ -132,12 +144,6 @@ export const DataSheet = React.forwardRef(({
 
     React.useEffect(() => { if (_.isFunction(onSelectionChanged)) onSelectionChanged(); }, [state.selected_rows, state.selected_cells]);
 
-    useDocumentEvent('mousedown', onMouseDown);
-    useDocumentEvent('mouseup', onMouseUp);
-    useDocumentEvent('keydown', handleKey);
-    useDocumentEvent('copy', handleCopy);
-    useDocumentEvent('paste', handlePaste);
-
     const _selected_rows = allowSelection === true && _.isEmpty(state.selecting_cells) ? _current_selected_rows(state) : [];
     const _selected_cells = allowSelection === true && _.isEmpty(state.selecting_rows) ? state.selecting_cells ?? state.selected_cells : null;
 
@@ -149,7 +155,14 @@ export const DataSheet = React.forwardRef(({
 
     const is_row_selected = (row) => _selected_rows.includes(row);
     const is_cell_selected = (row, col) => !_.isEmpty(_selected_cells) && min_row <= row && row <= max_row && min_col <= col && col <= max_col;
-    const is_cell_editing = (row, col) => !_.isEmpty(state.editing) && row === state.editing.row && col === state.editing.col;
+    const is_editing = !_.isEmpty(state.editing);
+    const is_cell_editing = (row, col) => is_editing && row === state.editing.row && col === state.editing.col;
+
+    useDocumentEvent('mousedown', is_editing ? null : onMouseDown);
+    useDocumentEvent('mouseup', is_editing ? null : onMouseUp);
+    useDocumentEvent('keydown', is_editing ? null : handleKey);
+    useDocumentEvent('copy', is_editing ? null : handleCopy);
+    useDocumentEvent('paste', is_editing ? null : handlePaste);
 
     return <table
     ref={ref}
@@ -188,8 +201,8 @@ export const DataSheet = React.forwardRef(({
 
                 {rowNumbers === true && <TableCell
                 selected={is_row_selected(row)}
-                onMouseDown={(e) => handleRowMouseDown(e, row)}
-                onMouseOver={(e) => handleRowMouseOver(e, row)}
+                onMouseDown={is_editing ? null : (e) => handleRowMouseDown(e, row)}
+                onMouseOver={is_editing ? null : (e) => handleRowMouseOver(e, row)}
                 highlightColor={highlightColor}
                 style={StyleSheet.flatten([{
                     padding: 4,
@@ -204,9 +217,9 @@ export const DataSheet = React.forwardRef(({
 
                 <List data={_.map(columns, col => items[col])} renderItem={({ item, index: col }) => <TableCell 
                 selected={is_row_selected(row) || is_cell_selected(row, col)}
-                onMouseDown={(e) => handleCellMouseDown(e, row, col)}
-                onMouseOver={(e) => handleCellMouseOver(e, row, col)}
-                onDoubleClick={(e) => handleCellDoubleClick(e, row, col)}
+                onMouseDown={is_editing ? null : (e) => handleCellMouseDown(e, row, col)}
+                onMouseOver={is_editing ? null : (e) => handleCellMouseOver(e, row, col)}
+                onDoubleClick={is_editing ? null : (e) => handleCellDoubleClick(e, row, col)}
                 highlightColor={highlightColor}
                 style={StyleSheet.flatten([{
                     padding: 0,
@@ -218,9 +231,8 @@ export const DataSheet = React.forwardRef(({
                     position: 'relative',
                     cursor: 'cell',
                 }, selectedItemContainerStyle])}>
-                    <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, padding: 4 }}>
-					{renderItem({ item, rowIdx: row, columnIdx: col, isEditing: is_cell_editing(row, col) })}
-                    </View>
+                    <Text style={{ fontFamily: 'monospace' }}>{' '}</Text>
+					<TableCellItem item={item} rowIdx={row} columnIdx={col} isEditing={is_cell_editing(row, col)} renderItem={renderItem} />
                 </TableCell>} />
 
             </tr>} />
@@ -235,15 +247,14 @@ export const DataSheet = React.forwardRef(({
                 }, itemContainerStyle])} />}
 
                 <List data={columns} renderItem={({ index: col }) => <TableCell
-                onDoubleClick={(e) => handleCellDoubleClick(e, data.length, col)}
+                onDoubleClick={is_editing ? null : (e) => handleCellDoubleClick(e, data.length, col)}
                 style={StyleSheet.flatten([{
                     padding: 0,
                     position: 'relative',
                     cursor: 'cell',
                 }, itemContainerStyle])}>
-					{is_cell_editing(data.length, col) ? <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, padding: 4 }}>
-					{renderItem({ rowIdx: data.length, columnIdx: col, isEditing: true })}
-                    </View> : <Text style={{ fontFamily: 'monospace' }}>{' '}</Text>}
+                    <Text style={{ fontFamily: 'monospace' }}>{' '}</Text>
+					{is_cell_editing(data.length, col) && <TableCellItem rowIdx={data.length} columnIdx={col} isEditing={true} renderItem={renderItem} />}
                 </TableCell>} />
 
             </tr>}
