@@ -127,6 +127,7 @@ export const DataSheet = React.forwardRef(({
             return { startRow, startCol, endRow, endCol };
         },
         clearSelection: () => setState({ selecting_rows: null, selected_rows: [], selecting_cells: null, selected_cells: null }),
+        endEditing: () => setState({ editing: null }),
     }));
 
     React.useEffect(() => { if (_.isFunction(onSelectionChanged)) onSelectionChanged(); }, [state.selected_rows, state.selected_cells]);
