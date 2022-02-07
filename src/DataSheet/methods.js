@@ -24,6 +24,7 @@
 //
 
 import _ from 'lodash';
+import { EJSON } from 'bson';
 import { encode_value } from './encode_value';
 
 export const default_state = {

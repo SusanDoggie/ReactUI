@@ -25,7 +25,6 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { EJSON } from 'bson';
 import { View, Text, StyleSheet } from 'react-native';
 import { List } from '../List';
 import { useElementLayout, useDocumentEvent, useMergeRefs } from 'sugax';
