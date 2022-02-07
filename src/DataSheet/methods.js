@@ -34,6 +34,7 @@ export const default_state = {
     selected_cells: null,
     shiftKey: false,
     metaKey: false,
+    editing: null,
 };
 
 export function _encodeData(encodeValue, value) {
@@ -48,7 +49,8 @@ export const useMethods = ({
     data,
     columns,
     encodeValue,
-    allowedSelection,
+    allowSelection,
+    allowEditForCell,
     onDeleteRows,
     onDeleteCells,
     onCopyRows,
@@ -59,7 +61,7 @@ export const useMethods = ({
 
     function _current_selected_rows(e) {
 
-        if (allowedSelection !== true) return [];
+        if (allowSelection !== true) return [];
 
         if (_.isEmpty(state.selecting_rows)) {
             return state.selected_rows;
@@ -107,7 +109,7 @@ export const useMethods = ({
     
     function onMouseDown(e) {
 
-        if (allowedSelection !== true) return;
+        if (allowSelection !== true) return;
 
         if (!_.isEmpty(state.selected_rows) || !_.isEmpty(state.selected_cells)) {
     
@@ -120,65 +122,67 @@ export const useMethods = ({
                 node = node.parentNode;
             }
             
-            setState({ selecting_rows: null, selected_rows: [], selecting_cells: null, selected_cells: null });
+            setState({ selecting_rows: null, selected_rows: [], selecting_cells: null, selected_cells: null, editing: null });
         }
     }
     
     function onMouseUp(e) {
     
-        if (allowedSelection !== true) return;
+        if (allowSelection !== true) return;
 
         if (!_.isEmpty(state.selecting_rows)) {
     
             const selected_rows = _current_selected_rows(e);
         
-            setState({ selecting_rows: null, selected_rows, selected_cells: null });
+            setState({ selecting_rows: null, selected_rows, selected_cells: null, editing: null });
         }
     
         if (!_.isEmpty(state.selecting_cells)) {
     
-            setState({ selecting_cells: null, selected_cells: state.selecting_cells, selected_rows: [] });
+            setState({ selecting_cells: null, selected_cells: state.selecting_cells, selected_rows: [], editing: null });
         }
     }
     
     function handleRowMouseDown(e, row) {
     
-        if (allowedSelection !== true) return;
+        if (allowSelection !== true) return;
 
-        setState({ selecting_rows: { start_row: row, end_row: row }, shiftKey: e.shiftKey, metaKey: e.metaKey });
+        setState({ selecting_rows: { start_row: row, end_row: row }, shiftKey: e.shiftKey, metaKey: e.metaKey, editing: null });
     }
     
     function handleRowMouseOver(e, row) {
     
-        if (allowedSelection !== true) return;
+        if (allowSelection !== true) return;
         if (_.isEmpty(state.selecting_rows)) return;
     
-        setState({ selecting_rows: { ...state.selecting_rows, end_row: row }, shiftKey: e.shiftKey, metaKey: e.metaKey });
+        setState({ selecting_rows: { ...state.selecting_rows, end_row: row }, shiftKey: e.shiftKey, metaKey: e.metaKey, editing: null });
     }
     
     function handleCellMouseDown(e, row, col) {
     
-        if (allowedSelection !== true) return;
+        if (allowSelection !== true) return;
 
-        setState({ selecting_cells: { start_row: row, start_col: col, end_row: row, end_col: col } });
+        setState({ selecting_cells: { start_row: row, start_col: col, end_row: row, end_col: col, editing: null } });
     }
     
     function handleCellMouseOver(e, row, col) {
 
-        if (allowedSelection !== true) return;
+        if (allowSelection !== true) return;
         if (_.isEmpty(state.selecting_cells)) return;
     
-        setState({ selecting_cells: { ...state.selecting_cells, end_row: row, end_col: col } });
+        setState({ selecting_cells: { ...state.selecting_cells, end_row: row, end_col: col, editing: null } });
     }
     
     function handleCellDoubleClick(e, row, col) {
-        
-        console.log(e);
+
+        if (allowEditForCell === true || (_.isFunction(allowEditForCell) && allowEditForCell(row, col) === true)) {
+            setState({ ...default_state, editing: { row, col } });
+        }
     }
-    
+
     function handleKey(e) {
     
-        if (allowedSelection !== true) return;
+        if (allowSelection !== true) return;
 
         if (e.ctrlKey) {
             if (e.keyCode === 67) {
@@ -195,7 +199,7 @@ export const useMethods = ({
     
     function handleDelete(e) {
     
-        if (allowedSelection !== true) return;
+        if (allowSelection !== true) return;
 
         if (!_.isEmpty(state.selected_rows)) {
     
@@ -218,7 +222,7 @@ export const useMethods = ({
     
     function handleCopy(e) {
     
-        if (allowedSelection !== true) return;
+        if (allowSelection !== true) return;
 
         if (!_.isEmpty(state.selected_rows)) {
     
@@ -271,7 +275,7 @@ export const useMethods = ({
     
     function handlePaste(e) {
     
-        if (allowedSelection !== true) return;
+        if (allowSelection !== true) return;
 
         if (!_.isEmpty(state.selected_rows)) {
     

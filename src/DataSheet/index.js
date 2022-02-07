@@ -69,7 +69,8 @@ export const DataSheet = React.forwardRef(({
     contentContainerStyle,
     encodeValue,
     showEmptyLastRow,
-    allowedSelection = true,
+    allowSelection = true,
+    allowEditForCell = true,
     onDeleteRows,
     onDeleteCells,
     onCopyRows,
@@ -84,7 +85,7 @@ export const DataSheet = React.forwardRef(({
     const tableRef = React.useRef();
     const ref = useMergeRefs(tableRef, forwardRef);
     const [state, _setState] = React.useState(default_state);
-    const setState = (next) => _setState(state => allowedSelection === true ? { ...state, ...next } : default_state);
+    const setState = (next) => _setState(state => allowSelection === true ? { ...state, ...next } : default_state);
 
     const {
         _current_selected_rows,
@@ -105,7 +106,8 @@ export const DataSheet = React.forwardRef(({
         data,
         columns,
         encodeValue,
-        allowedSelection,
+        allowSelection,
+        allowEditForCell,
         onDeleteRows,
         onDeleteCells,
         onCopyRows,
@@ -135,8 +137,8 @@ export const DataSheet = React.forwardRef(({
     useDocumentEvent('copy', handleCopy);
     useDocumentEvent('paste', handlePaste);
 
-    const _selected_rows = allowedSelection === true && _.isEmpty(state.selecting_cells) ? _current_selected_rows(state) : [];
-    const _selected_cells = allowedSelection === true && _.isEmpty(state.selecting_rows) ? state.selecting_cells ?? state.selected_cells : null;
+    const _selected_rows = allowSelection === true && _.isEmpty(state.selecting_cells) ? _current_selected_rows(state) : [];
+    const _selected_cells = allowSelection === true && _.isEmpty(state.selecting_rows) ? state.selecting_cells ?? state.selected_cells : null;
 
     const { start_row, start_col, end_row, end_col } = _selected_cells ?? {};
     const min_row = _.isEmpty(_selected_cells) ? null : Math.min(start_row, end_row);
@@ -146,6 +148,7 @@ export const DataSheet = React.forwardRef(({
 
     const is_row_selected = (row) => _selected_rows.includes(row);
     const is_cell_selected = (row, col) => !_.isEmpty(_selected_cells) && min_row <= row && row <= max_row && min_col <= col && col <= max_col;
+    const is_cell_editing = (row, col) => !_.isEmpty(state.editing) && row === state.editing.row && col === state.editing.col;
 
     return <table
     ref={ref}
@@ -215,7 +218,7 @@ export const DataSheet = React.forwardRef(({
                     cursor: 'cell',
                 }, selectedItemContainerStyle])}>
                     <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, padding: 4 }}>
-					{renderItem({ item, rowIdx: row, columnIdx: col })}
+					{renderItem({ item, rowIdx: row, columnIdx: col, isEditing: is_cell_editing(row, col) })}
                     </View>
                 </TableCell>} />
 
@@ -237,7 +240,9 @@ export const DataSheet = React.forwardRef(({
                     position: 'relative',
                     cursor: 'cell',
                 }, itemContainerStyle])}>
-					<Text style={{ fontFamily: 'monospace' }}>{' '}</Text>
+					{is_cell_editing(data.length, col) ? <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, padding: 4 }}>
+					{renderItem({ rowIdx: data.length, columnIdx: col, isEditing: true })}
+                    </View> : <Text style={{ fontFamily: 'monospace' }}>{' '}</Text>}
                 </TableCell>} />
 
             </tr>}
