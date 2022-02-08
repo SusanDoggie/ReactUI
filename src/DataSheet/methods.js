@@ -39,7 +39,8 @@ export const default_state = {
 
 export function _encodeData(encodeValue, value) {
     const string = _.isFunction(encodeValue) ? encodeValue(value) : `${encode_value(value)}`;
-    return string.replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/\t/g, '\\t').replace(/\r/g, '\\r');
+    const map = { '\n': '\\n', '\r': '\\r', '\t': '\\t' };
+    return string.replace(/(['"\n\r\t\\])/g, c => map[c] ?? `\\${c}`);
 }
 
 export const useMethods = ({
