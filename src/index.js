@@ -33,6 +33,7 @@ export { Image } from './Image';
 export { List } from './List';
 export { Markdown } from './Markdown';
 export * from './Modal';
+export * from './SafeAreaView';
 export { ScrollView } from './ScrollView';
 export { SVG } from './SVG';
 export * from './Toast';

@@ -15,9 +15,11 @@
     "codemirror": ">=5.65.1",
     "react-native-markdown-display": ">=7.0.0-alpha.2",
     "react-native-render-html": ">=6.3.4",
+    "react-native-safe-area-context": ">=3.3.2",
     "react-native-svg": ">=12.1.1",
     "react-native-vector-icons": ">=9.0.0",
-    "uuid": "^8.3.2",
+    "sugax": ">=1.0.16",
+    "uuid": ">=8.3.2",
     "webfontloader": ">=1.6.28"
   },
   "peerDependencies": {
@@ -43,7 +45,6 @@
     "rollup-plugin-dts": "^4.1.0",
     "rollup-plugin-postcss": "^4.0.2",
     "style-inject": "link:./src/styleInject",
-    "sugax": "^1.0.15",
     "typescript": "^4.5.5"
   }
 }
