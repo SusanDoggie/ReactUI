@@ -35,6 +35,7 @@ function TableCell({
     selectedStyle,
     selected,
     highlightColor,
+    isEditing,
     children,
     ...props
 }) {
@@ -45,6 +46,7 @@ function TableCell({
     useElementLayout(ref, (e) => setCellHeight(e.nativeEvent?.layout?.height ?? 0));
 
     const _style = StyleSheet.flatten([{
+        zIndex: isEditing === true ? 1 : 0,
         border: 1,
         borderStyle: selected ? 'double' : 'solid',
         borderColor: selected ? '#2185D0' : '#DDD',
@@ -178,7 +180,7 @@ export const DataSheet = React.forwardRef(({
             position: 'sticky',
             tableLayout: 'fixed',
             top: 0,
-            zIndex: 100,
+            zIndex: 1,
         }, headerContainerStyle])}>
             <tr style={{ backgroundColor: '#F6F8FF' }}>
             {rowNumbers === true && <th />}
@@ -216,6 +218,7 @@ export const DataSheet = React.forwardRef(({
                 </TableCell>}
 
                 <List data={_.map(columns, col => items[col])} renderItem={({ item, index: col }) => <TableCell 
+                isEditing={is_cell_editing(row, col)}
                 selected={is_row_selected(row) || is_cell_selected(row, col)}
                 onMouseDown={is_editing ? null : (e) => handleCellMouseDown(e, row, col)}
                 onMouseOver={is_editing ? null : (e) => handleCellMouseOver(e, row, col)}
@@ -247,6 +250,7 @@ export const DataSheet = React.forwardRef(({
                 }, itemContainerStyle])} />}
 
                 <List data={columns} renderItem={({ index: col }) => <TableCell
+                isEditing={is_cell_editing(data.length, col)}
                 onDoubleClick={is_editing ? null : (e) => handleCellDoubleClick(e, data.length, col)}
                 style={StyleSheet.flatten([{
                     padding: 0,
