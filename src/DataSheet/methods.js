@@ -64,6 +64,7 @@ export const useMethods = ({
     onCopyCells,
     onPasteRows,
     onPasteCells,
+    onEndEditing,
 }) => {
 
     function _current_selected_rows(e) {
@@ -116,13 +117,11 @@ export const useMethods = ({
     
     function onMouseDown(e) {
 
-        console.log(editingRef.current)
-        console.log(state.editing)
-
         if (!_.isNil(editingRef.current) && !_.isNil(state.editing)) {
 
             if (!is_child_node(editingRef.current, e.target)) {
             
+                onEndEditing(state.editing.row, state.editing.col);
                 setState({ editing: null });
             }
         }

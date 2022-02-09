@@ -30,7 +30,7 @@ import { List } from '../List';
 import { useElementLayout, useDocumentEvent, useMergeRefs } from 'sugax';
 import { default_state, useMethods } from './methods';
 
-function TableCell({
+const TableCell = React.forwardRef(({
     style,
     selectedStyle,
     selected,
@@ -38,12 +38,13 @@ function TableCell({
     isEditing,
     children,
     ...props
-}) {
+}, forwardRef) => {
 
-    const ref = React.useRef();
+    const cellRef = React.useRef();
+    const ref = useMergeRefs(cellRef, forwardRef);
     const [cellHeight, setCellHeight] = React.useState(0);
 
-    useElementLayout(ref, (e) => setCellHeight(e.nativeEvent?.layout?.height ?? 0));
+    useElementLayout(cellRef, (e) => setCellHeight(e.nativeEvent?.layout?.height ?? 0));
 
     const _style = StyleSheet.flatten([{
         zIndex: isEditing === true ? 1 : 0,
@@ -54,7 +55,7 @@ function TableCell({
     }, selected ? selectedStyle : style]);
 
     return <td ref={ref} style={_style} {...props}>{children}</td>;
-}
+});
 
 const TableCellItem = ({ item, rowIdx, columnIdx, isEditing, renderItem }) => <View 
 style={{
@@ -101,11 +102,7 @@ export const DataSheet = React.forwardRef(({
     const editingRef = React.createRef();
     const ref = useMergeRefs(tableRef, forwardRef);
     const [state, _setState] = React.useState(default_state);
-
-    const setState = (next) => _setState(state => {
-        if (!_.isNil(state.editing) && _.isNil(next.editing) && _.isFunction(onEndEditing)) onEndEditing(state.editing.row, state.editing.col);
-        return allowSelection === true ? { ...state, ...next } : default_state
-    });
+    const setState = (next) => _setState(state => allowSelection === true ? { ...state, ...next } : default_state);
 
     const {
         _current_selected_rows,
@@ -135,6 +132,7 @@ export const DataSheet = React.forwardRef(({
         onCopyCells,
         onPasteRows,
         onPasteCells,
+        onEndEditing,
     });
 
     React.useImperativeHandle(forwardRef, () => ({
