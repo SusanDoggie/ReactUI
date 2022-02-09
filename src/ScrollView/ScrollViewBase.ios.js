@@ -33,9 +33,9 @@ export const KeyboardAwareScrollView = React.forwardRef(({ children, onScroll, .
   const scrollEvent = React.useRef({});
   
   React.useImperativeHandle(forwardRef, () => ({
-    flashScrollIndicators: () => scrollViewRef.current.flashScrollIndicators(...arguments),
-    scrollTo: () => scrollViewRef.current.scrollTo(...arguments),
-    scrollToEnd: () => scrollViewRef.current.scrollToEnd(...arguments),
+    flashScrollIndicators: () => scrollViewRef.current.flashScrollIndicators(),
+    scrollTo: (options, deprecatedX, deprecatedAnimated) => scrollViewRef.current.scrollTo(options, deprecatedX, deprecatedAnimated),
+    scrollToEnd: (options) => scrollViewRef.current.scrollToEnd(options),
   }));
   
   React.useEffect(() => {
