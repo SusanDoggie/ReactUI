@@ -92,6 +92,7 @@ export const DataSheet = React.forwardRef(({
     onPasteRows,
     onPasteCells,
     onSelectionChanged,
+    onEndEditing,
     highlightColor = 'rgba(33, 133, 208, 0.15)',
     ...props
 }, forwardRef) => {
@@ -99,7 +100,11 @@ export const DataSheet = React.forwardRef(({
     const tableRef = React.useRef();
     const ref = useMergeRefs(tableRef, forwardRef);
     const [state, _setState] = React.useState(default_state);
-    const setState = (next) => _setState(state => allowSelection === true ? { ...state, ...next } : default_state);
+
+    const setState = (next) => _setState(state => {
+        if (!_.isNil(state.editing) && _.isNil(next.editing) && _.isFunction(onEndEditing)) onEndEditing(state.editing.row, state.editing.col);
+        return allowSelection === true ? { ...state, ...next } : default_state
+    });
 
     const {
         _current_selected_rows,
