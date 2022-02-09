@@ -2673,10 +2673,10 @@ stylehacks@^5.0.2:
     browserslist "^4.16.6"
     postcss-selector-parser "^6.0.4"
 
-sugax@>=1.0.16:
-  version "1.0.16"
-  resolved "https://registry.yarnpkg.com/sugax/-/sugax-1.0.16.tgz#3c9e869de24b035fe55d93746d8027b8245cf22d"
-  integrity sha512-qCuG1V6+yqmG7B+lArD4HHu2rZhQyTyWdQ9vm5jaNMRTKIT+kF7CKiBCQdNPank73UyBM28EKQHR4SZ5CYVTCA==
+sugax@>=1.0.17:
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/sugax/-/sugax-1.0.17.tgz#0cfebab9b8e9f9073397edb7794950d179902c4b"
+  integrity sha512-94mIIILoy8KNc6FbprQXGFA5X7q6B0NM4iDS4x+krL8xmGYtF7IS75AE0wo2kGIha8Ia47f5n06fvTXKVnBWhA==
   dependencies:
     events ">=3.3.0"
     lodash ">=4.17.21"

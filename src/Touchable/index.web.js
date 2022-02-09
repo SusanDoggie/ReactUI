@@ -50,7 +50,7 @@ function registerEventListener(targetRef, event, callback) {
             if (_.isFunction(callback)) target.removeEventListener(event, _callback, options)
         };
 
-    }, [callback]);
+    }, [targetRef.current, event, callback]);
 }
 
 export const Touchable = React.forwardRef(({
@@ -98,7 +98,7 @@ export const Touchable = React.forwardRef(({
             }
         }
 
-    }, [onDrag]);
+    }, [touchableRef.current, onDrag]);
 
     React.useLayoutEffect(() => {
 
@@ -120,7 +120,7 @@ export const Touchable = React.forwardRef(({
             }
         }
 
-    }, [onDrop]);
+    }, [touchableRef.current, onDrop]);
 
     return <TouchableWithoutFeedback 
     ref={useMergeRefs(forwardRef, touchableRef)}
