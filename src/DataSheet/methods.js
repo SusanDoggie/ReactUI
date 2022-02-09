@@ -38,10 +38,21 @@ export const default_state = {
     editing: null,
 };
 
+function is_child_node(parent, node) {
+    while (node !== document) {
+        if (node === parent) {
+            return true;
+        }
+        node = node.parentNode;
+    }
+    return false;
+}
+
 export const useMethods = ({
     state, 
     setState,
     tableRef,
+    editingRef,
     data,
     columns,
     encodeValue,
@@ -105,20 +116,25 @@ export const useMethods = ({
     
     function onMouseDown(e) {
 
+        console.log(editingRef.current)
+        console.log(state.editing)
+
+        if (!_.isNil(editingRef.current) && !_.isNil(state.editing)) {
+
+            if (!is_child_node(editingRef.current, e.target)) {
+            
+                setState({ editing: null });
+            }
+        }
+
         if (allowSelection !== true) return;
 
         if (!_.isEmpty(state.selected_rows) || !_.isEmpty(state.selected_cells)) {
     
-            let node = e.target;
-    
-            while (node !== document) {
-                if (node === tableRef.current) {
-                    return;
-                }
-                node = node.parentNode;
-            }
+            if (!is_child_node(tableRef.current, e.target)) {
             
-            setState({ selecting_rows: null, selected_rows: [], selecting_cells: null, selected_cells: null, editing: null });
+                setState({ selecting_rows: null, selected_rows: [], selecting_cells: null, selected_cells: null, editing: null });
+            }
         }
     }
     

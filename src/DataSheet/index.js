@@ -98,6 +98,7 @@ export const DataSheet = React.forwardRef(({
 }, forwardRef) => {
 
     const tableRef = React.useRef();
+    const editingRef = React.createRef();
     const ref = useMergeRefs(tableRef, forwardRef);
     const [state, _setState] = React.useState(default_state);
 
@@ -122,6 +123,7 @@ export const DataSheet = React.forwardRef(({
         state,
         setState,
         tableRef,
+        editingRef,
         data,
         columns,
         encodeValue,
@@ -165,7 +167,7 @@ export const DataSheet = React.forwardRef(({
     const is_editing = !_.isEmpty(state.editing);
     const is_cell_editing = (row, col) => is_editing && row === state.editing.row && col === state.editing.col;
 
-    useDocumentEvent('mousedown', is_editing ? null : onMouseDown);
+    useDocumentEvent('mousedown', onMouseDown);
     useDocumentEvent('mouseup', is_editing ? null : onMouseUp);
     useDocumentEvent('keydown', is_editing ? null : handleKey);
     useDocumentEvent('copy', is_editing ? null : handleCopy);
@@ -222,7 +224,8 @@ export const DataSheet = React.forwardRef(({
                     <Text style={{ fontFamily: 'monospace' }}>{row + 1}</Text>
                 </TableCell>}
 
-                <List data={_.map(columns, col => items[col])} renderItem={({ item, index: col }) => <TableCell 
+                <List data={_.map(columns, col => items[col])} renderItem={({ item, index: col }) => <TableCell
+                ref={is_cell_editing(row, col) ? editingRef : null}
                 isEditing={is_cell_editing(row, col)}
                 selected={is_row_selected(row) || is_cell_selected(row, col)}
                 onMouseDown={is_editing ? null : (e) => handleCellMouseDown(e, row, col)}
@@ -263,6 +266,7 @@ export const DataSheet = React.forwardRef(({
                 }, selectedItemContainerStyle])} />}
 
                 <List data={columns} renderItem={({ index: col }) => <TableCell
+                ref={is_cell_editing(data.length, col) ? editingRef : null}
                 isEditing={is_cell_editing(data.length, col)}
                 selected={is_row_selected(data.length)}
                 onDoubleClick={is_editing ? null : (e) => handleCellDoubleClick(e, data.length, col)}
