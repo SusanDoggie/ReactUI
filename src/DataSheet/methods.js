@@ -197,12 +197,14 @@ export const useMethods = ({
     
         if (allowSelection !== true) return;
 
-        if (!_.isEmpty(state.selected_rows)) {
+        const selected_rows = state.selected_rows.sort().filter(x => x < data.length);
+
+        if (!_.isEmpty(selected_rows)) {
     
             e.preventDefault();
             
             if (_.isFunction(onDeleteRows)) {
-                onDeleteRows(state.selected_rows.sort());
+                onDeleteRows(selected_rows);
             }
         }
     
@@ -211,7 +213,15 @@ export const useMethods = ({
             e.preventDefault();
             
             if (_.isFunction(onDeleteCells)) {
-                onDeleteCells(state.selected_cells);
+            
+                const { start_row, start_col, end_row, end_col } = state.selected_cells;
+        
+                const min_row = Math.min(start_row, end_row);
+                const max_row = Math.max(start_row, end_row);
+                const min_col = Math.min(start_col, end_col);
+                const max_col = Math.max(start_col, end_col);
+                
+                onDeleteCells({ start_row: min_row, start_col: min_col, end_row: max_row, end_col: max_col });
             }
         }
     }
@@ -220,11 +230,12 @@ export const useMethods = ({
     
         if (allowSelection !== true) return;
 
-        if (!_.isEmpty(state.selected_rows)) {
+        const selected_rows = state.selected_rows.sort().filter(x => x < data.length);
+
+        if (!_.isEmpty(selected_rows)) {
     
             e.preventDefault();
             
-            const selected_rows = state.selected_rows.sort();
             const _data = _.map(selected_rows, row => _.pick(data[row], columns));
             
             if (_.isFunction(onCopyRows)) {
@@ -257,7 +268,7 @@ export const useMethods = ({
     
             if (_.isFunction(onCopyCells)) {
     
-                onCopyCells({ start_row, start_col, end_row, end_col }, _data);
+                onCopyCells({ start_row: min_row, start_col: min_col, end_row: max_row, end_col: max_col }, _data);
     
             } else {
                 
@@ -287,7 +298,15 @@ export const useMethods = ({
             e.preventDefault();
             
             if (_.isFunction(onPasteCells)) {
-                onPasteCells(state.selected_cells);
+
+                const { start_row, start_col, end_row, end_col } = state.selected_cells;
+        
+                const min_row = Math.min(start_row, end_row);
+                const max_row = Math.max(start_row, end_row);
+                const min_col = Math.min(start_col, end_col);
+                const max_col = Math.max(start_col, end_col);
+        
+                onPasteCells({ start_row: min_row, start_col: min_col, end_row: max_row, end_col: max_col });
             }
         }
     }

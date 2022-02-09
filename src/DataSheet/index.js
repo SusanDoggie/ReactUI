@@ -114,7 +114,7 @@ export const DataSheet = React.forwardRef(({
         handleCopy,
         handlePaste,
     } = useMethods({
-        state, 
+        state,
         setState,
         tableRef,
         data,
@@ -244,19 +244,34 @@ export const DataSheet = React.forwardRef(({
             style={StyleSheet.flatten([{ backgroundColor: data.length % 2 == 0 ? 'white' : '#F6F8FF' }, rowContainerStyle])}>
 
                 {rowNumbers === true && <TableCell
+                selected={is_row_selected(data.length)}
+                onMouseDown={is_editing ? null : (e) => handleRowMouseDown(e, data.length)}
+                onMouseOver={is_editing ? null : (e) => handleRowMouseOver(e, data.length)}
+                highlightColor={highlightColor}
                 style={StyleSheet.flatten([{
                     padding: 4,
                     overflow: 'hidden',
-                }, itemContainerStyle])} />}
+                }, itemContainerStyle])}
+                selectedStyle={StyleSheet.flatten([{
+                    padding: 4,
+                    overflow: 'hidden',
+                }, selectedItemContainerStyle])} />}
 
                 <List data={columns} renderItem={({ index: col }) => <TableCell
                 isEditing={is_cell_editing(data.length, col)}
+                selected={is_row_selected(data.length)}
                 onDoubleClick={is_editing ? null : (e) => handleCellDoubleClick(e, data.length, col)}
+                highlightColor={highlightColor}
                 style={StyleSheet.flatten([{
                     padding: 0,
                     position: 'relative',
                     cursor: 'cell',
-                }, itemContainerStyle])}>
+                }, itemContainerStyle])}
+                selectedStyle={StyleSheet.flatten([{
+                    padding: 0,
+                    position: 'relative',
+                    cursor: 'cell',
+                }, selectedItemContainerStyle])}>
                     <Text style={{ fontFamily: 'monospace' }}>{' '}</Text>
 					{is_cell_editing(data.length, col) && <TableCellItem rowIdx={data.length} columnIdx={col} isEditing={true} renderItem={renderItem} />}
                 </TableCell>} />
