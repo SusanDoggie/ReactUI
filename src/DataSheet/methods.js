@@ -26,6 +26,7 @@
 import _ from 'lodash';
 import { EJSON } from 'bson';
 import { encode_value } from './encode_value';
+import { tsvFormatRows } from 'd3-dsv';
 
 export const default_state = {
     selecting_rows: null,
@@ -36,12 +37,6 @@ export const default_state = {
     metaKey: false,
     editing: null,
 };
-
-export function _encodeData(encodeValue, value) {
-    const string = _.isFunction(encodeValue) ? encodeValue(value) : `${encode_value(value)}`;
-    const map = { '\n': '\\n', '\r': '\\r', '\t': '\\t' };
-    return string.replace(/(['"\n\r\t\\])/g, c => map[c] ?? `\\${c}`);
-}
 
 export const useMethods = ({
     state, 
@@ -240,8 +235,8 @@ export const useMethods = ({
     
                 e.clipboardData.setData('application/json', EJSON.stringify(_data));
                 
-                const text = _data.map(x => _.values(x).map(x => _encodeData(encodeValue, x)).join('\t')).join('\n');
-                e.clipboardData.setData('text/plain', text);
+                const text = _data.map(x => _.values(x).map(x => _.isFunction(encodeValue) ? encodeValue(x) : `${encode_value(x)}`));
+                e.clipboardData.setData('text/plain', tsvFormatRows(text));
             }
         }
     
@@ -268,8 +263,8 @@ export const useMethods = ({
                 
                 e.clipboardData.setData('application/json', EJSON.stringify(_data));
                 
-                const text = _data.map(x => _.values(x).map(x => _encodeData(encodeValue, x)).join('\t')).join('\n');
-                e.clipboardData.setData('text/plain', text);
+                const text = _data.map(x => _.values(x).map(x => _.isFunction(encodeValue) ? encodeValue(x) : `${encode_value(x)}`));
+                e.clipboardData.setData('text/plain', tsvFormatRows(text));
             }
         }
     }

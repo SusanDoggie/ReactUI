@@ -28,7 +28,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { List } from '../List';
 import { useElementLayout, useDocumentEvent, useMergeRefs } from 'sugax';
-import { default_state, _encodeData, useMethods } from './methods';
+import { default_state, useMethods } from './methods';
 
 function TableCell({
     style,
