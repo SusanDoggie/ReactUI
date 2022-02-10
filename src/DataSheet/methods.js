@@ -251,17 +251,17 @@ export const useMethods = ({
     
             e.preventDefault();
             
-            const _data = _.map(selected_rows, row => _.pick(data[row], columns));
-            
             if (_.isFunction(onCopyRows)) {
     
+                const _data = _.map(selected_rows, row => _.pick(data[row], columns));
                 onCopyRows(selected_rows, _data);
     
             } else {
     
                 e.clipboardData.setData('application/json', EJSON.stringify(_data));
                 
-                const text = _data.map(x => _.values(x).map(x => _.isFunction(encodeValue) ? encodeValue(x) : `${encode_value(x)}`));
+                const _data = _.map(selected_rows, row => _.map(columns, col => data[row][col]));
+                const text = _data.map(row => _.map(row, val => _.isFunction(encodeValue) ? encodeValue(val) : `${encode_value(val)}`));
                 e.clipboardData.setData('text/plain', tsvFormatRows(text));
             }
         }
@@ -279,17 +279,18 @@ export const useMethods = ({
     
             const _rows = _.range(min_row, max_row + 1);
             const _cols = _.range(min_col, max_col + 1);
-            const _data = _.map(_rows, row => _.pick(data[row], _.map(_cols, col => columns[col])));
     
             if (_.isFunction(onCopyCells)) {
     
+                const _data = _.map(_rows, row => _.pick(data[row], _.map(_cols, col => columns[col])));
                 onCopyCells({ start_row: min_row, start_col: min_col, end_row: max_row, end_col: max_col }, _data);
     
             } else {
                 
                 e.clipboardData.setData('application/json', EJSON.stringify(_data));
                 
-                const text = _data.map(x => _.values(x).map(x => _.isFunction(encodeValue) ? encodeValue(x) : `${encode_value(x)}`));
+                const _data = _.map(_rows, row => _.map(_cols, col => data[row][columns[col]]));
+                const text = _data.map(row => _.map(row, val => _.isFunction(encodeValue) ? encodeValue(val) : `${encode_value(val)}`));
                 e.clipboardData.setData('text/plain', tsvFormatRows(text));
             }
         }
