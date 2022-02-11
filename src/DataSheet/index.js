@@ -137,6 +137,7 @@ export const DataSheet = React.forwardRef(({
     });
 
     React.useImperativeHandle(forwardRef, () => ({
+        get editing() { return state.editing },
         get selectedRows() { return _.isEmpty(state.selected_cells) ? state.selected_rows ?? [] : [] },
         get selectedCells() {
             const { start_row, start_col, end_row, end_col } = state.selected_cells ?? {};
