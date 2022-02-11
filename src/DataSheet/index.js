@@ -106,6 +106,7 @@ export const DataSheet = React.forwardRef(({
 
     const {
         _current_selected_rows,
+        _current_selected_cells,
         onMouseDown,
         onMouseUp,
         handleRowMouseDown,
@@ -152,7 +153,7 @@ export const DataSheet = React.forwardRef(({
     React.useEffect(() => { if (_.isFunction(onSelectionChanged)) onSelectionChanged(); }, [state.selected_rows, state.selected_cells]);
 
     const _selected_rows = allowSelection === true && _.isEmpty(state.selecting_cells) ? _current_selected_rows(state) : [];
-    const _selected_cells = allowSelection === true && _.isEmpty(state.selecting_rows) ? state.selecting_cells ?? state.selected_cells : null;
+    const _selected_cells = allowSelection === true && _.isEmpty(state.selecting_rows) ? _current_selected_cells(state) : null;
 
     const { start_row, start_col, end_row, end_col } = _selected_cells ?? {};
     const min_row = _.isEmpty(_selected_cells) ? null : Math.min(start_row, end_row);

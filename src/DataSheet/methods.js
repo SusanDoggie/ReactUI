@@ -114,6 +114,49 @@ export const useMethods = ({
     
         return [...selecting_rows].sort();
     }
+
+    function _current_selected_cells(e) {
+
+        if (allowSelection !== true) return {};
+
+        if (_.isEmpty(state.selecting_cells)) {
+            return state.selected_cells;
+        }
+    
+        const { start_row, start_col, end_row, end_col } = state.selecting_cells;
+        const min_row = Math.min(start_row, end_row);
+        const max_row = Math.max(start_row, end_row);
+        const min_col = Math.min(start_col, end_col);
+        const max_col = Math.max(start_col, end_col);
+
+        const key_events = e ?? state;
+        
+        if (key_events.shiftKey || key_events.metaKey) {
+    
+            if (!_.isEmpty(state.selected_cells)) {
+                
+                const { start_row: _start_row, start_col: _start_col, end_row: _end_row, end_col: _end_col } = state.selected_cells;
+                const _min_row = Math.min(min_row, _start_row, _end_row);
+                const _max_row = Math.max(max_row, _start_row, _end_row);
+                const _min_col = Math.min(min_col, _start_col, _end_col);
+                const _max_col = Math.max(max_col, _start_col, _end_col);
+
+                return {
+                    start_row: _min_row,
+                    start_col: _min_col,
+                    end_row: _max_row,
+                    end_col: _max_col,
+                };
+            }
+        }
+
+        return {
+            start_row: min_row,
+            start_col: min_col,
+            end_row: max_row,
+            end_col: max_col,
+        };
+    }
     
     function onMouseDown(e) {
 
@@ -143,14 +186,12 @@ export const useMethods = ({
 
         if (!_.isEmpty(state.selecting_rows)) {
     
-            const selected_rows = _current_selected_rows(e);
-        
-            setState({ selecting_rows: null, selected_rows, selected_cells: null, editing: null });
+            setState({ selecting_rows: null, selected_rows: _current_selected_rows(e), selected_cells: null, editing: null });
         }
     
         if (!_.isEmpty(state.selecting_cells)) {
     
-            setState({ selecting_cells: null, selected_cells: state.selecting_cells, selected_rows: [], editing: null });
+            setState({ selecting_cells: null, selected_cells: _current_selected_cells(e), selected_rows: [], editing: null });
         }
     }
     
@@ -173,7 +214,7 @@ export const useMethods = ({
     
         if (allowSelection !== true) return;
 
-        setState({ selecting_cells: { start_row: row, start_col: col, end_row: row, end_col: col, editing: null } });
+        setState({ selecting_cells: { start_row: row, start_col: col, end_row: row, end_col: col }, shiftKey: e.shiftKey, metaKey: e.metaKey, editing: null });
     }
     
     function handleCellMouseOver(e, row, col) {
@@ -181,7 +222,7 @@ export const useMethods = ({
         if (allowSelection !== true) return;
         if (_.isEmpty(state.selecting_cells)) return;
     
-        setState({ selecting_cells: { ...state.selecting_cells, end_row: row, end_col: col, editing: null } });
+        setState({ selecting_cells: { ...state.selecting_cells, end_row: row, end_col: col }, shiftKey: e.shiftKey, metaKey: e.metaKey, editing: null });
     }
     
     function handleCellDoubleClick(e, row, col) {
@@ -329,6 +370,7 @@ export const useMethods = ({
     
     return {
         _current_selected_rows,
+        _current_selected_cells,
         onMouseDown,
         onMouseUp,
         handleRowMouseDown,
