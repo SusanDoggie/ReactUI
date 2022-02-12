@@ -23,22 +23,13 @@
 //  THE SOFTWARE.
 //
 
-export { styleInject } from 'style-inject';
-export * from './ActivityIndicator';
-export { BBCode } from './BBCode';
-export { Button } from './Button';
-export { HTML } from './HTML';
-export { Icon } from './Icon';
-export { Image } from './Image';
-export { List } from './List';
-export { Markdown } from './Markdown';
-export * from './Modal';
-export { Picker } from './Picker';
-export * from './SafeAreaView';
-export { ScrollView } from './ScrollView';
-export * from './SegmentedControl';
-export { SVG } from './SVG';
-export * from './Toast';
-export { Touchable } from './Touchable';
-export { ZStack } from './ZStack';
-export * from './Icons';
+import _ from 'lodash';
+import React from 'react';
+import { List } from '../List';
+import { Picker as RNPicker } from '@react-native-picker/picker';
+
+export const Picker = React.forwardRef(({ items = [], ...props }, forwardRef) => <RNPicker ref={forwardRef} {...props}>
+    <List data={items} renderItem={({item}) => _.isString(item) ? <RNPicker.Item label={item} value={item} /> : <RNPicker.Item {...item} />} />
+</RNPicker>);
+
+export default Picker;

@@ -28,7 +28,7 @@ import React from 'react';
 import { Animated, View, Text, Pressable, Platform, StyleSheet } from 'react-native';
 import { List } from '../List';
 
-const segment_title = (item) => _.isString(item) ? item : item.title;
+const segment_label = (item) => _.isString(item) ? item : item.label;
 const segment_value = (item) => _.isString(item) ? item : item.value;
 
 const shadow = {
@@ -60,7 +60,7 @@ function Segment({
     onPress={onPress}
     onLayout={onLayout}
     style={[{ paddingVertical: 8, paddingHorizontal: 16 }, _segmentContainerStyle]}>
-        <Text style={_segmentTextStyle}>{segment_title(item)}</Text>
+        <Text style={_segmentTextStyle}>{segment_label(item)}</Text>
     </Pressable>
 }
 
