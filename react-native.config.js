@@ -1,6 +1,8 @@
 
+const packageJson = require('./package.json');
+
 module.exports = {
-    dependency: {
-        platforms: {},
-    },
+    dependency: packageJson.dependencies.mapValues(() => ({
+        platforms: {}
+    })),
 };
