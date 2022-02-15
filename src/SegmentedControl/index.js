@@ -62,11 +62,11 @@ function Segment({
 	let content;
 
     if (!_.isEmpty(item.icon) && !_.isEmpty(title)) {
-        content = <Icon icon={item.icon} name={item.iconName} style={[{ color: 'white', fontWeight: '500' }, _segmentTextStyle]} iconStyle={_iconStyle}> {title}</Icon>;
+        content = <Icon icon={item.icon} name={item.iconName} style={_segmentTextStyle} iconStyle={_iconStyle}> {title}</Icon>;
     } else if (!_.isEmpty(item.icon)) {
-        content = <Icon icon={item.icon} name={item.iconName} iconStyle={[{ color: 'white', fontWeight: '500' }, _iconStyle]} />;
+        content = <Icon icon={item.icon} name={item.iconName} iconStyle={_iconStyle} />;
     } else if (!_.isEmpty(title)) {
-        content = <Text style={[{ color: 'white', fontWeight: '500' }, _segmentTextStyle]}>{title}</Text>;
+        content = <Text style={_segmentTextStyle}>{title}</Text>;
     }
 
     return <Pressable
