@@ -58,9 +58,9 @@ export const Button = React.forwardRef(({
 
 	if (_.isEmpty(children)) {
 		if (!_.isEmpty(Icon) && !_.isEmpty(title)) {
-			content = <Text style={[{ color: 'white', fontWeight: '500' }, _titleStyle]}><Icon name={iconName} {...StyleSheet.flatten(_iconStyle)} /> {title}</Text>;
+			content = <Text style={[{ color: 'white', fontWeight: '500' }, _titleStyle]}><Icon {...StyleSheet.flatten(_iconStyle)} name={iconName} /> {title}</Text>;
 		} else if (!_.isEmpty(Icon)) {
-			content = <Icon name={iconName} color='white' fontWeight='500' {...StyleSheet.flatten(_iconStyle)} />;
+			content = <Icon color='white' fontWeight='500' {...StyleSheet.flatten(_iconStyle)} name={iconName} />;
 		} else if (!_.isEmpty(title)) {
 			content = <Text style={[{ color: 'white', fontWeight: '500' }, _titleStyle]}>{title}</Text>;
 		}

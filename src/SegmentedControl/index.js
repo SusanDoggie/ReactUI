@@ -27,6 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { Animated, View, Text, Pressable, Platform, StyleSheet } from 'react-native';
 import { List } from '../List';
+import * as Icons from '../Icons';
 
 const segment_label = (item) => _.isString(item) ? item : item.label;
 const segment_value = (item) => _.isString(item) ? item : item.value;
@@ -55,13 +56,25 @@ function Segment({
 
 	const _segmentContainerStyle = isSelected ? StyleSheet.compose(segmentContainerStyle, selectedSegmentContainerStyle) : segmentContainerStyle;
 	const _segmentTextStyle = isSelected ? StyleSheet.compose(segmentTextStyle, selectedSegmentTextStyle) : segmentTextStyle;
+	const _iconStyle = isSelected ? StyleSheet.compose(item.iconStyle, item.selectedIconStyle) : item.iconStyle;
+
+	const Icon = Icons[item.icon];
+
+	const title = segment_label(item);
+	let content;
+
+    if (!_.isEmpty(Icon) && !_.isEmpty(title)) {
+        content = <Text style={_segmentTextStyle}><Icon {...StyleSheet.flatten(_iconStyle)} name={item.iconName} /> {title}</Text>;
+    } else if (!_.isEmpty(Icon)) {
+        content = <Icon {...StyleSheet.flatten(_iconStyle)} name={item.iconName} />;
+    } else if (!_.isEmpty(title)) {
+        content = <Text style={_segmentTextStyle}>{title}</Text>;
+    }
 
     return <Pressable
     onPress={onPress}
     onLayout={onLayout}
-    style={[{ paddingVertical: 8, paddingHorizontal: 16 }, _segmentContainerStyle]}>
-        <Text style={_segmentTextStyle}>{segment_label(item)}</Text>
-    </Pressable>
+    style={[{ paddingVertical: 8, paddingHorizontal: 16 }, _segmentContainerStyle]}>{content}</Pressable>
 }
 
 export const SegmentedControl = React.forwardRef(({
