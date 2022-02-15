@@ -62,17 +62,18 @@ export const Icon = React.forwardRef(({
 	icon,
 	name,
 	style,
+	iconStyle,
 	children,
 	...props
 }, forwardRef) => {
 
 	const _Icon = Icons[icon];
 
-	const _style = StyleSheet.flatten(style);
-	const { fontSize, color } = _style ?? {};
+	const _iconStyle = StyleSheet.flatten([style, iconStyle]);
+	const { fontSize, color } = _iconStyle ?? {};
 	
-	return <Text ref={forwardRef} style={_style} {...props}>
-		{!_.isNil(_Icon) && <_Icon name={name} size={fontSize} color={color} style={_.pick(_style, text_style)} />}
+	return <Text ref={forwardRef} style={style} {...props}>
+		{!_.isNil(_Icon) && <_Icon name={name} size={fontSize} color={color} style={_.pick(_iconStyle, text_style)} />}
 		{children}
 	</Text>;
 });

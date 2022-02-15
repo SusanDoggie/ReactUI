@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { Text, Pressable, StyleSheet } from 'react-native';
-import * as Icons from '../Icons';
+import { Icon } from '../Icon';
 
 export const Button = React.forwardRef(({
 	icon,
@@ -52,15 +52,13 @@ export const Button = React.forwardRef(({
 	const _iconStyle = isHover ? StyleSheet.compose(iconStyle, iconHoverStyle) : iconStyle;
 	const _titleStyle = isHover ? StyleSheet.compose(titleStyle, titleHoverStyle) : titleStyle;
 
-	const Icon = Icons[icon];
-
 	let content = children;
 
 	if (_.isEmpty(children)) {
-		if (!_.isEmpty(Icon) && !_.isEmpty(title)) {
-			content = <Text style={[{ color: 'white', fontWeight: '500' }, _titleStyle]}><Icon {...StyleSheet.flatten(_iconStyle)} name={iconName} /> {title}</Text>;
-		} else if (!_.isEmpty(Icon)) {
-			content = <Icon color='white' fontWeight='500' {...StyleSheet.flatten(_iconStyle)} name={iconName} />;
+		if (!_.isEmpty(icon) && !_.isEmpty(title)) {
+			content = <Icon icon={icon} name={iconName} style={[{ color: 'white', fontWeight: '500' }, _titleStyle]} iconStyle={_iconStyle}> {title}</Icon>;
+		} else if (!_.isEmpty(icon)) {
+			content = <Icon icon={icon} name={iconName} iconStyle={[{ color: 'white', fontWeight: '500' }, _iconStyle]} />;
 		} else if (!_.isEmpty(title)) {
 			content = <Text style={[{ color: 'white', fontWeight: '500' }, _titleStyle]}>{title}</Text>;
 		}

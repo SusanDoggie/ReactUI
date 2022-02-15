@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { Animated, View, Text, Pressable, Platform, StyleSheet } from 'react-native';
 import { List } from '../List';
-import * as Icons from '../Icons';
+import { Icon } from '../Icon';
 
 const segment_label = (item) => _.isString(item) ? item : item.label;
 const segment_value = (item) => _.isString(item) ? item : item.value;
@@ -58,17 +58,15 @@ function Segment({
 	const _segmentTextStyle = isSelected ? StyleSheet.compose(segmentTextStyle, selectedSegmentTextStyle) : segmentTextStyle;
 	const _iconStyle = isSelected ? StyleSheet.compose(item.iconStyle, item.selectedIconStyle) : item.iconStyle;
 
-	const Icon = Icons[item.icon];
-
 	const title = segment_label(item);
 	let content;
 
-    if (!_.isEmpty(Icon) && !_.isEmpty(title)) {
-        content = <Text style={_segmentTextStyle}><Icon {...StyleSheet.flatten(_iconStyle)} name={item.iconName} /> {title}</Text>;
-    } else if (!_.isEmpty(Icon)) {
-        content = <Icon {...StyleSheet.flatten(_iconStyle)} name={item.iconName} />;
+    if (!_.isEmpty(item.icon) && !_.isEmpty(title)) {
+        content = <Icon icon={item.icon} name={item.iconName} style={[{ color: 'white', fontWeight: '500' }, _segmentTextStyle]} iconStyle={_iconStyle}> {title}</Icon>;
+    } else if (!_.isEmpty(item.icon)) {
+        content = <Icon icon={item.icon} name={item.iconName} iconStyle={[{ color: 'white', fontWeight: '500' }, _iconStyle]} />;
     } else if (!_.isEmpty(title)) {
-        content = <Text style={_segmentTextStyle}>{title}</Text>;
+        content = <Text style={[{ color: 'white', fontWeight: '500' }, _segmentTextStyle]}>{title}</Text>;
     }
 
     return <Pressable
