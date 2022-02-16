@@ -29,8 +29,8 @@ import { Animated, View, Text, Pressable, Platform, StyleSheet } from 'react-nat
 import { List } from '../List';
 import { Icon } from '../Icon';
 
-const segment_label = (item) => _.isString(item) ? item : item.label;
-const segment_value = (item) => _.isString(item) ? item : item.value;
+const segment_label = (item) => _.isString(item) ? item : item?.label;
+const segment_value = (item) => _.isString(item) ? item : item?.value;
 
 const shadow = {
     shadowColor: "#000",
