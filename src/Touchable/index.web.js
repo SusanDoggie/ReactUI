@@ -25,8 +25,8 @@
 
 import _ from 'lodash';
 import React from 'react';
+import { findDOMNode } from 'react-dom';
 import { TouchableWithoutFeedback } from 'react-native';
-import { useMergeRefs } from 'sugax';
 
 const supportsPointerEvent = () => typeof window !== 'undefined' && window.PointerEvent != null;
 const options = { passive: true };
@@ -36,11 +36,11 @@ function normalizeEvent(event) {
     return event;
 }
 
-function registerEventListener(targetRef, event, callback) {
+function registerEventListener(nodeHandle, event, callback) {
 
     React.useLayoutEffect(() => {
 
-        const target = targetRef.current;
+        const target = nodeHandle;
         if (!(target instanceof EventTarget)) return;
 
         const _callback = (e) => callback(normalizeEvent(e));
@@ -50,10 +50,11 @@ function registerEventListener(targetRef, event, callback) {
             if (_.isFunction(callback)) target.removeEventListener(event, _callback, options)
         };
 
-    }, [targetRef.current, event, callback]);
+    }, [nodeHandle, event, callback]);
 }
 
-export const Touchable = React.forwardRef(({
+const TouchableBody = ({
+    nodeHandle,
     onDrag,
     onDrop,
     onDragIn,
@@ -63,20 +64,18 @@ export const Touchable = React.forwardRef(({
     onHoverOut,
     children,
     ...props
-}, forwardRef) => {
-
-    const touchableRef = React.useRef();
+}) => {
 
     const _supportsPointerEvent = supportsPointerEvent();
-    registerEventListener(touchableRef, 'dragenter', onDragIn);
-    registerEventListener(touchableRef, 'dragover', onDragOver);
-    registerEventListener(touchableRef, 'dragleave', onDragOut);
-    registerEventListener(touchableRef, _supportsPointerEvent ? 'pointerover' : 'mouseover', onHoverIn);
-    registerEventListener(touchableRef, _supportsPointerEvent ? 'pointerout' : 'mouseout', onHoverOut);
+    registerEventListener(nodeHandle, 'dragenter', onDragIn);
+    registerEventListener(nodeHandle, 'dragover', onDragOver);
+    registerEventListener(nodeHandle, 'dragleave', onDragOut);
+    registerEventListener(nodeHandle, _supportsPointerEvent ? 'pointerover' : 'mouseover', onHoverIn);
+    registerEventListener(nodeHandle, _supportsPointerEvent ? 'pointerout' : 'mouseout', onHoverOut);
 
     React.useLayoutEffect(() => {
 
-        const target = touchableRef.current;
+        const target = nodeHandle;
         if (!(target instanceof EventTarget)) return;
 
         const originalDraggableValue = target.getAttribute('draggable');
@@ -98,11 +97,11 @@ export const Touchable = React.forwardRef(({
             }
         }
 
-    }, [touchableRef.current, onDrag]);
+    }, [nodeHandle, onDrag]);
 
     React.useLayoutEffect(() => {
 
-        const target = touchableRef.current;
+        const target = nodeHandle;
         if (!(target instanceof EventTarget)) return;
 
         const _onDrop = (e) => onDrop(normalizeEvent(e));
@@ -120,13 +119,29 @@ export const Touchable = React.forwardRef(({
             }
         }
 
-    }, [touchableRef.current, onDrop]);
+    }, [nodeHandle, onDrop]);
 
-    return <TouchableWithoutFeedback 
-    ref={useMergeRefs(forwardRef, touchableRef)}
-    {...props}>
-        {children}
-    </TouchableWithoutFeedback>;
-});
+    return <TouchableWithoutFeedback {...props}>{children}</TouchableWithoutFeedback>;
+};
+
+export class Touchable extends React.PureComponent {
+
+    state = { 
+        nodeHandle: null,
+    }
+
+    componentDidMount() {
+        this.setState({ nodeHandle: findDOMNode(this) });
+    }
+
+    componentWillUnmount() {
+        this.setState({ nodeHandle: null });
+    }
+    
+    render() {
+        const { children, ...props } = this.props;
+        return <TouchableBody nodeHandle={this.state.nodeHandle} {...props}>{children}</TouchableBody>;
+    }
+};
 
 export default Touchable;
