@@ -41,7 +41,7 @@ function registerEventListener(targetRef, event, callback) {
     React.useLayoutEffect(() => {
 
         const target = targetRef.current;
-        if (_.isNil(target)) return;
+        if (!(target instanceof EventTarget)) return;
 
         const _callback = (e) => callback(normalizeEvent(e));
         if (_.isFunction(callback)) target.addEventListener(event, _callback, options);
@@ -77,7 +77,7 @@ export const Touchable = React.forwardRef(({
     React.useLayoutEffect(() => {
 
         const target = touchableRef.current;
-        if (_.isNil(target)) return;
+        if (!(target instanceof EventTarget)) return;
 
         const originalDraggableValue = target.getAttribute('draggable');
         const _onDrag = (e) => onDrag(normalizeEvent(e));
@@ -103,7 +103,7 @@ export const Touchable = React.forwardRef(({
     React.useLayoutEffect(() => {
 
         const target = touchableRef.current;
-        if (_.isNil(target)) return;
+        if (!(target instanceof EventTarget)) return;
 
         const _onDrop = (e) => onDrop(normalizeEvent(e));
         const _onDropOver = (e) => e.preventDefault();
