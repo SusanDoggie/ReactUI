@@ -298,10 +298,10 @@ export const useMethods = ({
                 onCopyRows(selected_rows, _data);
     
             } else {
-    
-                e.clipboardData.setData('application/json', EJSON.stringify(_data));
                 
                 const _data = _.map(selected_rows, row => _.map(columns, col => data[row][col]));
+                e.clipboardData.setData('application/json', EJSON.stringify(_data));
+                
                 const text = _data.map(row => _.map(row, val => _.isFunction(encodeValue) ? encodeValue(val) : `${encode_value(val)}`));
                 e.clipboardData.setData('text/plain', tsvFormatRows(text));
             }
@@ -328,9 +328,9 @@ export const useMethods = ({
     
             } else {
                 
+                const _data = _.map(_rows, row => _.map(_cols, col => data[row][columns[col]]));
                 e.clipboardData.setData('application/json', EJSON.stringify(_data));
                 
-                const _data = _.map(_rows, row => _.map(_cols, col => data[row][columns[col]]));
                 const text = _data.map(row => _.map(row, val => _.isFunction(encodeValue) ? encodeValue(val) : `${encode_value(val)}`));
                 e.clipboardData.setData('text/plain', tsvFormatRows(text));
             }

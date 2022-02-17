@@ -48,9 +48,6 @@ const TableCell = React.forwardRef(({
 
     const _style = StyleSheet.flatten([{
         zIndex: isEditing === true ? 1 : 0,
-        border: 1,
-        borderStyle: selected ? 'double' : 'solid',
-        borderColor: selected ? '#2185D0' : '#DDD',
         boxShadow: selected ? `inset 0 -${cellHeight}px 0 ${highlightColor}` : null,
     }, selected ? selectedStyle : style]);
 
@@ -75,6 +72,8 @@ export const DataSheet = React.forwardRef(({
     rowNumbers = true,
     renderItem,
     style,
+    stickyHeader = true,
+    stickyRowNumbers = true,
     headerContainerStyle,
     headerItemContainerStyle,
     headerTextStyle,
@@ -173,31 +172,50 @@ export const DataSheet = React.forwardRef(({
     useDocumentEvent('copy', is_editing ? null : handleCopy);
     useDocumentEvent('paste', is_editing ? null : handlePaste);
 
+    const stickyHeaderStyle = stickyHeader === true ? {
+        position: 'sticky',
+        tableLayout: 'fixed',
+        top: 0,
+        zIndex: 1,
+    } : {};
+
+    const stickyRowNumberStyle = stickyRowNumbers === true ? {
+        position: 'sticky',
+        tableLayout: 'fixed',
+        left: 0,
+        zIndex: 1,
+    } : {};
+
     return <table
     ref={ref}
     style={StyleSheet.flatten([{ 
-        borderCollapse: 'collapse',
+        borderCollapse: 'separate',
+        borderSpacing: 0,
         userSelect: 'none',
         MozUserSelect: 'none',
         WebkitUserSelect: 'none',
         msUserSelect: 'none',
     }, style])} {...props}>
         <thead
-        style={StyleSheet.flatten([{
-            position: 'sticky',
-            tableLayout: 'fixed',
-            top: 0,
-            zIndex: 1,
-        }, headerContainerStyle])}>
+        style={StyleSheet.flatten([stickyHeaderStyle, headerContainerStyle])}>
             <tr style={{ backgroundColor: '#F6F8FF' }}>
-            {rowNumbers === true && <th />}
-            <List data={columns} renderItem={({ item }) => <th
-            style={StyleSheet.flatten([{
-                padding: 4,
-                position: 'relative', 
-                border: 1, 
+            {rowNumbers === true && <th style={StyleSheet.flatten([{
+                border: 1,
                 borderStyle: 'solid',
                 borderColor: '#DDD',
+                borderBottomStyle: is_row_selected(0) ? 'double' : 'solid',
+                borderBottomColor: is_row_selected(0) ? '#2185D0' : '#DDD',
+            }, stickyRowNumberStyle])} />}
+            <List data={columns} renderItem={({ item, index: col }) => <th
+            style={StyleSheet.flatten([{
+                padding: 4,
+                position: 'relative',
+                border: 1,
+                borderLeft: 0,
+                borderStyle: 'solid',
+                borderColor: '#DDD',
+                borderBottomStyle: is_row_selected(0) || is_cell_selected(0, col) ? 'double' : 'solid',
+                borderBottomColor: is_row_selected(0) || is_cell_selected(0, col) ? '#2185D0' : '#DDD',
             }, headerItemContainerStyle])}><Text style={headerTextStyle}>{item}</Text></th>} />
             </tr>
         </thead>
@@ -206,7 +224,7 @@ export const DataSheet = React.forwardRef(({
         style={StyleSheet.flatten([{ backgroundColor: 'white' }, contentContainerStyle])}>
 
             <List data={data} renderItem={({ item: items, index: row }) => <tr
-            style={StyleSheet.flatten([{ backgroundColor: row % 2 == 0 ? 'white' : '#F6F8FF' }, rowContainerStyle])}>
+            style={StyleSheet.flatten(rowContainerStyle)}>
 
                 {rowNumbers === true && <TableCell
                 selected={is_row_selected(row)}
@@ -216,11 +234,29 @@ export const DataSheet = React.forwardRef(({
                 style={StyleSheet.flatten([{
                     padding: 4,
                     overflow: 'hidden',
-                }, itemContainerStyle])}
+                    borderTop: 0,
+                    borderLeft: 1,
+                    borderBottom: 1,
+                    borderRight: 1,
+                    borderStyle: 'solid',
+                    borderColor: '#DDD',
+                    borderRightStyle: is_row_selected(row) || is_cell_selected(row, 0) ? 'double' : 'solid',
+                    borderRightColor: is_row_selected(row) || is_cell_selected(row, 0) ? '#2185D0' : '#DDD',
+                    borderBottomStyle: is_row_selected(row + 1) ? 'double' : 'solid',
+                    borderBottomColor: is_row_selected(row + 1) ? '#2185D0' : '#DDD',
+                    backgroundColor: row % 2 == 0 ? 'white' : '#F6F8FF',
+                }, stickyRowNumberStyle, itemContainerStyle])}
                 selectedStyle={StyleSheet.flatten([{
                     padding: 4,
                     overflow: 'hidden',
-                }, selectedItemContainerStyle])}>
+                    borderTop: 0,
+                    borderLeft: 1,
+                    borderBottom: 1,
+                    borderRight: 1,
+                    borderStyle: 'double',
+                    borderColor: '#2185D0',
+                    backgroundColor: row % 2 == 0 ? 'white' : '#F6F8FF',
+                }, stickyRowNumberStyle, selectedItemContainerStyle])}>
                     <Text style={{ fontFamily: 'monospace' }}>{row + 1}</Text>
                 </TableCell>}
 
@@ -236,11 +272,29 @@ export const DataSheet = React.forwardRef(({
                     padding: 0,
                     position: 'relative',
                     cursor: 'cell',
+                    borderTop: 0,
+                    borderLeft: rowNumbers === true || col != 0 ? 0 : 1,
+                    borderBottom: 1,
+                    borderRight: 1,
+                    borderStyle: 'solid',
+                    borderColor: '#DDD',
+                    borderRightStyle: is_row_selected(row) || is_cell_selected(row, col + 1) ? 'double' : 'solid',
+                    borderRightColor: is_row_selected(row) || is_cell_selected(row, col + 1) ? '#2185D0' : '#DDD',
+                    borderBottomStyle: is_row_selected(row + 1) || is_cell_selected(row + 1, col) ? 'double' : 'solid',
+                    borderBottomColor: is_row_selected(row + 1) || is_cell_selected(row + 1, col) ? '#2185D0' : '#DDD',
+                    backgroundColor: row % 2 == 0 ? 'white' : '#F6F8FF',
                 }, itemContainerStyle])}
                 selectedStyle={StyleSheet.flatten([{
                     padding: 0,
                     position: 'relative',
                     cursor: 'cell',
+                    borderTop: 0,
+                    borderLeft: rowNumbers === true || col != 0 ? 0 : 1,
+                    borderBottom: 1,
+                    borderRight: 1,
+                    borderStyle: 'double',
+                    borderColor: '#2185D0',
+                    backgroundColor: row % 2 == 0 ? 'white' : '#F6F8FF',
                 }, selectedItemContainerStyle])}>
                     <Text style={{ fontFamily: 'monospace' }}>{' '}</Text>
 					<TableCellItem item={item} rowIdx={row} columnIdx={col} isEditing={is_cell_editing(row, col)} renderItem={renderItem} />
@@ -249,7 +303,7 @@ export const DataSheet = React.forwardRef(({
             </tr>} />
 
 			{showEmptyLastRow === true && <tr
-            style={StyleSheet.flatten([{ backgroundColor: data.length % 2 == 0 ? 'white' : '#F6F8FF' }, rowContainerStyle])}>
+            style={StyleSheet.flatten(rowContainerStyle)}>
 
                 {rowNumbers === true && <TableCell
                 selected={is_row_selected(data.length)}
@@ -259,11 +313,25 @@ export const DataSheet = React.forwardRef(({
                 style={StyleSheet.flatten([{
                     padding: 4,
                     overflow: 'hidden',
-                }, itemContainerStyle])}
+                    borderTop: 0,
+                    borderLeft: 1,
+                    borderBottom: 1,
+                    borderRight: 1,
+                    borderStyle: 'solid',
+                    borderColor: '#DDD',
+                    backgroundColor: data.length % 2 == 0 ? 'white' : '#F6F8FF',
+                }, stickyRowNumberStyle, itemContainerStyle])}
                 selectedStyle={StyleSheet.flatten([{
                     padding: 4,
                     overflow: 'hidden',
-                }, selectedItemContainerStyle])} />}
+                    borderTop: 0,
+                    borderLeft: 1,
+                    borderBottom: 1,
+                    borderRight: 1,
+                    borderStyle: 'double',
+                    borderColor: '#2185D0',
+                    backgroundColor: data.length % 2 == 0 ? 'white' : '#F6F8FF',
+                }, stickyRowNumberStyle, selectedItemContainerStyle])} />}
 
                 <List data={columns} renderItem={({ index: col }) => <TableCell
                 ref={is_cell_editing(data.length, col) ? editingRef : null}
@@ -275,11 +343,25 @@ export const DataSheet = React.forwardRef(({
                     padding: 0,
                     position: 'relative',
                     cursor: 'cell',
+                    borderTop: 0,
+                    borderLeft: rowNumbers === true || col != 0 ? 0 : 1,
+                    borderBottom: 1,
+                    borderRight: 1,
+                    borderStyle: 'solid',
+                    borderColor: '#DDD',
+                    backgroundColor: data.length % 2 == 0 ? 'white' : '#F6F8FF',
                 }, itemContainerStyle])}
                 selectedStyle={StyleSheet.flatten([{
                     padding: 0,
                     position: 'relative',
                     cursor: 'cell',
+                    borderTop: 0,
+                    borderLeft: rowNumbers === true || col != 0 ? 0 : 1,
+                    borderBottom: 1,
+                    borderRight: 1,
+                    borderStyle: 'double',
+                    borderColor: '#2185D0',
+                    backgroundColor: data.length % 2 == 0 ? 'white' : '#F6F8FF',
                 }, selectedItemContainerStyle])}>
                     <Text style={{ fontFamily: 'monospace' }}>{' '}</Text>
 					{is_cell_editing(data.length, col) && <TableCellItem rowIdx={data.length} columnIdx={col} isEditing={true} renderItem={renderItem} />}
