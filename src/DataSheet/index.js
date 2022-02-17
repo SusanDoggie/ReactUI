@@ -30,6 +30,35 @@ import { List } from '../List';
 import { useElementLayout, useDocumentEvent, useMergeRefs } from 'sugax';
 import { default_state, useMethods } from './methods';
 
+function TableHeaderCell({
+    label,
+    style,
+    borderSize = 1,
+    headerTextStyle,
+    columnWidth,
+    columnMinWidth,
+    onColumnWidthChange,
+    ...props
+}) {
+
+    const borderRef = React.useRef();
+
+    return <th style={StyleSheet.flatten([{ width: Math.max(columnWidth ?? 0, columnMinWidth ?? 0) }, style])} {...props}>
+        <View style={{ flexDirection: 'row', alignItems: 'stretch' }}>
+            <Text style={[{ flex: 1, padding: 4 }, headerTextStyle]}>{label}</Text>
+            <View ref={borderRef}
+                onStartShouldSetResponder={(e) => e.target === borderRef.current}
+                onMoveShouldSetResponder={(e) => e.target === borderRef.current}
+                onStartShouldSetResponderCapture={() => false}
+                onMoveShouldSetResponderCapture={() => false}
+                onResponderTerminationRequest={() => false}
+                onResponderMove={e => onColumnWidthChange(columnWidth + e.nativeEvent.locationX - borderSize * 0.5)}
+                onResponderRelease={e => onColumnWidthChange(columnWidth + e.nativeEvent.locationX - borderSize * 0.5)}
+                style={{ width: borderSize, cursor: 'col-resize' }} />
+        </View>
+    </th>;
+}
+
 const TableCell = React.forwardRef(({
     style,
     selectedStyle,
@@ -69,6 +98,9 @@ style={{
 export const DataSheet = React.forwardRef(({
     data,
     columns,
+    columnWidth,
+    columnMinWidth = 64,
+    onColumnWidthChange,
     rowNumbers = true,
     renderItem,
     style,
@@ -206,9 +238,13 @@ export const DataSheet = React.forwardRef(({
                 borderBottomStyle: is_row_selected(0) ? 'double' : 'solid',
                 borderBottomColor: is_row_selected(0) ? '#2185D0' : '#DDD',
             }, stickyRowNumberStyle])} />}
-            <List data={columns} renderItem={({ item, index: col }) => <th
+            <List data={columns} renderItem={({ item, index: col }) => <TableHeaderCell
+            label={item}
+            headerTextStyle={headerTextStyle}
+            columnWidth={_.isArray(columnWidth) ? columnWidth[col] : null}
+            columnMinWidth={columnMinWidth}
+            onColumnWidthChange={_.isFunction(onColumnWidthChange) ? (width) => onColumnWidthChange(col, width) : null}
             style={StyleSheet.flatten([{
-                padding: 4,
                 position: 'relative',
                 border: 1,
                 borderLeft: 0,
@@ -216,7 +252,7 @@ export const DataSheet = React.forwardRef(({
                 borderColor: '#DDD',
                 borderBottomStyle: is_row_selected(0) || is_cell_selected(0, col) ? 'double' : 'solid',
                 borderBottomColor: is_row_selected(0) || is_cell_selected(0, col) ? '#2185D0' : '#DDD',
-            }, headerItemContainerStyle])}><Text style={headerTextStyle}>{item}</Text></th>} />
+            }, headerItemContainerStyle])} />} />
             </tr>
         </thead>
 
