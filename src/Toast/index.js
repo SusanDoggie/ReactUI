@@ -144,7 +144,7 @@ export const ToastProvider = React.forwardRef(({
     function show_message(message, type, timeout) {
 
         if (_.isNil(message)) return;
-        if (_.isArrayLike(message)) return _.forEach(message, x => show_message(x, type, timeout));
+        if (!_.isString(message) && _.isArrayLike(message)) return _.forEach(message, x => show_message(x, type, timeout));
         
         const id = uuidv4();
         
