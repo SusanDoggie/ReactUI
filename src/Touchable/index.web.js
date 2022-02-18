@@ -25,8 +25,8 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { findDOMNode } from 'react-dom';
 import { TouchableWithoutFeedback } from 'react-native';
+import { NodeHandleProvider } from '../NodeHandleProvider';
 
 const supportsPointerEvent = () => typeof window !== 'undefined' && window.PointerEvent != null;
 const options = { passive: true };
@@ -53,8 +53,7 @@ function registerEventListener(nodeHandle, event, callback) {
     }, [nodeHandle, event, callback]);
 }
 
-const TouchableBody = ({
-    nodeHandle,
+export const Touchable = React.forwardRef(({
     onDrag,
     onDrop,
     onDragIn,
@@ -64,7 +63,9 @@ const TouchableBody = ({
     onHoverOut,
     children,
     ...props
-}) => {
+}, forwardRef) => {
+
+    const [nodeHandle, setNodeHandle] = React.useState();
 
     const _supportsPointerEvent = supportsPointerEvent();
     registerEventListener(nodeHandle, 'dragenter', onDragIn);
@@ -121,27 +122,9 @@ const TouchableBody = ({
 
     }, [nodeHandle, onDrop]);
 
-    return <TouchableWithoutFeedback {...props}>{children}</TouchableWithoutFeedback>;
-};
-
-export class Touchable extends React.PureComponent {
-
-    state = { 
-        nodeHandle: null,
-    }
-
-    componentDidMount() {
-        this.setState({ nodeHandle: findDOMNode(this) });
-    }
-
-    componentWillUnmount() {
-        this.setState({ nodeHandle: null });
-    }
-    
-    render() {
-        const { children, ...props } = this.props;
-        return <TouchableBody nodeHandle={this.state.nodeHandle} {...props}>{children}</TouchableBody>;
-    }
-};
+    return <NodeHandleProvider onChangeHandle={setNodeHandle}>
+        <TouchableWithoutFeedback ref={forwardRef} {...props}>{children}</TouchableWithoutFeedback>
+    </NodeHandleProvider>;
+});
 
 export default Touchable;

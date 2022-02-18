@@ -1,5 +1,5 @@
 //
-//  index.web.js
+//  index.js
 //
 //  The MIT License
 //  Copyright (c) 2015 - 2022 Susan Cheng. All rights reserved.
@@ -23,8 +23,41 @@
 //  THE SOFTWARE.
 //
 
-export * from './index.js';
-export { CodeMirror } from './CodeMirror';
-export { DataSheet } from './DataSheet';
-export { useWebFont } from './useWebFont';
-export { NodeHandleProvider } from './NodeHandleProvider';
+import _ from 'lodash';
+import React from 'react';
+import { findDOMNode } from 'react-dom';
+
+export class NodeHandleProvider extends React.PureComponent {
+
+    state = {
+        nodeHandle: null,
+    }
+    
+    componentDidMount() {
+        const nodeHandle = findDOMNode(this);
+        this.setState({ nodeHandle: nodeHandle }, () => { 
+            if (_.isFunction(this.props.onChangeHandle)) this.props.onChangeHandle(nodeHandle);
+        });
+    }
+
+    componentDidUpdate() {
+        const nodeHandle = findDOMNode(this);
+        if (nodeHandle !== this.state.nodeHandle) {
+            this.setState({ nodeHandle: nodeHandle }, () => { 
+                if (_.isFunction(this.props.onChangeHandle)) this.props.onChangeHandle(nodeHandle);
+            });
+        }
+    }
+    
+    componentWillUnmount() {
+        this.setState({ nodeHandle: null }, () => { 
+            if (_.isFunction(this.props.onChangeHandle)) this.props.onChangeHandle();
+        });
+    }
+    
+    render() {
+        return this.props.children;
+    }
+};
+
+export default NodeHandleProvider;
