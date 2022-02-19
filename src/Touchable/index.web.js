@@ -54,7 +54,8 @@ function registerEventListener(nodeHandle, event, callback) {
 }
 
 export const Touchable = React.forwardRef(({
-    onDrag,
+    onDragStart,
+    onDragEnd,
     onDrop,
     onDragIn,
     onDragOver,
@@ -68,6 +69,7 @@ export const Touchable = React.forwardRef(({
     const [nodeHandle, setNodeHandle] = React.useState();
 
     const _supportsPointerEvent = supportsPointerEvent();
+    registerEventListener(nodeHandle, 'dragend', onDragEnd);
     registerEventListener(nodeHandle, 'dragenter', onDragIn);
     registerEventListener(nodeHandle, 'dragover', onDragOver);
     registerEventListener(nodeHandle, 'dragleave', onDragOut);
@@ -80,15 +82,15 @@ export const Touchable = React.forwardRef(({
         if (!(target instanceof EventTarget)) return;
 
         const originalDraggableValue = target.getAttribute('draggable');
-        const _onDrag = (e) => onDrag(normalizeEvent(e));
+        const _onDrag = (e) => onDragStart(normalizeEvent(e));
 
-        if (_.isFunction(onDrag)) {
+        if (_.isFunction(onDragStart)) {
             target.addEventListener('dragstart', _onDrag, options);
             target.setAttribute('draggable', 'true');
         }
 
         return () => {
-            if (_.isFunction(onDrag)) {
+            if (_.isFunction(onDragStart)) {
                 target.removeEventListener('dragstart', _onDrag, options);
                 if (_.isNil(originalDraggableValue)) {
                     target.removeAttribute('draggable');
@@ -98,7 +100,7 @@ export const Touchable = React.forwardRef(({
             }
         }
 
-    }, [nodeHandle, onDrag]);
+    }, [nodeHandle, onDragStart]);
 
     React.useLayoutEffect(() => {
 

@@ -28,7 +28,8 @@ import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 
 export const Touchable = React.forwardRef(({
-    onDrag,
+    onDragStart,
+    onDragEnd,
     onDrop,
     onDragIn,
     onDragOver,
