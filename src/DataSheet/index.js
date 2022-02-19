@@ -41,9 +41,12 @@ function TableHeaderCell({
     ...props
 }) {
 
+    const _columnWidth = columnWidth ?? 0;
+    const _columnMinWidth = columnMinWidth ?? 0;
+
     const borderRef = React.useRef();
 
-    return <th style={StyleSheet.flatten([{ width: Math.max(columnWidth ?? 0, columnMinWidth ?? 0) }, style])} {...props}>
+    return <th style={StyleSheet.flatten([{ width: Math.max(_columnWidth, _columnMinWidth) }, style])} {...props}>
         <View style={{ flexDirection: 'row', alignItems: 'stretch' }}>
             <Text style={[{ flex: 1, padding: 4 }, headerTextStyle]}>{label}</Text>
             <View ref={borderRef}
@@ -52,8 +55,8 @@ function TableHeaderCell({
                 onStartShouldSetResponderCapture={() => false}
                 onMoveShouldSetResponderCapture={() => false}
                 onResponderTerminationRequest={() => false}
-                onResponderMove={e => onColumnWidthChange(columnWidth + e.nativeEvent.locationX - borderSize * 0.5)}
-                onResponderRelease={e => onColumnWidthChange(columnWidth + e.nativeEvent.locationX - borderSize * 0.5)}
+                onResponderMove={e => onColumnWidthChange(_columnWidth + e.nativeEvent.locationX - borderSize * 0.5)}
+                onResponderRelease={e => onColumnWidthChange(_columnWidth + e.nativeEvent.locationX - borderSize * 0.5)}
                 style={{ width: borderSize, cursor: 'col-resize' }} />
         </View>
     </th>;
