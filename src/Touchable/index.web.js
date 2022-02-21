@@ -38,7 +38,7 @@ function normalizeEvent(event) {
 
 function registerEventListener(nodeHandle, event, callback) {
 
-    React.useLayoutEffect(() => {
+    React.useEffect(() => {
 
         const target = nodeHandle;
         if (!(target instanceof EventTarget)) return;
@@ -76,7 +76,7 @@ export const Touchable = React.forwardRef(({
     registerEventListener(nodeHandle, _supportsPointerEvent ? 'pointerover' : 'mouseover', onHoverIn);
     registerEventListener(nodeHandle, _supportsPointerEvent ? 'pointerout' : 'mouseout', onHoverOut);
 
-    React.useLayoutEffect(() => {
+    React.useEffect(() => {
 
         const target = nodeHandle;
         if (!(target instanceof EventTarget)) return;
@@ -102,7 +102,7 @@ export const Touchable = React.forwardRef(({
 
     }, [nodeHandle, onDragStart]);
 
-    React.useLayoutEffect(() => {
+    React.useEffect(() => {
 
         const target = nodeHandle;
         if (!(target instanceof EventTarget)) return;
