@@ -40,15 +40,12 @@ function registerEventListener(nodeHandle, event, callback) {
 
     React.useEffect(() => {
 
-        const target = nodeHandle;
-        if (!(target instanceof EventTarget)) return;
+        if (!(nodeHandle instanceof EventTarget) || !_.isFunction(callback)) return;
 
         const _callback = (e) => { e.preventDefault(); callback(normalizeEvent(e)); }
-        if (_.isFunction(callback)) target.addEventListener(event, _callback, options);
+        nodeHandle.addEventListener(event, _callback, options);
 
-        return () => {
-            if (_.isFunction(callback)) target.removeEventListener(event, _callback, options)
-        };
+        return () => nodeHandle.removeEventListener(event, _callback, options);
 
     }, [nodeHandle, event, callback]);
 }
@@ -79,29 +76,36 @@ export const Touchable = React.forwardRef(({
 
     React.useEffect(() => {
 
-        const target = nodeHandle;
-        if (!(target instanceof EventTarget)) return;
+        if (!(nodeHandle instanceof EventTarget) || !_.isFunction(onDragStart)) return;
 
-        const originalDraggableValue = target.getAttribute('draggable');
+        const originalDraggableValue = nodeHandle.getAttribute('draggable');
         const _onDrag = (e) => { e.preventDefault(); onDragStart(normalizeEvent(e)); }
 
-        if (_.isFunction(onDragStart)) {
-            target.addEventListener('dragstart', _onDrag, options);
-            target.setAttribute('draggable', 'true');
-        }
+        nodeHandle.addEventListener('dragstart', _onDrag, options);
+        nodeHandle.setAttribute('draggable', 'true');
 
         return () => {
-            if (_.isFunction(onDragStart)) {
-                target.removeEventListener('dragstart', _onDrag, options);
-                if (_.isNil(originalDraggableValue)) {
-                    target.removeAttribute('draggable');
-                } else {
-                    target.setAttribute('draggable', originalDraggableValue);
-                }
+            nodeHandle.removeEventListener('dragstart', _onDrag, options);
+            if (_.isNil(originalDraggableValue)) {
+                nodeHandle.removeAttribute('draggable');
+            } else {
+                nodeHandle.setAttribute('draggable', originalDraggableValue);
             }
         }
 
     }, [nodeHandle, onDragStart]);
+
+    React.useEffect(() => {
+
+        if (!(nodeHandle instanceof EventTarget)) return;
+        if (!_.isFunction(onDrop) || _.isFunction(onDragOver)) return;
+
+        const _onDragOver = (e) => e.preventDefault();
+        nodeHandle.addEventListener('dragover', _onDragOver, options);
+
+        return () => nodeHandle.removeEventListener('dragover', _onDragOver, options);
+
+    }, [nodeHandle, onDrop, onDragOver]);
 
     return <NodeHandleProvider onChangeHandle={setNodeHandle}>
         <TouchableWithoutFeedback ref={forwardRef} {...props}>{children}</TouchableWithoutFeedback>
