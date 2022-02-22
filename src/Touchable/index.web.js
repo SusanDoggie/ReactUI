@@ -43,7 +43,7 @@ function registerEventListener(nodeHandle, event, callback) {
         const target = nodeHandle;
         if (!(target instanceof EventTarget)) return;
 
-        const _callback = (e) => callback(normalizeEvent(e));
+        const _callback = (e) => { e.preventDefault(); callback(normalizeEvent(e)); }
         if (_.isFunction(callback)) target.addEventListener(event, _callback, options);
 
         return () => {
@@ -69,6 +69,7 @@ export const Touchable = React.forwardRef(({
     const [nodeHandle, setNodeHandle] = React.useState();
 
     const _supportsPointerEvent = supportsPointerEvent();
+    registerEventListener(nodeHandle, 'drop', onDrop);
     registerEventListener(nodeHandle, 'dragend', onDragEnd);
     registerEventListener(nodeHandle, 'dragenter', onDragIn);
     registerEventListener(nodeHandle, 'dragover', onDragOver);
@@ -82,7 +83,7 @@ export const Touchable = React.forwardRef(({
         if (!(target instanceof EventTarget)) return;
 
         const originalDraggableValue = target.getAttribute('draggable');
-        const _onDrag = (e) => onDragStart(normalizeEvent(e));
+        const _onDrag = (e) => { e.preventDefault(); onDragStart(normalizeEvent(e)); }
 
         if (_.isFunction(onDragStart)) {
             target.addEventListener('dragstart', _onDrag, options);
@@ -101,28 +102,6 @@ export const Touchable = React.forwardRef(({
         }
 
     }, [nodeHandle, onDragStart]);
-
-    React.useEffect(() => {
-
-        const target = nodeHandle;
-        if (!(target instanceof EventTarget)) return;
-
-        const _onDrop = (e) => onDrop(normalizeEvent(e));
-        const _onDropOver = (e) => e.preventDefault();
-
-        if (_.isFunction(onDrop)) {
-            target.addEventListener('drop', _onDrop, options);
-            target.addEventListener('dragover', _onDropOver);
-        }
-
-        return () => {
-            if (_.isFunction(onDrop)) {
-                target.removeEventListener('drop', _onDrop, options);
-                target.removeEventListener('dragover', _onDropOver);
-            }
-        }
-
-    }, [nodeHandle, onDrop]);
 
     return <NodeHandleProvider onChangeHandle={setNodeHandle}>
         <TouchableWithoutFeedback ref={forwardRef} {...props}>{children}</TouchableWithoutFeedback>
