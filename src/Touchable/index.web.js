@@ -42,13 +42,15 @@ function registerEventListener(nodeHandle, event, callback) {
 
         if (!(nodeHandle instanceof EventTarget) || !_.isFunction(callback)) return;
 
-        const _callback = (e) => { e.preventDefault(); callback(normalizeEvent(e)); }
+        const _callback = (e) => { e.preventDefault(); e.stopPropagation(); callback(normalizeEvent(e)); }
         nodeHandle.addEventListener(event, _callback, options);
 
         return () => nodeHandle.removeEventListener(event, _callback, options);
 
     }, [nodeHandle, event, callback]);
 }
+
+const empty_function = () => {};
 
 export const Touchable = React.forwardRef(({
     onDragStart,
@@ -69,7 +71,7 @@ export const Touchable = React.forwardRef(({
     registerEventListener(nodeHandle, 'drop', onDrop);
     registerEventListener(nodeHandle, 'dragend', onDragEnd);
     registerEventListener(nodeHandle, 'dragenter', onDragIn);
-    registerEventListener(nodeHandle, 'dragover', onDragOver);
+    registerEventListener(nodeHandle, 'dragover', _.isFunction(onDrop) ? onDragOver ?? empty_function : onDragOver);
     registerEventListener(nodeHandle, 'dragleave', onDragOut);
     registerEventListener(nodeHandle, _supportsPointerEvent ? 'pointerover' : 'mouseover', onHoverIn);
     registerEventListener(nodeHandle, _supportsPointerEvent ? 'pointerout' : 'mouseout', onHoverOut);
@@ -79,7 +81,7 @@ export const Touchable = React.forwardRef(({
         if (!(nodeHandle instanceof EventTarget) || !_.isFunction(onDragStart)) return;
 
         const originalDraggableValue = nodeHandle.getAttribute('draggable');
-        const _onDrag = (e) => { e.preventDefault(); onDragStart(normalizeEvent(e)); }
+        const _onDrag = (e) => { e.preventDefault(); e.stopPropagation(); onDragStart(normalizeEvent(e)); }
 
         nodeHandle.addEventListener('dragstart', _onDrag, options);
         nodeHandle.setAttribute('draggable', 'true');
@@ -94,18 +96,6 @@ export const Touchable = React.forwardRef(({
         }
 
     }, [nodeHandle, onDragStart]);
-
-    React.useEffect(() => {
-
-        if (!(nodeHandle instanceof EventTarget)) return;
-        if (!_.isFunction(onDrop) || _.isFunction(onDragOver)) return;
-
-        const _onDragOver = (e) => e.preventDefault();
-        nodeHandle.addEventListener('dragover', _onDragOver, options);
-
-        return () => nodeHandle.removeEventListener('dragover', _onDragOver, options);
-
-    }, [nodeHandle, onDrop, onDragOver]);
 
     return <NodeHandleProvider onChangeHandle={setNodeHandle}>
         <TouchableWithoutFeedback ref={forwardRef} {...props}>{children}</TouchableWithoutFeedback>
