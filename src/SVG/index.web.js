@@ -38,7 +38,7 @@ export const SVG = React.forwardRef(({
         height,
         aspectRatio,
         ..._style
-    } = StyleSheet.flatten(style);
+    } = StyleSheet.flatten(style) ?? {};
 
     if (_.isString(source?.content)) {
         return <View ref={forwardRef} style={[{ width, height, aspectRatio }, _style]} {...props}>

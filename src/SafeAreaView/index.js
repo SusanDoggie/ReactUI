@@ -84,7 +84,7 @@ export const SafeAreaView = React.forwardRef(({
         paddingBottom = paddingVertical,
         paddingLeft = paddingHorizontal,
         ..._style
-    } = StyleSheet.flatten(style);
+    } = StyleSheet.flatten(style) ?? {};
 
     return <View 
     ref={ref}

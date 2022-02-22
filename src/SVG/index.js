@@ -38,7 +38,7 @@ export const SVG = React.forwardRef(({
         width,
         height,
         ..._style
-    } = StyleSheet.flatten(style);
+    } = StyleSheet.flatten(style) ?? {};
 
     if (_.isString(source?.content)) {
         return <SvgCss ref={forwardRef} width={width} height={height} xml={source.content} style={_style} {...props} />;
