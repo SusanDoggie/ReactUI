@@ -27,6 +27,7 @@ import 'codemirror/lib/codemirror.css';
 import './index.css';
 import React from 'react';
 import { View } from 'react-native';
+import { useCallbackRef } from 'sugax';
 
 export const CodeMirror = React.forwardRef(function({
 	value,
@@ -45,16 +46,22 @@ export const CodeMirror = React.forwardRef(function({
 	const codeMirror = React.useRef({ editor: null });
 	const textareaRef = React.useRef();
 
+    const onChangeRef = useCallbackRef(onChange);
+    const onCursorActivityRef = useCallbackRef(onCursorActivity);
+    const onFocusRef = useCallbackRef(onFocus);
+    const onBlurRef = useCallbackRef(onBlur);
+    const onScrollRef = useCallbackRef(onScroll);
+
 	React.useEffect(() => {
 
 		const editor = require('codemirror').fromTextArea(textareaRef.current, options);
 		codeMirror.current.editor = editor;
 		
-		editor.on('change', (editor, change) => onChange && change.origin !== 'setValue' && onChange(editor.getValue(), change));
-		editor.on('cursorActivity', (editor) => onCursorActivity && onCursorActivity(editor));
-		editor.on('focus', () => onFocus && onFocus());
-		editor.on('blur', () => onBlur && onBlur());
-		editor.on('scroll', (editor) => onScroll && onScroll(editor.getScrollInfo()));
+		editor.on('change', (editor, change) => change.origin !== 'setValue' && onChangeRef.current && onChangeRef.current(editor.getValue(), change));
+		editor.on('cursorActivity', (editor) => onCursorActivityRef.current && onCursorActivityRef.current(editor));
+		editor.on('focus', () => onFocusRef.current && onFocusRef.current());
+		editor.on('blur', () => onBlurRef.current && onBlurRef.current());
+		editor.on('scroll', (editor) => onScrollRef.current && onScrollRef.current(editor.getScrollInfo()));
 		editor.setValue(value ?? defaultValue ?? '');
 
 		return () => editor.toTextArea();
