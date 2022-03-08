@@ -73,8 +73,8 @@ export const Touchable = React.forwardRef(({
     registerEventListener(nodeHandle, 'dragenter', onDragIn);
     registerEventListener(nodeHandle, 'dragover', _.isFunction(onDrop) ? onDragOver ?? empty_function : onDragOver);
     registerEventListener(nodeHandle, 'dragleave', onDragOut);
-    registerEventListener(nodeHandle, _supportsPointerEvent ? 'pointerover' : 'mouseover', onHoverIn);
-    registerEventListener(nodeHandle, _supportsPointerEvent ? 'pointerout' : 'mouseout', onHoverOut);
+    registerEventListener(nodeHandle, _supportsPointerEvent ? 'pointerenter' : 'mouseenter', onHoverIn);
+    registerEventListener(nodeHandle, _supportsPointerEvent ? 'pointerleave' : 'mouseleave', onHoverOut);
 
     React.useEffect(() => {
 
