@@ -26,25 +26,28 @@
 import _ from 'lodash';
 import React from 'react';
 import { View, ActivityIndicator as RNActivityIndicator, StyleSheet } from 'react-native';
+import { v4 as uuidv4 } from 'uuid';
 
 const ActivityIndicatorContext = React.createContext({ 
-    setVisible: () => {}, 
+    setTasks: () => {}, 
     defaultDelay: 250,
 });
 
 export function useActivityIndicator() {
     
-    const { setVisible, defaultDelay } = React.useContext(ActivityIndicatorContext);
+    const { setTasks, defaultDelay } = React.useContext(ActivityIndicatorContext);
 
     return async (callback = async () => {}, delay) => {
 
+        const id = uuidv4();
+        
         let completed = false;
         const _delay = delay ?? defaultDelay;
-            
+        
         if (_.isNumber(_delay) && _delay > 0) {
-            setTimeout(() => { if (!completed) setVisible(true); }, _delay);
+            setTimeout(() => { if (!completed) setTasks(tasks => [...tasks, id]); }, _delay);
         } else {
-            setVisible(true);
+            setTasks(tasks => [...tasks, id]);
         }
 
         try {
@@ -52,14 +55,14 @@ export function useActivityIndicator() {
             const result = await callback();
 
             completed = true;
-            setVisible(false);
+            setTasks(tasks => _.filter(tasks, x => x !== id));
 
             return result;
 
         } catch (e) {
 
             completed = true;
-            setVisible(false);
+            setTasks(tasks => _.filter(tasks, x => x !== id));
 
             throw e;
         }
@@ -75,11 +78,11 @@ export const ActivityIndicatorProvider = React.forwardRef(({
     ActivityIndicator = () => <RNActivityIndicator color='white' />,
 }, forwardRef) => {
 
-    const [visible, setVisible] = React.useState(false);
+    const [tasks, setTasks] = React.useState([]);
     
-    return <ActivityIndicatorContext.Provider ref={forwardRef} value={{ setVisible, defaultDelay }}>
+    return <ActivityIndicatorContext.Provider ref={forwardRef} value={{ setTasks, defaultDelay }}>
         {children}
-        {visible === true && <View
+        {!_.isEmpty(tasks) && <View
         pointerEvents={passThroughEvents ? 'none' : 'auto'}
         style={[{
             alignItems: 'center',
