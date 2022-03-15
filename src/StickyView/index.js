@@ -43,23 +43,26 @@ function StickyContainer({
     const width = layout.width ?? 0;
     const height = layout.height ?? 0;
 
-    const maxX = width - (scrollViewLayout.layoutMeasurement?.width ?? 0);
-    const maxY = height - (scrollViewLayout.layoutMeasurement?.height ?? 0);
+    const displayment = {
+        left: scrollViewLayout.contentOffset?.x ?? 0,
+        top: scrollViewLayout.contentOffset?.y ?? 0,
+        width: scrollViewLayout.layoutMeasurement?.width ?? 0,
+        height: scrollViewLayout.layoutMeasurement?.height ?? 0,
+    }
+    
+    displayment.left += left;
+    displayment.top += top;
+    const maxX = width - displayment.width;
+    const maxY = height - displayment.height;
 
-    const offsetX = Math.max(0, Math.min(maxX, left + (scrollViewLayout.contentOffset?.x ?? 0)));
-    const offsetY = Math.max(0, Math.min(maxY, top + (scrollViewLayout.contentOffset?.y ?? 0)));
-
-    const offsetMax = horizontal === true ? maxX : maxY;
-    const offset = horizontal === true ? offsetX : offsetY;
-
-    return <View style={[{
-        position: 'absolute',
-        left: offsetX, 
-        top: offsetY,
-        width: scrollViewLayout.layoutMeasurement?.width,
-        height: scrollViewLayout.layoutMeasurement?.height,
-    }, style]}>
-        {renderItem({ offset: offset / offsetMax })}
+    const offset = horizontal === true ? displayment.left : displayment.top;
+    const factor = Math.max(0, Math.min(1, horizontal === true ? displayment.left / maxX : displayment.top / maxY));
+    
+    displayment.left = Math.max(0, Math.min(maxX, displayment.left));
+    displayment.top = Math.max(0, Math.min(maxY, displayment.top));
+    
+    return <View style={[{ position: 'absolute' }, displayment, style]}>
+        {renderItem({ factor, offset })}
     </View>;
 }
 

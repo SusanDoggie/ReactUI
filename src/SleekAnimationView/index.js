@@ -41,11 +41,11 @@ export const SleekAnimationView = React.forwardRef(({
     return <StickyView
     ref={forwardRef}
     stickyContainerStyle={[{ zIndex: -1 }, backgroundContainerStyle]}
-    stickyView={({offset}) => <List 
+    stickyView={({factor}) => <List 
         data={images} 
         renderItem={({ item, index }) => <Image
             source={item}
-            style={[{ width: '100%', height: '100%', display: index === Math.min(images.length - 1, Math.floor(offset * images.length)) ? 'flex' : 'none' }, backgroundStyle]}
+            style={[{ width: '100%', height: '100%', display: index === Math.min(images.length - 1, Math.floor(factor * images.length)) ? 'flex' : 'none' }, backgroundStyle]}
             resizeMode={resizeMode} />} />}
     {...props}>
         {children}
