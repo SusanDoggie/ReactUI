@@ -37,6 +37,7 @@ export { Picker } from './Picker';
 export * from './SafeAreaView';
 export { ScrollView, useScrollView, useScrollLayout } from './ScrollView';
 export * from './SegmentedControl';
+export { SleekAnimatedView } from './SleekAnimatedView';
 export { SVG } from './SVG';
 export * from './Toast';
 export { Touchable } from './Touchable';
