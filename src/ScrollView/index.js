@@ -38,6 +38,8 @@ export const useScrollLayout = () => React.useContext(ScrollLayoutContext);
 
 export const ScrollView = React.forwardRef(({
     onRefresh,
+    onLayout,
+    onContentSizeChange,
     onScroll,
     refreshControlProps,
     scrollEventThrottle = 16,
@@ -48,12 +50,24 @@ export const ScrollView = React.forwardRef(({
     const scrollViewRef = React.useRef();
     const ref = useMergeRefs(scrollViewRef, forwardRef);
     
-    const [scrollLayout, setScrollLayout] = React.useState();
+    const [layoutMeasurement, setLayout] = React.useState();
+    const [contentSize, setContentSize] = React.useState();
+    const [scroll, setScroll] = React.useState();
+
+    const scrollLayout = React.useMemo(() => ({ ...scroll, layoutMeasurement, contentSize }), [layoutMeasurement, contentSize, scroll])
     
     return <ScrollViewBase
         ref={ref}
+        onLayout={(event) => {
+            setLayout(event.nativeEvent.layout);
+            if (_.isFunction(onLayout)) onLayout(event);
+        }}
+        onContentSizeChange={(width, height) => {
+            setContentSize(width, height);
+            if (_.isFunction(onContentSizeChange)) onContentSizeChange(width, height);
+        }}
         onScroll={(event) => {
-            setScrollLayout(event.nativeEvent);
+            setScroll(event.nativeEvent);
             if (_.isFunction(onScroll)) onScroll(event);
         }}
         scrollEventThrottle={scrollEventThrottle}

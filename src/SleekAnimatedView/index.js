@@ -38,6 +38,7 @@ const BackgroundContainer = ({ images, style, imageStyle, frameIndex, resizeMode
 </View>;
 
 export const SleekAnimatedView = React.forwardRef(({
+    onLayout,
     backgroundContainerStyle,
     backgroundStyle,
     backgroundImages = [],
@@ -50,35 +51,43 @@ export const SleekAnimatedView = React.forwardRef(({
     const containerRef = React.useRef();
     const ref = useMergeRefs(containerRef, forwardRef);
     const [layout, setLayout] = React.useState({});
-    const [frameIndex, setFrameIndex] = React.useState(0);
 
     const scrollViewRef = useScrollView();
     const scrollViewLayout = useScrollLayout();
 
-    React.useEffect(() => {
-
+    function _setLayout({ width, height }) {
+        
         if (_.isNil(scrollViewRef.current)) return;
         if (_.isNil(containerRef.current)) return;
-        if (_.isNil(scrollViewLayout?.layoutMeasurement)) return;
-
-        containerRef.current.measureLayout(scrollViewRef.current, (left, top, width, height) => {
-
-            const maxX = width - scrollViewLayout.layoutMeasurement.width;
-            const maxY = height - scrollViewLayout.layoutMeasurement.height;
-            const offsetX = Math.max(0, Math.min(maxX, -left));
-            const offsetY = Math.max(0, Math.min(maxY, -top));
-
-            const offsetMax = horizontal === true ? maxX : maxY;
-            const offset = horizontal === true ? offsetX : offsetY;
-            const frameIndex = Math.min(backgroundImages.length - 1, Math.floor((offset / offsetMax) * backgroundImages.length));
-    
-            setLayout({ left: offsetX, top: offsetY });
-            setFrameIndex(frameIndex);
+        
+        containerRef.current.measureLayout(scrollViewRef.current, (left, top) => {
+            const offset_x = scrollViewLayout.contentOffset?.x ?? 0;
+            const offset_y = scrollViewLayout.contentOffset?.y ?? 0;
+            setLayout({ left: -left - offset_x, top: -top - offset_y, width, height });
         });
+    }
 
-    }, [scrollViewLayout]);
+    const left = layout.left ?? 0;
+    const top = layout.top ?? 0;
+    const width = layout.width ?? 0;
+    const height = layout.height ?? 0;
 
-    return <View ref={ref} {...props}>
+    const maxX = width - (scrollViewLayout.layoutMeasurement?.width ?? 0);
+    const maxY = height - (scrollViewLayout.layoutMeasurement?.height ?? 0);
+
+    const offsetX = Math.max(0, Math.min(maxX, left + (scrollViewLayout.contentOffset?.x ?? 0)));
+    const offsetY = Math.max(0, Math.min(maxY, top + (scrollViewLayout.contentOffset?.y ?? 0)));
+
+    const offsetMax = horizontal === true ? maxX : maxY;
+    const offset = horizontal === true ? offsetX : offsetY;
+    const frameIndex = Math.min(backgroundImages.length - 1, Math.floor((offset / offsetMax) * backgroundImages.length));
+
+    return <View
+    ref={ref}
+    onLayout={(event) => {
+        _setLayout(event.nativeEvent.layout);
+        if (_.isFunction(onLayout)) onLayout(event);
+    }} {...props}>
         <BackgroundContainer
         frameIndex={frameIndex}
         resizeMode={resizeMode}
@@ -86,7 +95,8 @@ export const SleekAnimatedView = React.forwardRef(({
         imageStyle={backgroundStyle}
         style={[{
             position: 'absolute',
-            ...layout,
+            left: offsetX, 
+            top: offsetY,
             width: scrollViewLayout?.layoutMeasurement?.width,
             height: scrollViewLayout?.layoutMeasurement?.height,
             zIndex: -1,
