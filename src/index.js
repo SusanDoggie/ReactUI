@@ -35,7 +35,7 @@ export { Markdown } from './Markdown';
 export * from './Modal';
 export { Picker } from './Picker';
 export * from './SafeAreaView';
-export { ScrollView } from './ScrollView';
+export { ScrollView, useScrollView } from './ScrollView';
 export * from './SegmentedControl';
 export { SVG } from './SVG';
 export * from './Toast';

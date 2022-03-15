@@ -26,17 +26,14 @@
 import _ from 'lodash';
 import React from 'react';
 import { ScrollView, UIManager, Keyboard, TextInput, findNodeHandle } from 'react-native';
+import { useMergeRefs } from 'sugax';
 
 export const KeyboardAwareScrollView = React.forwardRef(({ children, onScroll, ...props }, forwardRef) => {
 
   const scrollViewRef = React.useRef();
   const scrollEvent = React.useRef({});
   
-  React.useImperativeHandle(forwardRef, () => ({
-    flashScrollIndicators: () => scrollViewRef.current.flashScrollIndicators(),
-    scrollTo: (options, deprecatedX, deprecatedAnimated) => scrollViewRef.current.scrollTo(options, deprecatedX, deprecatedAnimated),
-    scrollToEnd: (options) => scrollViewRef.current.scrollToEnd(options),
-  }));
+  const ref = useMergeRefs(scrollViewRef, forwardRef);
   
   React.useEffect(() => {
 
@@ -69,7 +66,7 @@ export const KeyboardAwareScrollView = React.forwardRef(({ children, onScroll, .
   }, []);
 
   return <ScrollView
-    ref={scrollViewRef}
+    ref={ref}
     onScroll={(event) => {
       _.assignIn(scrollEvent.current, event.nativeEvent);
       onScroll?.(event);

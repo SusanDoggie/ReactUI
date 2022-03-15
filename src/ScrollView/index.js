@@ -34,19 +34,27 @@ async function _onRefresh(onRefresh, setRefreshing) {
   setRefreshing(false);
 }
 
+const ScrollViewContext = React.createContext();
+export const useScrollView = () => React.useContext(ScrollViewContext)?.current;
+
 export const ScrollView = React.forwardRef(({ children, onRefresh, refreshControlProps, ...props }, forwardRef) => {
 
-  const [refreshing, setRefreshing] = React.useState(false);
-
-  let refreshControl;
-  if (onRefresh) {
-    refreshControl = <RefreshControl
-      refreshing={refreshing}
-      onRefresh={() => _onRefresh(onRefresh, setRefreshing)} 
-      {...refreshControlProps} />;
-  }
-
-  return <ScrollViewBase ref={forwardRef} refreshControl={refreshControl} {...props}>{children}</ScrollViewBase>;
+    const scrollViewRef = React.useRef();
+    const ref = useMergeRefs(scrollViewRef, forwardRef);
+    
+    const [refreshing, setRefreshing] = React.useState(false);
+  
+    let refreshControl;
+    if (onRefresh) {
+        refreshControl = <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => _onRefresh(onRefresh, setRefreshing)} 
+            {...refreshControlProps} />;
+    }
+    
+    return <ScrollViewBase ref={ref} refreshControl={refreshControl} {...props}>
+        <ScrollViewContext.Provider value={scrollViewRef}>{children}</ScrollViewContext.Provider>
+    </ScrollViewBase>;
 });
 
 export default ScrollView;
