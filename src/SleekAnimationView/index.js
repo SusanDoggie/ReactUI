@@ -1,5 +1,5 @@
 //
-//  SleekAnimationView.js
+//  index.js
 //
 //  The MIT License
 //  Copyright (c) 2015 - 2022 Susan Cheng. All rights reserved.
@@ -25,97 +25,31 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, Image } from 'react-native';
-import { useScrollView, useScrollLayout } from '../ScrollView';
+import { Image } from 'react-native';
 import { List } from '../List';
-import { useMergeRefs } from 'sugax';
-
-function BackgroundContainer({
-    layout,
-    scrollViewLayout,
-    images,
-    style,
-    imageStyle,
-    horizontal,
-    resizeMode,
-}) {
-
-    const left = layout.left ?? 0;
-    const top = layout.top ?? 0;
-    const width = layout.width ?? 0;
-    const height = layout.height ?? 0;
-
-    const maxX = width - (scrollViewLayout.layoutMeasurement?.width ?? 0);
-    const maxY = height - (scrollViewLayout.layoutMeasurement?.height ?? 0);
-
-    const offsetX = Math.max(0, Math.min(maxX, left + (scrollViewLayout.contentOffset?.x ?? 0)));
-    const offsetY = Math.max(0, Math.min(maxY, top + (scrollViewLayout.contentOffset?.y ?? 0)));
-
-    const offsetMax = horizontal === true ? maxX : maxY;
-    const offset = horizontal === true ? offsetX : offsetY;
-    const frameIndex = Math.min(images.length - 1, Math.floor((offset / offsetMax) * images.length));
-
-    return <View style={[{
-        position: 'absolute',
-        left: offsetX, 
-        top: offsetY,
-        width: scrollViewLayout.layoutMeasurement?.width,
-        height: scrollViewLayout.layoutMeasurement?.height,
-        zIndex: -1,
-    }, style]}>
-        <List data={images} renderItem={({ item, index }) => <Image
-            source={item}
-            style={[{ width: '100%', height: '100%', display: index === frameIndex ? 'flex' : 'none' }, imageStyle]}
-            resizeMode={resizeMode} />} />
-    </View>;
-}
+import { StickyView } from '../StickyView';
 
 export const SleekAnimationView = React.forwardRef(({
-    onLayout,
     backgroundContainerStyle,
     backgroundStyle,
-    backgroundImages = [],
+    backgroundImages: images = [],
     resizeMode,
-    horizontal = false,
     children,
     ...props
 }, forwardRef) => {
 
-    const containerRef = React.useRef();
-    const ref = useMergeRefs(containerRef, forwardRef);
-    const [layout, setLayout] = React.useState({});
-
-    const scrollViewRef = useScrollView();
-    const scrollViewLayout = useScrollLayout();
-
-    function _setLayout({ width, height }) {
-        
-        if (_.isNil(scrollViewRef.current)) return;
-        if (_.isNil(containerRef.current)) return;
-        
-        containerRef.current.measureLayout(scrollViewRef.current, (left, top) => {
-            const offset_x = scrollViewLayout.contentOffset?.x ?? 0;
-            const offset_y = scrollViewLayout.contentOffset?.y ?? 0;
-            setLayout({ left: -left - offset_x, top: -top - offset_y, width, height });
-        });
-    }
-    
-    return <View
-    ref={ref}
-    onLayout={(event) => {
-        _setLayout(event.nativeEvent.layout);
-        if (_.isFunction(onLayout)) onLayout(event);
-    }} {...props}>
-        {!_.isEmpty(backgroundImages) && <BackgroundContainer
-            layout={layout}
-            scrollViewLayout={scrollViewLayout}
-            resizeMode={resizeMode}
-            horizontal={horizontal}
-            images={backgroundImages}
-            imageStyle={backgroundStyle}
-            style={backgroundContainerStyle} />}
+    return <StickyView
+    ref={forwardRef}
+    stickyContainerStyle={[{ zIndex: -1 }, backgroundContainerStyle]}
+    stickyView={({offset}) => <List 
+        data={images} 
+        renderItem={({ item, index }) => <Image
+            source={item}
+            style={[{ width: '100%', height: '100%', display: index === Math.min(images.length - 1, Math.floor(offset * images.length)) ? 'flex' : 'none' }, backgroundStyle]}
+            resizeMode={resizeMode} />} />}
+    {...props}>
         {children}
-    </View>;
+    </StickyView>;
 });
 
 export default SleekAnimationView;
