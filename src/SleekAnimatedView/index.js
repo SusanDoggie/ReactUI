@@ -30,19 +30,52 @@ import { useScrollView, useScrollLayout } from '../ScrollView';
 import { List } from '../List';
 import { useMergeRefs } from 'sugax';
 
-const BackgroundContainer = ({ images, style, imageStyle, frameIndex, resizeMode }) => <View style={style}>
-    <List data={images} renderItem={({ item, index }) => <Image
-        source={item}
-        style={[{ width: '100%', height: '100%', display: index === frameIndex ? 'flex' : 'none' }, imageStyle]}
-        resizeMode={resizeMode} />} />
-</View>;
+function BackgroundContainer({
+    layout,
+    scrollViewLayout,
+    images,
+    style,
+    imageStyle,
+    horizontal,
+    resizeMode,
+}) {
+
+    const left = layout.left ?? 0;
+    const top = layout.top ?? 0;
+    const width = layout.width ?? 0;
+    const height = layout.height ?? 0;
+
+    const maxX = width - (scrollViewLayout.layoutMeasurement?.width ?? 0);
+    const maxY = height - (scrollViewLayout.layoutMeasurement?.height ?? 0);
+
+    const offsetX = Math.max(0, Math.min(maxX, left + (scrollViewLayout.contentOffset?.x ?? 0)));
+    const offsetY = Math.max(0, Math.min(maxY, top + (scrollViewLayout.contentOffset?.y ?? 0)));
+
+    const offsetMax = horizontal === true ? maxX : maxY;
+    const offset = horizontal === true ? offsetX : offsetY;
+    const frameIndex = Math.min(images.length - 1, Math.floor((offset / offsetMax) * images.length));
+
+    return <View style={[{
+        position: 'absolute',
+        left: offsetX, 
+        top: offsetY,
+        width: scrollViewLayout.layoutMeasurement?.width,
+        height: scrollViewLayout.layoutMeasurement?.height,
+        zIndex: -1,
+    }, style]}>
+        <List data={images} renderItem={({ item, index }) => <Image
+            source={item}
+            style={[{ width: '100%', height: '100%', display: index === frameIndex ? 'flex' : 'none' }, imageStyle]}
+            resizeMode={resizeMode} />} />
+    </View>;
+}
 
 export const SleekAnimatedView = React.forwardRef(({
     onLayout,
     backgroundContainerStyle,
     backgroundStyle,
     backgroundImages = [],
-    resizeMode = 'cover',
+    resizeMode,
     horizontal = false,
     children,
     ...props
@@ -66,41 +99,21 @@ export const SleekAnimatedView = React.forwardRef(({
             setLayout({ left: -left - offset_x, top: -top - offset_y, width, height });
         });
     }
-
-    const left = layout.left ?? 0;
-    const top = layout.top ?? 0;
-    const width = layout.width ?? 0;
-    const height = layout.height ?? 0;
-
-    const maxX = width - (scrollViewLayout.layoutMeasurement?.width ?? 0);
-    const maxY = height - (scrollViewLayout.layoutMeasurement?.height ?? 0);
-
-    const offsetX = Math.max(0, Math.min(maxX, left + (scrollViewLayout.contentOffset?.x ?? 0)));
-    const offsetY = Math.max(0, Math.min(maxY, top + (scrollViewLayout.contentOffset?.y ?? 0)));
-
-    const offsetMax = horizontal === true ? maxX : maxY;
-    const offset = horizontal === true ? offsetX : offsetY;
-    const frameIndex = Math.min(backgroundImages.length - 1, Math.floor((offset / offsetMax) * backgroundImages.length));
-
+    
     return <View
     ref={ref}
     onLayout={(event) => {
         _setLayout(event.nativeEvent.layout);
         if (_.isFunction(onLayout)) onLayout(event);
     }} {...props}>
-        <BackgroundContainer
-        frameIndex={frameIndex}
-        resizeMode={resizeMode}
-        images={backgroundImages}
-        imageStyle={backgroundStyle}
-        style={[{
-            position: 'absolute',
-            left: offsetX, 
-            top: offsetY,
-            width: scrollViewLayout?.layoutMeasurement?.width,
-            height: scrollViewLayout?.layoutMeasurement?.height,
-            zIndex: -1,
-        }, backgroundContainerStyle]} />
+        {!_.isEmpty(backgroundImages) && <BackgroundContainer
+            layout={layout}
+            scrollViewLayout={scrollViewLayout}
+            resizeMode={resizeMode}
+            horizontal={horizontal}
+            images={backgroundImages}
+            imageStyle={backgroundStyle}
+            style={backgroundContainerStyle} />}
         {children}
     </View>;
 });
