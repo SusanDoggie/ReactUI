@@ -35,8 +35,8 @@ async function _onRefresh(onRefresh, setRefreshing) {
   setRefreshing(false);
 }
 
-const ScrollViewContext = React.createContext();
-export const useScrollView = () => React.useContext(ScrollViewContext)?.current;
+const ScrollViewContext = React.createContext({ current: null });
+export const useScrollView = () => React.useContext(ScrollViewContext);
 
 export const ScrollView = React.forwardRef(({ children, onRefresh, refreshControlProps, ...props }, forwardRef) => {
 
