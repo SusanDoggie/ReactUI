@@ -25,37 +25,44 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { RefreshControl } from 'react-native';
+import { RefreshControl as RNRefreshControl } from 'react-native';
 import ScrollViewBase from './ScrollViewBase';
+import RefreshControl from './RefreshControl';
 import { useMergeRefs } from 'sugax';
-
-async function _onRefresh(onRefresh, setRefreshing) {
-  setRefreshing(true);
-  try { await onRefresh() } catch { }
-  setRefreshing(false);
-}
 
 const ScrollViewContext = React.createContext({ current: null });
 export const useScrollView = () => React.useContext(ScrollViewContext);
 
-export const ScrollView = React.forwardRef(({ children, onRefresh, refreshControlProps, ...props }, forwardRef) => {
+const ScrollLayoutContext = React.createContext({ current: null });
+export const useScrollLayout = () => React.useContext(ScrollLayoutContext);
+
+export const ScrollView = React.forwardRef(({
+    onRefresh,
+    onScroll,
+    refreshControlProps,
+    scrollEventThrottle = 16,
+    children,
+    ...props
+}, forwardRef) => {
 
     const scrollViewRef = React.useRef();
     const ref = useMergeRefs(scrollViewRef, forwardRef);
     
-    const [refreshing, setRefreshing] = React.useState(false);
-  
-    let refreshControl;
-    if (onRefresh) {
-        refreshControl = <RefreshControl
-            refreshing={refreshing}
-            onRefresh={() => _onRefresh(onRefresh, setRefreshing)} 
-            {...refreshControlProps} />;
-    }
+    const [scrollLayout, setScrollLayout] = React.useState();
     
-    return <ScrollViewBase ref={ref} refreshControl={refreshControl} {...props}>
-        <ScrollViewContext.Provider value={scrollViewRef}>{children}</ScrollViewContext.Provider>
-    </ScrollViewBase>;
+    return <ScrollViewBase
+        ref={ref}
+        onScroll={(event) => {
+            setScrollLayout(event.nativeEvent);
+            if (_.isFunction(onScroll)) onScroll(event);
+        }}
+        scrollEventThrottle={scrollEventThrottle}
+        refreshControl={_.isFunction(onRefresh) ? <RefreshControl onRefresh={onRefresh} {...refreshControlProps} /> : null}
+        {...props}>
+            <ScrollViewContext.Provider value={scrollViewRef}><ScrollLayoutContext.Provider value={scrollLayout}>
+                {children}
+            </ScrollLayoutContext.Provider></ScrollViewContext.Provider>
+        </ScrollViewBase>;
 });
 
 export default ScrollView;

@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.ios.js
 //
 //  The MIT License
 //  Copyright (c) 2015 - 2022 Susan Cheng. All rights reserved.
@@ -23,22 +23,24 @@
 //  THE SOFTWARE.
 //
 
-export { styleInject } from 'style-inject';
-export * from './ActivityIndicator';
-export { BBCode } from './BBCode';
-export { Button } from './Button';
-export { HTML } from './HTML';
-export { Icon } from './Icon';
-export { Image } from './Image';
-export { List } from './List';
-export { Markdown } from './Markdown';
-export * from './Modal';
-export { Picker } from './Picker';
-export * from './SafeAreaView';
-export { ScrollView, useScrollView, useScrollLayout } from './ScrollView';
-export * from './SegmentedControl';
-export { SVG } from './SVG';
-export * from './Toast';
-export { Touchable } from './Touchable';
-export { ZStack } from './ZStack';
-export * from './Icons';
+import _ from 'lodash';
+import React from 'react';
+import { RefreshControl as RNRefreshControl } from 'react-native';
+
+async function _onRefresh(onRefresh, setRefreshing) {
+    setRefreshing(true);
+    try { await onRefresh() } catch { }
+    setRefreshing(false);
+}
+
+export function RefreshControl({
+    onRefresh,
+    ...props
+}) {
+
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    return <RNRefreshControl refreshing={refreshing} onRefresh={() => _onRefresh(onRefresh, setRefreshing)} {...props} />;
+}
+
+export default RefreshControl;

@@ -28,52 +28,57 @@ import React from 'react';
 import { ScrollView, UIManager, Keyboard, TextInput, findNodeHandle } from 'react-native';
 import { useMergeRefs } from 'sugax';
 
-export const KeyboardAwareScrollView = React.forwardRef(({ children, onScroll, ...props }, forwardRef) => {
+export const KeyboardAwareScrollView = React.forwardRef(({
+    onScroll,
+    scrollEventThrottle = 16,
+    children,
+    ...props
+}, forwardRef) => {
 
-  const scrollViewRef = React.useRef();
-  const scrollEvent = React.useRef({});
-  
-  const ref = useMergeRefs(scrollViewRef, forwardRef);
-  
-  React.useEffect(() => {
-
-    const event = Keyboard.addListener('keyboardWillShow', (event) => {
+    const scrollViewRef = React.useRef();
+    const scrollEvent = React.useRef({});
     
-      const currentlyFocusedInput = TextInput.State.currentlyFocusedInput();
-      const scrollResponder = scrollViewRef.current.getScrollResponder();
-      const innerViewNode = scrollResponder.getInnerViewNode();
+    const ref = useMergeRefs(scrollViewRef, forwardRef);
+    
+    React.useEffect(() => {
   
-      UIManager.viewIsDescendantOf(findNodeHandle(currentlyFocusedInput), innerViewNode, (isAncestor) => {
+        const event = Keyboard.addListener('keyboardWillShow', (event) => {
         
-        if (isAncestor) {
-          
-          currentlyFocusedInput.measureInWindow((_x, y, _width, height) => {
-  
-            const maxY = y + height;
-            const contentOffsetY = scrollEvent.current.contentOffset?.y ?? 0;
-  
-            if (maxY > event.endCoordinates.screenY) {
-  
-              scrollViewRef.current.scrollTo({ y: contentOffsetY + maxY - event.endCoordinates.screenY });
-            }
-          });
-        }
-      });
-    });
-
-    return () => event.remove();
+            const currentlyFocusedInput = TextInput.State.currentlyFocusedInput();
+            const scrollResponder = scrollViewRef.current.getScrollResponder();
+            const innerViewNode = scrollResponder.getInnerViewNode();
+        
+            UIManager.viewIsDescendantOf(findNodeHandle(currentlyFocusedInput), innerViewNode, (isAncestor) => {
+              
+                if (isAncestor) {
+                
+                    currentlyFocusedInput.measureInWindow((_x, y, _width, height) => {
+            
+                        const maxY = y + height;
+                        const contentOffsetY = scrollEvent.current.contentOffset?.y ?? 0;
+              
+                        if (maxY > event.endCoordinates.screenY) {
+              
+                            scrollViewRef.current.scrollTo({ y: contentOffsetY + maxY - event.endCoordinates.screenY });
+                        }
+                    });
+                }
+            });
+        });
     
-  }, []);
-
-  return <ScrollView
-    ref={ref}
-    onScroll={(event) => {
-      _.assignIn(scrollEvent.current, event.nativeEvent);
-      onScroll?.(event);
-    }}
-    scrollEventThrottle={16}
-    scrollToOverflowEnabled={true}
-    {...props}>{children}</ScrollView>;
+        return () => event.remove();
+      
+    }, []);
+    
+    return <ScrollView
+        ref={ref}
+        onScroll={(event) => {
+            _.assignIn(scrollEvent.current, event.nativeEvent);
+            if (_.isFunction(onScroll)) onScroll(event);
+        }}
+        scrollEventThrottle={scrollEventThrottle}
+        scrollToOverflowEnabled={true}
+        {...props}>{children}</ScrollView>;
 });
 
 export default KeyboardAwareScrollView;
