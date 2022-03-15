@@ -30,7 +30,7 @@ import { useMergeRefs } from 'sugax';
 
 export const KeyboardAwareScrollView = React.forwardRef(({
     onScroll,
-    scrollEventThrottle = 16,
+    scrollEventThrottle = 1,
     children,
     ...props
 }, forwardRef) => {

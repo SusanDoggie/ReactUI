@@ -42,7 +42,7 @@ export const ScrollView = React.forwardRef(({
     onContentSizeChange,
     onScroll,
     refreshControlProps,
-    scrollEventThrottle = 16,
+    scrollEventThrottle = 1,
     children,
     ...props
 }, forwardRef) => {
