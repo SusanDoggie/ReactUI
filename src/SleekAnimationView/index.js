@@ -1,5 +1,5 @@
 //
-//  SleekAnimatedView.js
+//  SleekAnimationView.js
 //
 //  The MIT License
 //  Copyright (c) 2015 - 2022 Susan Cheng. All rights reserved.
@@ -70,7 +70,7 @@ function BackgroundContainer({
     </View>;
 }
 
-export const SleekAnimatedView = React.forwardRef(({
+export const SleekAnimationView = React.forwardRef(({
     onLayout,
     backgroundContainerStyle,
     backgroundStyle,
@@ -118,4 +118,4 @@ export const SleekAnimatedView = React.forwardRef(({
     </View>;
 });
 
-export default SleekAnimatedView;
+export default SleekAnimationView;
