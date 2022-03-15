@@ -27,6 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { RefreshControl } from 'react-native';
 import ScrollViewBase from './ScrollViewBase';
+import { useMergeRefs } from 'sugax';
 
 async function _onRefresh(onRefresh, setRefreshing) {
   setRefreshing(true);
