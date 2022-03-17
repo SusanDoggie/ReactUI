@@ -27,6 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { useMergeRefs } from 'sugax';
 import { View, StyleSheet, useWindowDimensions } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 export { SafeAreaProvider, useSafeAreaInsets, useSafeAreaFrame, withSafeAreaInsets } from 'react-native-safe-area-context';
 
 const TOP    = 0b1000,
