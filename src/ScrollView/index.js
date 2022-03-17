@@ -25,7 +25,6 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { RefreshControl as RNRefreshControl } from 'react-native';
 import ScrollViewBase from './ScrollViewBase';
 import RefreshControl from './RefreshControl';
 import { useMergeRefs } from 'sugax';
@@ -43,6 +42,7 @@ export const ScrollView = React.forwardRef(({
     onScroll,
     refreshControlProps,
     scrollEventThrottle = 1,
+    horizontal = false,
     children,
     ...props
 }, forwardRef) => {
@@ -54,7 +54,7 @@ export const ScrollView = React.forwardRef(({
     const [contentSize, setContentSize] = React.useState();
     const [scroll, setScroll] = React.useState();
 
-    const scrollLayout = React.useMemo(() => ({ ...scroll, layoutMeasurement, contentSize }), [layoutMeasurement, contentSize, scroll])
+    const scrollLayout = React.useMemo(() => ({ ...scroll, layoutMeasurement, contentSize, horizontal }), [layoutMeasurement, contentSize, scroll])
     
     return <ScrollViewBase
         ref={ref}
@@ -70,6 +70,7 @@ export const ScrollView = React.forwardRef(({
             setScroll(event.nativeEvent);
             if (_.isFunction(onScroll)) onScroll(event);
         }}
+        horizontal={horizontal}
         scrollEventThrottle={scrollEventThrottle}
         refreshControl={_.isFunction(onRefresh) ? <RefreshControl onRefresh={onRefresh} {...refreshControlProps} /> : null}
         {...props}>

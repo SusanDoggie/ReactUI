@@ -34,7 +34,6 @@ function StickyContainer({
     layout,
     scrollViewLayout,
     style,
-    horizontal,
     renderItem,
 }) {
 
@@ -44,19 +43,17 @@ function StickyContainer({
     const height = layout.height ?? 0;
 
     const displayment = {
-        left: scrollViewLayout.contentOffset?.x ?? 0,
-        top: scrollViewLayout.contentOffset?.y ?? 0,
-        width: scrollViewLayout.layoutMeasurement?.width ?? 0,
-        height: scrollViewLayout.layoutMeasurement?.height ?? 0,
+        left: left + (scrollViewLayout.contentOffset?.x ?? 0),
+        top: top + (scrollViewLayout.contentOffset?.y ?? 0),
+        width: Math.min(width, scrollViewLayout.layoutMeasurement?.width ?? 0),
+        height: Math.min(height, scrollViewLayout.layoutMeasurement?.height ?? 0),
     }
     
-    displayment.left += left;
-    displayment.top += top;
     const maxX = width - displayment.width;
     const maxY = height - displayment.height;
 
-    const offset = horizontal === true ? displayment.left : displayment.top;
-    const factor = Math.max(0, Math.min(1, horizontal === true ? displayment.left / maxX : displayment.top / maxY));
+    const offset = scrollViewLayout.horizontal === true ? displayment.left : displayment.top;
+    const factor = Math.max(0, Math.min(1, scrollViewLayout.horizontal === true ? displayment.left / maxX : displayment.top / maxY));
     
     displayment.left = Math.max(0, Math.min(maxX, displayment.left));
     displayment.top = Math.max(0, Math.min(maxY, displayment.top));
@@ -69,7 +66,6 @@ function StickyContainer({
 export const StickyView = React.forwardRef(({
     onLayout,
     stickyContainerStyle,
-    horizontal = false,
     stickyView,
     children,
     ...props
@@ -103,7 +99,6 @@ export const StickyView = React.forwardRef(({
         {_.isFunction(stickyView) && <StickyContainer
             layout={layout}
             scrollViewLayout={scrollViewLayout}
-            horizontal={horizontal}
             style={stickyContainerStyle}
             renderItem={stickyView} />}
         {children}
