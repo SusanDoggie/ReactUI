@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import Svg, { Rect } from 'react-native-svg';
+import Svg, { Rect, Path } from 'react-native-svg';
 import qrcode from 'qrcode';
 
 export const QRCode = React.forwardRef(({
