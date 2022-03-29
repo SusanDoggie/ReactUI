@@ -44,3 +44,4 @@ export * from './Toast';
 export { Touchable } from './Touchable';
 export { ZStack } from './ZStack';
 export * from './Icons';
+export * as Icons from './Icons';
