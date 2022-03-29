@@ -40,33 +40,39 @@ export const Barcode = React.forwardRef(({
     ...props
 }, forwardRef) => {
     
-    const rects = [];
-    let last_char;
-    let start = 0;
-    let end = 0;
-
-    try {
-
-        const encoder = new barcodes[format](value, options);
-        const encoded = encoder.encode();
-    
-        for (const char of encoded.data) {
-            if (last_char != char) {
-                if (last_char == '1') {
-                    rects.push({ x: start, width: end - start });
+    const rects = React.useMemo(() => {
+        
+        const rects = [];
+        let last_char;
+        let start = 0;
+        let end = 0;
+        
+        try {
+            
+            const encoder = new barcodes[format](value, options);
+            const encoded = encoder.encode();
+            
+            for (const char of encoded.data) {
+                if (last_char != char) {
+                    if (last_char == '1') {
+                        rects.push({ x: start, width: end - start });
+                    }
+                    start = end;
+                    last_char = char;
                 }
-                start = end;
-                last_char = char;
+                end += 1;
             }
-            end += 1;
-        }
+            
+            if (last_char == '1') {
+                rects.push({ x: start, width: end - start });
+            }
+            
+        } catch { }
         
-        if (last_char == '1') {
-            rects.push({ x: start, width: end - start });
-        }
+        return rects;
         
-    } catch { }
-
+    }, [value, format, options]);
+    
     return <Svg ref={forwardRef} viewBox='0 0 100 100' preserveAspectRatio='none' {...props}>
         {backgroundColor && <Rect x={0} y={0} width={100} height={100} fill={backgroundColor} />}
         <G scaleX={100/end}><List data={rects} renderItem={({item}) => <Rect y={0} height={100} fill={color} {...item} />} /></G>
