@@ -25,6 +25,7 @@
 
 export { styleInject } from 'style-inject';
 export * from './ActivityIndicator';
+export { Barcode, BarcodeFormats } from './Barcode';
 export { BBCode } from './BBCode';
 export { Button } from './Button';
 export { HTML } from './HTML';
