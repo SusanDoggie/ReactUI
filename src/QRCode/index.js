@@ -27,7 +27,6 @@ import _ from 'lodash';
 import React from 'react';
 import Svg, { Rect } from 'react-native-svg';
 import qrcode from 'qrcode';
-import { List } from '../List';
 
 export const QRCode = React.forwardRef(({
     value = '',
@@ -37,29 +36,28 @@ export const QRCode = React.forwardRef(({
     ...props
 }, forwardRef) => {
 
-    const rects = [];
+    let path = '';
+    let _size = 100;
     
     try {
 
         const { size, data } = qrcode.create(value, options).modules;
-        const scale = 100 / size;
+        _size = size;
 
         for (let i = 0; i < data.length; i++) {
 
             if (data[i]) {
-
                 const col = Math.floor(i % size);
                 const row = Math.floor(i / size);
-
-                rects.push({ x: col * scale, y: row * scale, width: scale, height: scale });
+                path += `M${col},${row}v1h1v-1z`
             }
         }
 
     } catch { }
 
-    return <Svg ref={forwardRef} viewBox='0 0 100 100' preserveAspectRatio='none' {...props}>
-        {backgroundColor && <Rect x={0} y={0} width={100} height={100} fill={backgroundColor} />}
-        <List data={rects} renderItem={({item}) => <Rect fill={color} {...item} />} />
+    return <Svg ref={forwardRef} viewBox={`0 0 ${_size} ${_size}`} preserveAspectRatio='none' {...props}>
+        {backgroundColor && <Rect x={0} y={0} width={_size} height={_size} fill={backgroundColor} />}
+        <Path d={path} fill={color} />
     </Svg>;
 });
 
