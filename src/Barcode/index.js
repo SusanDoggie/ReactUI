@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import Svg, { Rect, G } from 'react-native-svg';
+import Svg, { Rect } from 'react-native-svg';
 import barcodes from 'jsbarcode/src/barcodes';
 import { List } from '../List';
 
@@ -40,7 +40,7 @@ export const Barcode = React.forwardRef(({
     ...props
 }, forwardRef) => {
     
-    const rects = React.useMemo(() => {
+    const { rects, size } = React.useMemo(() => {
         
         const rects = [];
         let last_char;
@@ -69,13 +69,13 @@ export const Barcode = React.forwardRef(({
             
         } catch { }
         
-        return rects;
+        return { rects, size: end };
         
     }, [value, format, options]);
     
-    return <Svg ref={forwardRef} viewBox='0 0 100 100' preserveAspectRatio='none' {...props}>
-        {backgroundColor && <Rect x={0} y={0} width={100} height={100} fill={backgroundColor} />}
-        <G scaleX={100/end}><List data={rects} renderItem={({item}) => <Rect y={0} height={100} fill={color} {...item} />} /></G>
+    return <Svg ref={forwardRef} viewBox={`0 0 ${size} 100`} preserveAspectRatio='none' {...props}>
+        {backgroundColor && <Rect x={0} y={0} width={size} height={100} fill={backgroundColor} />}
+        <List data={rects} renderItem={({item}) => <Rect y={0} height={100} fill={color} {...item} />} />
     </Svg>;
 });
 
