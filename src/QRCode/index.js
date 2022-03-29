@@ -25,52 +25,42 @@
 
 import _ from 'lodash';
 import React from 'react';
-import Svg, { Rect, G } from 'react-native-svg';
-import barcodes from 'jsbarcode/src/barcodes';
+import Svg, { Rect } from 'react-native-svg';
+import qrcode from 'qrcode';
 import { List } from '../List';
 
-export const BarcodeFormats = _.keys(barcodes);
-
-export const Barcode = React.forwardRef(({
+export const QRCode = React.forwardRef(({
     value = '',
-    format = 'CODE128',
     options = {},
     color = 'black',
     backgroundColor,
     ...props
 }, forwardRef) => {
-    
-    const rects = [];
-    let last_char;
-    let start = 0;
-    let end = 0;
 
+    const rects = [];
+    
     try {
 
-        const encoder = new barcodes[format](value, options);
-        const encoded = encoder.encode();
-    
-        for (const char of encoded.data) {
-            if (last_char != char) {
-                if (last_char == '1') {
-                    rects.push({ x: start, width: end - start });
-                }
-                start = end;
-                last_char = char;
+        const { size, data } = qrcode.create(value, options).modules;
+        const scale = 100 / size;
+
+        for (let i = 0; i < data.length; i++) {
+
+            if (data[i]) {
+
+                const col = Math.floor(i % size);
+                const row = Math.floor(i / size);
+
+                rects.push({ x: col * scale, y: row * scale, width: scale, height: scale });
             }
-            end += 1;
         }
-        
-        if (last_char == '1') {
-            rects.push({ x: start, width: end - start });
-        }
-        
+
     } catch { }
 
     return <Svg ref={forwardRef} viewBox='0 0 100 100' preserveAspectRatio='none' {...props}>
         {backgroundColor && <Rect x={0} y={0} width={100} height={100} fill={backgroundColor} />}
-        <G scaleX={100/end}><List data={rects} renderItem={({item}) => <Rect y={0} height={100} fill={color} {...item} />} /></G>
+        <List data={rects} renderItem={({item}) => <Rect fill={color} {...item} />} />
     </Svg>;
 });
 
-export default Barcode;
+export default QRCode;

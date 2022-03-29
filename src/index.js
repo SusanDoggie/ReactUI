@@ -35,6 +35,7 @@ export { List } from './List';
 export { Markdown } from './Markdown';
 export * from './Modal';
 export { Picker } from './Picker';
+export { QRCode } from './QRCode';
 export * from './SafeAreaView';
 export { ScrollView, useScrollView, useScrollLayout } from './ScrollView';
 export * from './SegmentedControl';
