@@ -28,7 +28,17 @@ import React from 'react';
 import { BrowserRouter, useRoutes } from 'react-router-dom';
 import { StaticRouter } from 'react-router-dom/server';
 
-export { useHref, useLocation, useMatch, useNavigate, useParams, useResolvedPath } from 'react-router-dom';
+export { 
+    useHref,
+    useLocation,
+    useMatch,
+    useNavigate,
+    useParams,
+    useResolvedPath,
+    useLinkClickHandler,
+    Link,
+    NavLink,
+} from 'react-router-dom';
 
 const NavigatorContext = React.createContext();
 
