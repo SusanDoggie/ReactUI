@@ -112,7 +112,7 @@ function RouteObject({ component: Component, statusCode, title, meta = {}, ...pr
 
 function routesBuilder(routes) {
     
-    const routes = [];
+    const result = [];
 
     for (const route of routes) {
 
@@ -125,7 +125,7 @@ function routesBuilder(routes) {
             ...props
         } = route;
         
-        routes.push({
+        result.push({
             element: !_.isNil(component) ? <RouteObject component={component} {...props} /> : null,
             caseSensitive,
             path,
@@ -134,7 +134,7 @@ function routesBuilder(routes) {
         });
     }
     
-    return routes;
+    return result;
 }
 
 export const Navigator = ({ children }) => useRoutes(routesBuilder(createRoutesFromChildren(children)));
