@@ -53,44 +53,44 @@ function invariant(cond, message) {
     if (!cond) throw new Error(message);
 }
 
-export const Screen = () => invariant(
+export const Route = () => invariant(
   false,
-  `A <Screen> is only ever to be used as the child of <Navigator> element, ` +
-  `never rendered directly. Please wrap your <Screen> in a <Navigator>.`
+  `A <Route> is only ever to be used as the child of <Navigator> element, ` +
+  `never rendered directly. Please wrap your <Route> in a <Navigator>.`
 );
 
-function createScreensFromChildren(children) {
+function createRoutesFromChildren(children) {
 
-    const screens = [];
+    const routes = [];
   
     React.Children.forEach(children, element => {
 
         if (!React.isValidElement(element)) return;
     
         if (element.type === React.Fragment) {
-            screens.push(createScreensFromChildren(element.props.children));
+            routes.push(createRoutesFromChildren(element.props.children));
             return;
         }
         
         invariant(
-            element.type === Screen,
+            element.type === Route,
             `[${typeof element.type === 'string' ? element.type : element.type.name}] ` +
-            `is not a <Screen> component. All component children of <Navigator> must be a <Screen> or <React.Fragment>`
+            `is not a <Route> component. All component children of <Navigator> must be a <Route> or <React.Fragment>`
         );
         
-        const screen = { ...element.props };
+        const route = { ...element.props };
         
         if (element.props.children) {
-            screen.children = createScreensFromChildren(element.props.children);
+            route.children = createRoutesFromChildren(element.props.children);
         }
     
-        screens.push(screen);
+        routes.push(route);
     });
 
-    return _.flattenDeep(screens);
+    return _.flattenDeep(routes);
 }
 
-function ScreenObject({ component: Component, statusCode, title, meta = {}, ...props }) {
+function RouteObject({ component: Component, statusCode, title, meta = {}, ...props }) {
 
     const NavigatorContext = useNavigatorContext();
 
@@ -110,11 +110,11 @@ function ScreenObject({ component: Component, statusCode, title, meta = {}, ...p
     return <Component {...props} />;
 }
 
-function routesBuilder(screens) {
+function routesBuilder(routes) {
     
     const routes = [];
 
-    for (const screen of screens) {
+    for (const route of routes) {
 
         const { 
             caseSensitive,
@@ -123,10 +123,10 @@ function routesBuilder(screens) {
             index,
             children = [],
             ...props
-        } = screen;
+        } = route;
         
         routes.push({
-            element: <ScreenObject component={component} {...props} />,
+            element: !_.isNil(component) ? <RouteObject component={component} {...props} /> : null,
             caseSensitive,
             path,
             index,
@@ -137,4 +137,4 @@ function routesBuilder(screens) {
     return routes;
 }
 
-export const Navigator = ({ children }) => useRoutes(routesBuilder(createScreensFromChildren(children)));
+export const Navigator = ({ children }) => useRoutes(routesBuilder(createRoutesFromChildren(children)));
