@@ -90,7 +90,7 @@ function createRoutesFromChildren(children) {
     return _.flattenDeep(routes);
 }
 
-function RouteObject({ component: Component, statusCode, title, meta = {}, ...props }) {
+function RouteObject({ component: Component, statusCode, title, meta = {}, children, ...props }) {
 
     const NavigatorContext = useNavigatorContext();
 
@@ -107,7 +107,7 @@ function RouteObject({ component: Component, statusCode, title, meta = {}, ...pr
         document.title = title;
     }
     
-    return <Component {...props} />;
+    return <Component {...props}>{children}</Component>;
 }
 
 function routesBuilder(routes) {
@@ -116,7 +116,7 @@ function routesBuilder(routes) {
 
     for (const route of routes) {
 
-        const { 
+        const {
             caseSensitive,
             component,
             path,
