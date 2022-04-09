@@ -126,7 +126,7 @@ function routesBuilder(routes) {
         } = route;
         
         result.push({
-            element: !_.isNil(component) ? <RouteObject component={component} {...props} /> : null,
+            element: !_.isNil(component) ? <RouteObject component={component} {...props} /> : undefined,
             caseSensitive,
             path,
             index,
