@@ -23,28 +23,43 @@
 //  THE SOFTWARE.
 //
 
-export { styleInject } from 'style-inject';
-export * from './ActivityIndicator';
-export { Barcode, BarcodeFormats } from './Barcode';
-export { BBCode } from './BBCode';
-export { Button } from './Button';
-export { HTML } from './HTML';
-export { Icon } from './Icon';
-export { Image } from './Image';
-export { List } from './List';
-export { Lottie } from './Lottie';
-export { Markdown } from './Markdown';
-export * from './Modal';
-export { Picker } from './Picker';
-export { QRCode } from './QRCode';
-export * from './SafeAreaView';
-export { ScrollView, useScrollView, useScrollLayout } from './ScrollView';
-export * from './SegmentedControl';
-export { SleekAnimationView } from './SleekAnimationView';
-export { StickyView } from './StickyView';
-export { SVG } from './SVG';
-export * from './Toast';
-export { Touchable } from './Touchable';
-export { ZStack } from './ZStack';
-export * from './Icons';
-export * as Icons from './Icons';
+import _ from 'lodash';
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import RNLottie from 'lottie-react-native';
+
+export const Lottie = React.forwardRef(({
+    source,
+    style,
+    duration = 0,
+    loop = true,
+    autoPlay = false,
+    ...props
+}, forwardRef) => {
+    
+    const _style = StyleSheet.flatten(style) ?? {};
+    
+    let aspectRatio;
+    let _width = _style.width;
+    let _height = _style.height;
+    
+    if (!_.isNil(source)) {
+        if (!_.isNil(_width) && !_.isNil(_height)) {
+            _width = source.w;
+            _height = source.h;
+        } else if (!_.isNil(_width) || !_.isNil(_height)) {
+            aspectRatio = source.w / source.h;
+        }
+    }
+    
+    return <RNLottie
+    ref={forwardRef}
+    source={source}
+    progress={Math.max(0, Math.min(1, duration))}
+    autoPlay={autoPlay}
+    loop={loop}
+    style={[{ aspectRatio, width: _width, height: _height }, style]}
+    {...props} />;
+});
+
+export default Lottie;
