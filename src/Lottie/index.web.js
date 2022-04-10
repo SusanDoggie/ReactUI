@@ -36,6 +36,7 @@ const LottieBase = React.forwardRef(({
     duration = 0,
     autoPlay = false,
     loop = true,
+    renderer = 'canvas',
     preserveAspectRatio,
     ...props
 }, forwardRef) => {
@@ -74,7 +75,7 @@ const LottieBase = React.forwardRef(({
         const handle = LottieWeb.loadAnimation({
             container: containerRef.current,
             animationData: source,
-            renderer: 'canvas',
+            renderer: renderer,
             rendererSettings: { preserveAspectRatio },
             autoplay: autoPlay,
             loop,
