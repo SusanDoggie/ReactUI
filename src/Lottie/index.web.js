@@ -32,15 +32,18 @@ import LottieWeb from 'lottie-web';
 const LottieBase = React.forwardRef(({
     source,
     style,
+    onLayout,
     duration = 0,
     autoPlay = false,
     loop = true,
+    preserveAspectRatio,
     ...props
 }, forwardRef) => {
     
     const handleRef = React.useRef();
     const containerRef = React.useRef();
     const ref = useMergeRefs(containerRef, forwardRef);
+    const [layout, setLayout] = React.useState({});
     
     React.useImperativeHandle(forwardRef, () => ({
         get currentFrame() { return handleRef.current?.currentFrame },
@@ -72,6 +75,7 @@ const LottieBase = React.forwardRef(({
             container: containerRef.current,
             animationData: source,
             renderer: 'canvas',
+            rendererSettings: { preserveAspectRatio },
             autoplay: autoPlay,
             loop,
         });
@@ -91,7 +95,16 @@ const LottieBase = React.forwardRef(({
         
     }, [duration]);
     
-    return <View ref={ref} style={[{ aspectRatio, width: _width, height: _height }, style]} {...props} />;
+    React.useEffect(() => { handleRef.current?.resize(); }, [layout.width, layout.height]);
+    
+    return <View
+    ref={ref}
+    onLayout={(event) => {
+        setLayout(event.nativeEvent.layout);
+        if (_.isFunction(onLayout)) onLayout(event);
+    }}
+    style={[{ aspectRatio, width: _width, height: _height }, style]}
+    {...props} />;
 });
 
 export const Lottie = Animated.createAnimatedComponent(LottieBase);

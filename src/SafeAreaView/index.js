@@ -57,6 +57,7 @@ export const SafeAreaView = React.forwardRef(({
     style,
     edges,
     children,
+    onLayout,
     ...props
 }, forwardRef) => {
     
@@ -88,7 +89,10 @@ export const SafeAreaView = React.forwardRef(({
 
     return <View 
     ref={ref}
-    onLayout={() => viewRef.current?.measureInWindow((x, y, width, height) => setClientRect({ x, y, width, height }))}
+    onLayout={(event) => {
+        viewRef.current?.measureInWindow((x, y, width, height) => setClientRect({ x, y, width, height }));
+        if (_.isFunction(onLayout)) onLayout(event);
+    }}
     style={[{
         paddingTop: paddingTop + insetTop,
         paddingLeft: paddingLeft + insetLeft,
