@@ -25,9 +25,8 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, Image } from 'react-native';
+import { View } from 'react-native';
 import { useScrollView, useScrollLayout } from '../ScrollView';
-import { List } from '../List';
 import { useMergeRefs } from 'sugax';
 
 function StickyContainer({
