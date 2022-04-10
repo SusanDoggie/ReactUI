@@ -55,10 +55,10 @@ export const Image = React.forwardRef(({
     
     if (imageSize.width && imageSize.height) {
 
-        if (!_width && !_height) {
+        if (!_.isNil(_width) && !_.isNil(_height)) {
             _width = imageSize.width;
             _height = imageSize.height;
-        } else if (!_width || !_height) {
+        } else if (!_.isNil(_width) || !_.isNil(_height)) {
             aspectRatio = imageSize.width / imageSize.height;
         }
     
