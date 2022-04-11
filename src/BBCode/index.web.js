@@ -245,7 +245,7 @@ export const BBCode = React.forwardRef(({
     source,
     ...props
 }, forwardRef) => {
-    const elements = React.useMemo(() => _.isString(source?.content) ? parse(source.content) : '', [source?.content]);
+    const elements = React.useMemo(() => _.isString(source?.content) ? parse(source.content) : [], [source?.content]);
     return <View ref={forwardRef} {...props}>
         <div style={{
             fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif',
