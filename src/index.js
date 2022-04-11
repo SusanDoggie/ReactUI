@@ -33,7 +33,6 @@ export { Icon } from './Icon';
 export { Image } from './Image';
 export { List } from './List';
 export { Lottie } from './Lottie';
-export { Markdown } from './Markdown';
 export * from './Modal';
 export { Picker } from './Picker';
 export { QRCode } from './QRCode';
