@@ -1,5 +1,5 @@
 //
-//  index.ios.js
+//  index.js
 //
 //  The MIT License
 //  Copyright (c) 2015 - 2022 Susan Cheng. All rights reserved.
@@ -25,7 +25,6 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { RefreshControl as RNRefreshControl } from 'react-native';
 
 async function _onRefresh(onRefresh, setRefreshing) {
     setRefreshing(true);
@@ -33,14 +32,18 @@ async function _onRefresh(onRefresh, setRefreshing) {
     setRefreshing(false);
 }
 
-export function RefreshControl({
+export const AsyncRefreshControl = (RefreshControl) => React.forwardRef(({
     onRefresh,
     ...props
-}) {
+}, forwardRef) => {
 
     const [refreshing, setRefreshing] = React.useState(false);
 
-    return <RNRefreshControl refreshing={refreshing} onRefresh={() => _onRefresh(onRefresh, setRefreshing)} {...props} />;
-}
+    return <RefreshControl
+    ref={forwardRef}
+    refreshing={refreshing}
+    onRefresh={() => _onRefresh(onRefresh, setRefreshing)}
+    {...props} />;
+});
 
-export default RefreshControl;
+export default AsyncRefreshControl;

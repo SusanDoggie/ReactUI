@@ -25,11 +25,11 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { FlatList as RNFlatList } from 'react-native';
+import { FlatList as RNFlatList, RefreshControl as RNRefreshControl } from 'react-native';
 import { KeyboardAwareScrollable } from '../KeyboardAwareScrollable';
-import RefreshControl from '../ScrollView/RefreshControl';
 
 const FlatListBase = KeyboardAwareScrollable(RNFlatList);
+const RefreshControl = AsyncRefreshControl(RNRefreshControl);
 
 function array_of(children) {
     if (_.isNil(children)) return [];
@@ -49,8 +49,7 @@ export const FlatList = React.forwardRef(({
     data={array_of(children)}
     renderItem={({item}) => item}
     refreshControl={_.isFunction(onRefresh) ? <RefreshControl onRefresh={onRefresh} {...refreshControlProps} /> : null}
-    {...props}
-    />
+    {...props} />
 });
 
 export default FlatList;

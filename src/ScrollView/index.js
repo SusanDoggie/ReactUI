@@ -25,12 +25,13 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { ScrollView as RNScrollView } from 'react-native';
+import { ScrollView as RNScrollView, RefreshControl as RNRefreshControl } from 'react-native';
 import { KeyboardAwareScrollable } from '../KeyboardAwareScrollable';
-import RefreshControl from './RefreshControl';
+import { AsyncRefreshControl } from '../AsyncRefreshControl';
 import { useMergeRefs } from 'sugax';
 
 const ScrollViewBase = KeyboardAwareScrollable(RNScrollView);
+const RefreshControl = AsyncRefreshControl(RNRefreshControl);
 
 const ScrollViewContext = React.createContext({ current: null });
 export const useScrollView = () => React.useContext(ScrollViewContext);
