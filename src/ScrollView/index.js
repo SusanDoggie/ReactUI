@@ -1,5 +1,5 @@
 //
-//  index.ios.js
+//  index.js
 //
 //  The MIT License
 //  Copyright (c) 2015 - 2022 Susan Cheng. All rights reserved.
