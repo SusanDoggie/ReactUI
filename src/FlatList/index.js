@@ -27,6 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { FlatList as RNFlatList, RefreshControl as RNRefreshControl } from 'react-native';
 import { KeyboardAwareScrollable } from '../KeyboardAwareScrollable';
+import { AsyncRefreshControl } from '../AsyncRefreshControl';
 
 const FlatListBase = KeyboardAwareScrollable(RNFlatList);
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
