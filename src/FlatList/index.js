@@ -1,5 +1,5 @@
 //
-//  ScrollViewBase.js
+//  index.ios.js
 //
 //  The MIT License
 //  Copyright (c) 2015 - 2022 Susan Cheng. All rights reserved.
@@ -23,6 +23,34 @@
 //  THE SOFTWARE.
 //
 
-import { ScrollView } from 'react-native';
+import _ from 'lodash';
+import React from 'react';
+import { FlatList as RNFlatList } from 'react-native';
+import { KeyboardAwareScrollable } from '../KeyboardAwareScrollable';
+import RefreshControl from '../ScrollView/RefreshControl';
 
-export default ScrollView;
+const FlatListBase = KeyboardAwareScrollable(RNFlatList);
+
+function array_of(children) {
+    if (_.isNil(children)) return [];
+    if (_.isArray(children)) return children;
+    return [children];
+}
+
+export const FlatList = React.forwardRef(({
+    onRefresh,
+    refreshControlProps,
+    children,
+    ...props
+}, forwardRef) => {
+
+    return <FlatListBase
+    ref={forwardRef}
+    data={array_of(children)}
+    renderItem={({item}) => item}
+    refreshControl={_.isFunction(onRefresh) ? <RefreshControl onRefresh={onRefresh} {...refreshControlProps} /> : null}
+    {...props}
+    />
+});
+
+export default FlatList;

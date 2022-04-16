@@ -1,5 +1,5 @@
 //
-//  ScrollViewBase.ios.js
+//  index.ios.js
 //
 //  The MIT License
 //  Copyright (c) 2015 - 2022 Susan Cheng. All rights reserved.
@@ -25,10 +25,10 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { ScrollView, UIManager, Keyboard, TextInput, findNodeHandle } from 'react-native';
+import { UIManager, Keyboard, TextInput, findNodeHandle } from 'react-native';
 import { useMergeRefs } from 'sugax';
 
-export const KeyboardAwareScrollView = React.forwardRef(({
+export const KeyboardAwareScrollable = (Scrollable) => React.forwardRef(({
     onScroll,
     scrollEventThrottle = 1,
     children,
@@ -65,20 +65,18 @@ export const KeyboardAwareScrollView = React.forwardRef(({
                 }
             });
         });
-    
+        
         return () => event.remove();
-      
+        
     }, []);
     
-    return <ScrollView
-        ref={ref}
-        onScroll={(event) => {
-            _.assignIn(scrollEvent.current, event.nativeEvent);
-            if (_.isFunction(onScroll)) onScroll(event);
-        }}
-        scrollEventThrottle={scrollEventThrottle}
-        scrollToOverflowEnabled={true}
-        {...props}>{children}</ScrollView>;
+    return <Scrollable
+    ref={ref}
+    onScroll={(event) => {
+        _.assignIn(scrollEvent.current, event.nativeEvent);
+        if (_.isFunction(onScroll)) onScroll(event);
+    }}
+    scrollEventThrottle={scrollEventThrottle}
+    scrollToOverflowEnabled={true}
+    {...props}>{children}</Scrollable>;
 });
-
-export default KeyboardAwareScrollView;
