@@ -45,7 +45,6 @@
     "@types/lodash": "^4.14.180",
     "@types/react": "^17.0.40",
     "@types/react-native": "^0.67.3",
-    "@types/react-redux": "^7.1.23",
     "postcss": "^8.4.12",
     "react-dom": "^17.0.2",
     "rollup": "^2.70.1",
