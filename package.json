@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@react-native-picker/picker": ">=2.4.0",
+    "bson": "^4.6.5",
     "codemirror": ">=5.65.2",
     "d3-dsv": ">=3.0.1",
     "jsbarcode": ">=3.11.5",
@@ -24,14 +25,13 @@
     "react-native-svg": ">=12.3.0",
     "react-native-vector-icons": ">=9.1.0",
     "react-router-dom": ">=6.3.0",
+    "sugax": "^1.0.26",
+    "uuid": "^8.3.2",
     "webfontloader": ">=1.6.28"
   },
   "peerDependencies": {
-    "bson": ">=4.6.1",
     "react": ">=16.8.0",
-    "react-native": ">=0.67.0",
-    "sugax": ">=1.0.22",
-    "uuid": ">=8.3.2"
+    "react-native": ">=0.67.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.7",
