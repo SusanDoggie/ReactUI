@@ -13,7 +13,7 @@
   "dependencies": {
     "@react-native-picker/picker": ">=2.4.0",
     "bson": "^4.6.5",
-    "codemirror": ">=5.65.2",
+    "codemirror": "^5.65.2",
     "d3-dsv": ">=3.0.1",
     "jsbarcode": ">=3.11.5",
     "lottie-ios": ">=3.2.3",
