@@ -58,7 +58,7 @@ export const ScrollView = React.forwardRef(({
     const [contentSize, setContentSize] = React.useState();
     const [scroll, setScroll] = React.useState();
 
-    const scrollLayout = React.useMemo(() => ({ ...scroll, layoutMeasurement, contentSize, horizontal }), [layoutMeasurement, contentSize, scroll])
+    const scrollLayout = React.useMemo(() => ({ ...scroll, layoutMeasurement, contentSize, horizontal }), [layoutMeasurement, contentSize, scroll, horizontal])
     
     return <ScrollViewBase
         ref={ref}
