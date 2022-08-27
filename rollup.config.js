@@ -1,17 +1,11 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import postcss from 'rollup-plugin-postcss';
 import babel from '@rollup/plugin-babel';
 import dts from 'rollup-plugin-dts';
 
 const packageJson = require('./package.json');
 
 const rollupPlugins = [
-    postcss({
-        inject: (cssVariableName) => `
-        import styleInject from 'style-inject';
-        styleInject(${cssVariableName});`
-    }),
     babel({
         babelrc: false,
         exclude: 'node_modules/**',

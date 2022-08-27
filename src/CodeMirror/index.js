@@ -23,72 +23,87 @@
 //  THE SOFTWARE.
 //
 
-import 'codemirror/lib/codemirror.css';
-import './index.css';
+import _ from 'lodash';
 import React from 'react';
 import { View } from 'react-native';
-import { useCallbackRef } from 'sugax';
+import { EditorState } from '@codemirror/state';
+import { lineNumbers as _lineNumbers } from '@codemirror/view';
+import { EditorView, keymap, highlightSpecialChars, drawSelection } from '@codemirror/view';
+import { standardKeymap, history, historyKeymap } from '@codemirror/commands';
+import { defaultHighlightStyle, syntaxHighlighting, codeFolding as _codeFolding, foldGutter as _foldGutter } from '@codemirror/language';
+import { useMergeRefs, useCallbackRef } from 'sugax';
 
 export const CodeMirror = React.forwardRef(function({
 	value,
-	defaultValue,
-	style,
 	autoFocus,
-	options,
 	onChange,
-	onCursorActivity,
 	onFocus,
 	onBlur,
-	onScroll,
-	...props
+	onSelectionChange,
+  extensions = [],
+  editable = true,
+  codeFolding = false,
+  lineNumbers = false,
+  allowMultipleSelections = true,
+  tabSize = 4,
+  keymaps = [],
+  ...props
 }, forwardRef) {
-
+  
 	const codeMirror = React.useRef({ editor: null });
-	const textareaRef = React.useRef();
+  const divRef = React.useRef();
+  const ref = useMergeRefs(divRef, forwardRef);
 
-    const onChangeRef = useCallbackRef(onChange);
-    const onCursorActivityRef = useCallbackRef(onCursorActivity);
-    const onFocusRef = useCallbackRef(onFocus);
-    const onBlurRef = useCallbackRef(onBlur);
-    const onScrollRef = useCallbackRef(onScroll);
+  const onChangeRef = useCallbackRef(onChange);
+  const onFocusRef = useCallbackRef(onFocus);
+  const onBlurRef = useCallbackRef(onBlur);
+  const onSelectionChangeRef = useCallbackRef(onSelectionChange);
 
-	React.useEffect(() => {
+  React.useEffect(() => {
 
-		const editor = require('codemirror').fromTextArea(textareaRef.current, options);
-		codeMirror.current.editor = editor;
-		
-		editor.on('change', (editor, change) => change.origin !== 'setValue' && onChangeRef.current && onChangeRef.current(editor.getValue(), change));
-		editor.on('cursorActivity', (editor) => onCursorActivityRef.current && onCursorActivityRef.current(editor));
-		editor.on('focus', () => onFocusRef.current && onFocusRef.current());
-		editor.on('blur', () => onBlurRef.current && onBlurRef.current());
-		editor.on('scroll', (editor) => onScrollRef.current && onScrollRef.current(editor.getScrollInfo()));
-		editor.setValue(value ?? defaultValue ?? '');
+    if (_.isNil(divRef.current)) return;
 
-		return () => editor.toTextArea();
+    const updateListener = EditorView.updateListener.of((e) => {
+      if (e.docChanged) {
+        onChangeRef.current?.(e);
+      }
+      if (e.focusChanged) {
+        const callback = e.view.hasFocus ? onFocusRef : onBlurRef;
+        callback.current?.(e);
+      }
+      if (e.selectionSet) {
+        onSelectionChangeRef.current?.(e);
+      }
+    });
 
-	}, []);
+    const editor = new EditorView({
+      doc: value,
+      parent: divRef.current,
+      extensions: [
+        highlightSpecialChars(),
+        history(),
+        drawSelection(),
+        syntaxHighlighting(defaultHighlightStyle, {fallback: true}),
+        keymap.of(_.flattenDeep([standardKeymap, historyKeymap, keymaps])),
+        updateListener,
+        EditorView.editable.of(editable),
+        EditorState.allowMultipleSelections.of(allowMultipleSelections),
+        EditorState.tabSize.of(tabSize),
+        lineNumbers && _lineNumbers(),
+        codeFolding && _codeFolding(),
+        codeFolding && _foldGutter(),
+        ...extensions
+      ].filter(Boolean),
+    });
 
-	React.useEffect(() => {
+    codeMirror.current.editor = editor;
+    if (autoFocus) editor.focus();
 
-		const editor = codeMirror.current.editor;
-
-		if (!_.isNil(editor) && !_.isNil(value) && editor.getValue() !== value) {
-			editor.setValue(value);
-		}
-
-	}, [value]);
-
-	React.useImperativeHandle(forwardRef, () => ({
-		focus: () => { codeMirror.current.editor?.focus(); },
-	}), []);
-
-	return <View style={[{ width: '100%', height: '100%' }, style]} {...props}>
-		<textarea
-			ref={textareaRef}
-			defaultValue={value ?? defaultValue ?? ''}
-			autoComplete='off'
-			autoFocus={autoFocus} />
-	</View>;
+    return () => editor.destroy();
+  
+  }, [editable]);
+  
+  return <View ref={ref} {...props} />;
 });
 
 export default CodeMirror;
