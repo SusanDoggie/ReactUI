@@ -74,4 +74,14 @@ export default [
         ],
         plugins: [dts()],
     },
+    {
+        input: 'src/index.web',
+        output: [
+            {
+                file: 'dist/index.web.d.ts',
+                format: 'es',
+            },
+        ],
+        plugins: [dts()],
+    },
 ];
