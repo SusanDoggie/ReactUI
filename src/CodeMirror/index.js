@@ -103,15 +103,21 @@ export const CodeMirror = React.forwardRef(function({
 
     return () => editor.destroy();
   
-  }, [editable]);
+  }, []);
   
   React.useEffect(() => {
 
-    const state = codeMirror.current.editor?.state;
-    if (_.isNil(state)) return;
+    const editor = codeMirror.current.editor;
+    if (_.isNil(editor) || _.isNil(value)) return;
 
-    if (state.doc.toString() !== value.toString()) {
-      state.update({ changes: { from: 0, to: state.doc.length, insert: value } });
+    if (editor.state.doc.toString() !== value.toString()) {
+      editor.dispatch(editor.state.update({ 
+        changes: { 
+          from: 0, 
+          to: editor.state.doc.length, 
+          insert: value 
+        } 
+      }));
     }
     
   }, [value]);
