@@ -35,8 +35,10 @@ import { useMergeRefs, useCallbackRef } from 'sugax';
 
 export const CodeMirror = React.forwardRef(function({
 	value,
+	defaultValue,
 	autoFocus,
 	onChange,
+  onChangeValue,
 	onFocus,
 	onBlur,
 	onSelectionChange,
@@ -55,6 +57,7 @@ export const CodeMirror = React.forwardRef(function({
   const ref = useMergeRefs(divRef, forwardRef);
 
   const onChangeRef = useCallbackRef(onChange);
+  const onChangeValueRef = useCallbackRef(onChangeValue);
   const onFocusRef = useCallbackRef(onFocus);
   const onBlurRef = useCallbackRef(onBlur);
   const onSelectionChangeRef = useCallbackRef(onSelectionChange);
@@ -63,35 +66,34 @@ export const CodeMirror = React.forwardRef(function({
 
     if (_.isNil(divRef.current)) return;
 
-    const updateListener = EditorView.updateListener.of((e) => {
-      if (e.docChanged) {
-        onChangeRef.current?.(e);
-      }
-      if (e.focusChanged) {
-        const callback = e.view.hasFocus ? onFocusRef : onBlurRef;
-        callback.current?.(e);
-      }
-      if (e.selectionSet) {
-        onSelectionChangeRef.current?.(e);
-      }
-    });
-
     const editor = new EditorView({
-      doc: value,
+      doc: value?.toString() ?? defaultValue?.toString(),
       parent: divRef.current,
       extensions: [
         highlightSpecialChars(),
         history(),
         drawSelection(),
-        syntaxHighlighting(defaultHighlightStyle, {fallback: true}),
+        syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
         keymap.of(_.flattenDeep([standardKeymap, historyKeymap, keymaps])),
-        updateListener,
-        EditorView.editable.of(editable),
-        EditorState.allowMultipleSelections.of(allowMultipleSelections),
-        EditorState.tabSize.of(tabSize),
         lineNumbers && _lineNumbers(),
         codeFolding && _codeFolding(),
         codeFolding && _foldGutter(),
+        EditorView.editable.of(editable),
+        EditorState.allowMultipleSelections.of(allowMultipleSelections),
+        EditorState.tabSize.of(tabSize),
+        EditorView.updateListener.of((e) => {
+          if (e.docChanged) {
+            onChangeRef.current?.(e);
+            onChangeValueRef.current?.(e.state.doc.toString());
+          }
+          if (e.focusChanged) {
+            const callback = e.view.hasFocus ? onFocusRef : onBlurRef;
+            callback.current?.(e);
+          }
+          if (e.selectionSet) {
+            onSelectionChangeRef.current?.(e);
+          }
+        }),
         ...extensions
       ].filter(Boolean),
     });
@@ -102,6 +104,17 @@ export const CodeMirror = React.forwardRef(function({
     return () => editor.destroy();
   
   }, [editable]);
+  
+  React.useEffect(() => {
+
+    const state = codeMirror.current.editor?.state;
+    if (_.isNil(state)) return;
+
+    if (state.doc.toString() !== value.toString()) {
+      state.update({ changes: { from: 0, to: state.doc.length, insert: value } });
+    }
+    
+  }, [value]);
   
   return <View ref={ref} {...props} />;
 });
