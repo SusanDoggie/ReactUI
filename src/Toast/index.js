@@ -134,10 +134,10 @@ function ToastBody({
     </Animated.View>
 }
 
-export const ToastProvider = React.forwardRef(({ 
+export const ToastProvider = ({ 
     children,
     defaultTimeout = 5000,
-}, forwardRef) => {
+}) => {
 
     const [elements, setElements] = React.useState({});
 
@@ -163,7 +163,7 @@ export const ToastProvider = React.forwardRef(({
         showSuccess(message, timeout) { show_message(message, 'success', timeout); },
     };
 
-    return <ToastContext.Provider ref={forwardRef} value={provider}>
+    return <ToastContext.Provider value={provider}>
         {children}
         <View style={{
             top: 0,
@@ -172,4 +172,4 @@ export const ToastProvider = React.forwardRef(({
             alignSelf: 'center',
         }}>{_.values(elements)}</View>
     </ToastContext.Provider>;
-});
+};

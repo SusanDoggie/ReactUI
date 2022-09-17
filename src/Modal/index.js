@@ -31,15 +31,15 @@ const ModalContext = React.createContext((element) => {});
 
 export const useModal = () => React.useContext(ModalContext);
 
-export const ModalProvider = React.forwardRef(({ 
+export const ModalProvider = ({ 
     children,
     backdrop = true,
     backdropColor = 'rgba(0, 0, 0, 0.75)',
-}, forwardRef) => {
+}) => {
     
     const [modal, setModal] = React.useState();
 
-    return <ModalContext.Provider ref={forwardRef} value={setModal}>
+    return <ModalContext.Provider value={setModal}>
         {children}
         <RNModal visible={React.isValidElement(modal)} transparent>
             <View style={{
@@ -54,4 +54,4 @@ export const ModalProvider = React.forwardRef(({
             </View>
         </RNModal>
     </ModalContext.Provider>;
-});
+};

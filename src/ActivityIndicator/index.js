@@ -69,18 +69,18 @@ export function useActivityIndicator() {
     };
 }
 
-export const ActivityIndicatorProvider = React.forwardRef(({ 
+export const ActivityIndicatorProvider = ({ 
     children,
     defaultDelay = 250,
     backdrop = true,
     backdropColor = 'rgba(0, 0, 0, 0.75)',
     passThroughEvents = false,
     ActivityIndicator = () => <RNActivityIndicator color='white' />,
-}, forwardRef) => {
+}) => {
 
     const [tasks, setTasks] = React.useState([]);
     
-    return <ActivityIndicatorContext.Provider ref={forwardRef} value={{ setTasks, defaultDelay }}>
+    return <ActivityIndicatorContext.Provider value={{ setTasks, defaultDelay }}>
         {children}
         {!_.isEmpty(tasks) && <View
         pointerEvents={passThroughEvents ? 'none' : 'auto'}
@@ -96,4 +96,4 @@ export const ActivityIndicatorProvider = React.forwardRef(({
             }}><ActivityIndicator /></View> : <ActivityIndicator />}
         </View>}
     </ActivityIndicatorContext.Provider>;
-});
+};
