@@ -23,29 +23,9 @@
 //  THE SOFTWARE.
 //
 
-export { styleInject } from 'style-inject';
-export * from './ActivityIndicator';
-export { AsyncRefreshControl } from './AsyncRefreshControl';
-export { Barcode, BarcodeFormats } from './Barcode';
+export * from 'o2ter-ui';
 export { BBCode } from './BBCode';
-export { Button } from './Button';
-export { FlatList } from './FlatList';
 export { HTML } from './HTML';
-export { Icon } from './Icon';
-export { Image } from './Image';
-export { List } from './List';
-export { Lottie } from './Lottie';
 export * from './Modal';
-export { Picker } from './Picker';
-export { QRCode } from './QRCode';
-export * from './SafeAreaView';
-export { ScrollView, useScrollView, useScrollLayout } from './ScrollView';
-export * from './SegmentedControl';
-export { SleekAnimationView } from './SleekAnimationView';
-export { StickyView } from './StickyView';
-export { SVG } from './SVG';
 export * from './Toast';
-export { Touchable } from './Touchable';
 export { ZStack } from './ZStack';
-export * from './Icons';
-export * as Icons from './Icons';

@@ -26,6 +26,3 @@
 export * from './index.js';
 export { CodeMirror } from './CodeMirror';
 export { DataSheet } from './DataSheet';
-export { useWebFont } from './useWebFont';
-export { NodeHandleProvider } from './NodeHandleProvider';
-export * from './Navigator';

@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { List } from '../List';
+import { List } from 'o2ter-ui';
 import { useElementLayout, useDocumentEvent, useMergeRefs } from 'sugax';
 import { default_state, useMethods } from './methods';
 
