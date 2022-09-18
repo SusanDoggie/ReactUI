@@ -26,6 +26,4 @@
 export * from 'o2ter-ui';
 export { BBCode } from './BBCode';
 export { HTML } from './HTML';
-export * from './Modal';
-export * from './Toast';
 export { ZStack } from './ZStack';

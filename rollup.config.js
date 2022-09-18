@@ -72,7 +72,12 @@ export default [
                 format: 'es',
             },
         ],
-        plugins: [dts()],
+        plugins: [
+          resolve({
+              extensions: ['.js']
+          }),
+          dts()
+        ],
     },
     {
         input: 'src/index.web',
@@ -82,6 +87,11 @@ export default [
                 format: 'es',
             },
         ],
-        plugins: [dts()],
+        plugins: [
+          resolve({
+              extensions: ['.web.js', '.js']
+          }),
+          dts()
+        ],
     },
 ];
